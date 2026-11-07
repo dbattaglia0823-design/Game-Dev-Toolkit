@@ -23,3 +23,5 @@
 .gdt-wireframe-node{z-index:1}
 .gdt-wireframe-node[data-shape="circle"]{border-radius:50%;aspect-ratio:1/1}
 .gdt-wireframe-node[data-shape="rounded"]{border-radius:16px}
+
+.gdt-wireframe-panel{z-index:0}.gdt-connections{z-index:1}.gdt-wireframe-button,.gdt-wireframe-slot{z-index:2}
