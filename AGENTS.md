@@ -19,3 +19,7 @@ Before writing a new feature, inspect `docs/MODULES.md` for an existing compatib
 - Map each action ID to existing game callbacks and each data binding to existing game state. Record missing mappings instead of inventing gameplay implementations.
 - Preserve save formats, inventory logic, economy, progression, routing and game functionality. Validate integrated behavior.
 - Version 2 functional layout documents are distinct from version 1 legacy visual-studio documents. Never silently convert them or treat a label as a game action.
+
+## Integration validation gate
+
+Before importing a UI template into a game, run the `web/layout-kit/validator.js` checks with target action IDs and representative state data. Correct structural errors, resolve warnings or document why they are intentional. Run browser UI smoke tests or Godot headless checks as appropriate. A valid contract does **not** prove the actual game has implemented or tested the handlers.
