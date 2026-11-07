@@ -9,15 +9,15 @@ export class UIWorkflow {
   initialScreen='inventory',onGameAction=()=>{},onChange=()=>{},confirmationActions=['shop.purchase','upgrades.purchase']
  }={}){
   if(typeof onGameAction!=='function'||typeof onChange!=='function')throw new TypeError('Callbacks must be functions');
-  this.onGameAction=onGameAction;this.onChange=onChange;
+  this.onGameAction=onGameAction;this.onChange=onChange;this.initializing=true;
   this.confirmActions=new Set(confirmationActions);
   this.collection=new SearchableCollection({items,onChange:()=>this.notify()});
   this.equipment=new EquipmentSlots({slots,onChange:()=>this.notify()});
   this.navigation=new NavigationHistory({initial:initialScreen,knownScreens:screens,onChange:()=>this.notify()});
   this.confirmation=new ConfirmationQueue({onChange:()=>this.notify()});
-  this.notify();
+  this.initializing=false;this.notify();
  }
- notify(){this.onChange?.(this.snapshot());}
+ notify(){if(!this.initializing)this.onChange?.(this.snapshot());}
  snapshot(){
   const current=this.collection.snapshot();
   return {
