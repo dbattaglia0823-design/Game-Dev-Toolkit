@@ -1,6 +1,7 @@
 import {getPreset} from '../presets.js';
 import {mountLayout} from '../runtime.js';
 import {UIWorkflow} from '../workflow.js';
+import {ConfirmationDialogAdapter} from '../confirmation-dialog.js';
 
 const $=id=>document.getElementById(id);
 const items=[
@@ -11,7 +12,7 @@ const items=[
  {id:'item-05',name:'Steel sword',type:'weapon'},
  {id:'item-06',name:'Torch',type:'tool'}
 ];
-let view=null,workflow=null,requests=[];
+let view=null,workflow=null,confirmDialog=null,requests=[];
 let settings={music:true,sfx:true,volume:75};
 const onGameAction=(action,payload)=>{
  if(action==='inventory.equip'){
@@ -27,9 +28,10 @@ const onGameAction=(action,payload)=>{
  render();
 };
 workflow=new UIWorkflow({items,onGameAction,onChange:()=>{if(workflow)render();}});
+confirmDialog=new ConfirmationDialogAdapter({dialog:$('confirmation-dialog'),workflow,title:$('confirm-title'),message:$('confirm-message'),confirmButton:$('approve-confirm'),cancelButton:$('cancel-confirm')});
 function render(){
  const snapshot=workflow.snapshot(),pending=snapshot.confirmation;
- const screen=pending?'confirmation':snapshot.navigation.screen;
+ const screen=snapshot.navigation.screen;
  const data={
   game:{title:'UI Layout Demo'},
   inventory:{...snapshot.inventory,selected:snapshot.inventory.selected??{name:'None',description:'Select an item'}},
@@ -56,6 +58,7 @@ function render(){
   visible:snapshot.inventory.items.map(x=>x.name),equipment:snapshot.equipment,
   pendingAction:pending?.actionId??null
  },null,2);
+ confirmDialog?.sync();
  for(const button of $('nav').querySelectorAll('[data-screen]')){
   button.setAttribute('aria-pressed',String(button.dataset.screen===snapshot.navigation.screen));
  }
