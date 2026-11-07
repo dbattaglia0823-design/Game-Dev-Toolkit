@@ -35,3 +35,7 @@ The [catalog](../catalog/index.html) organizes 19 semantic UI layouts and provid
 ## Export to a target game
 
 The [Integration Package Builder](../package/index.html) produces one ZIP per chosen engine, including selected v2 layouts, contracts, validation reports and runtime adapter files. See [full instructions](../../docs/INTEGRATION_PACKAGES.md).
+
+## Choose among alternate compositions
+
+Every one of the original 19 menu types has three layouts (57 choices in total). [Browse variants](../catalog/index.html), filter by menu type and switch between Original, Reversed and Focus compositions. Contract IDs remain compatible. See [full guide](../../docs/MENU_VARIANTS.md).
