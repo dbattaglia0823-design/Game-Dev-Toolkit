@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "Inventory Validation",
+  "viewport": {"width": 800, "height": 500},
+  "nodes": [
+    {"id":"heading","type":"label","x":40,"y":40,"w":250,"h":55,"label":"Inventory","role":"screen_title","actionId":"","bindingKey":"inventory.title"},
+    {"id":"grid","type":"grid","x":40,"y":120,"w":400,"h":270,"label":"Items","role":"item_grid","actionId":"inventory.select","bindingKey":"inventory.items"},
+    {"id":"equip","type":"button","x":510,"y":300,"w":200,"h":55,"label":"Equip","role":"primary_action","actionId":"inventory.equip","bindingKey":""},
+    {"id":"health","type":"progress","x":510,"y":200,"w":200,"h":25,"label":"Health","role":"health_bar","actionId":"","bindingKey":"hud.health"},
+    {"id":"sound","type":"toggle","x":510,"y":120,"w":200,"h":45,"label":"Sound","role":"settings_toggle","actionId":"settings.sound_changed","bindingKey":"settings.sound"}
+  ]
+}
