@@ -46,7 +46,7 @@ test('browser runtime binds data and dispatches inventory actions',()=>{
 });
 test('browser runtime handles toggle and slider events',()=>{
  const previous=globalThis.document;
- globalThis.document={createElement:tag=>new Element(tag),activeElement:null};
+ globalThis.document={createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),activeElement:null};
  try{
   const target=new Element(),events=[];
   const ui=mountLayout({container:target,layout:getPreset('settings'),
