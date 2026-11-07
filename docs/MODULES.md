@@ -44,3 +44,16 @@ Builder exports validated JSON layouts, not executable games or Godot scenes. Se
 - `web/builder/studio.js`: editor history, premade asset library, additional screen presets, layer ordering and movement helpers (unit-tested).
 - `web/builder/exporters.js`: static standalone HTML and Godot 4 Control scene export generators (output-format unit-tested, target runtime smoke testing pending).
 - `web/builder/editor.js`: interactive canvas, resize handle, alignment guides, layer controls and keyboard shortcuts (browser smoke testing pending).
+
+## Functional UI Layout Kit (version 2)
+
+| Path | Purpose | Test status |
+|---|---|---|
+| `web/layout-kit/schema.js` | Strict semantic UI layout contract and manifest | Node unit tests |
+| `web/layout-kit/presets.js` | Seven game-agnostic screen templates | Node unit tests |
+| `web/layout-kit/runtime.js` | Browser data binding + named action dispatch | Browser example; smoke test pending |
+| `web/layout-kit/runtime.css` | Optional neutral preview styling | Browser example; smoke test pending |
+| `web/builder/wireframe.js` | Browser functional layout editor | Browser smoke test pending |
+| `godot/layout-kit/ui_layout.gd` | Godot 4 nodes, bindings and action signals | Godot runtime smoke test pending |
+
+See `docs/UI_TEMPLATE_CONTRACT.md` and `docs/CODEX_UI_INTEGRATION.md`. The legacy `web/builder/legacy-studio.html` preserves earlier appearance-first v1 layouts.
