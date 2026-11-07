@@ -2,6 +2,10 @@
 
 Reusable, engine-specific foundations for Godot 4 and browser games. **Version 0.1.0** is deliberately small: functioning web utilities, a browser demo, and documented Godot scripts with demo scene. It is not a universal game engine.
 
+## Visual UI builder
+
+Use the [browser-based UI builder](web/builder/index.html) to assemble layouts from preset panels, buttons, text, image placeholders and progress bars. Customize each item and export a portable JSON layout. See [builder documentation](web/builder/README.md). This is a layout editor; engine-specific conversion is planned, not yet implemented.
+
 ## Game menu templates
 
 Explore the [interactive menu templates](web/menu-demo/index.html) for main menu, pause, settings, gameplay and game-over screens. Reuse the [menu state controller](web/ui/game-menu-controller.js) without coupling to the mock gameplay timer. See [integration notes](web/menu-demo/README.md).
