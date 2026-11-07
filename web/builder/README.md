@@ -33,3 +33,7 @@ Earlier appearance-first JSON v1 designs can still be edited at [Legacy Visual S
 ## Phase 3 templates
 
 Open the [Functional Template Catalog](../catalog/index.html) to find character stats, crafting, skill trees, quest logs, career event selection, leaderboards, garage, dealership and race-selection layouts. Click **Open in builder** to edit a selected template; its geometry and action/data binding IDs carry over. For import details, see `docs/TEMPLATE_LIBRARY.md`.
+
+## Export current screen directly
+
+Choose **Package current layout** to hand your current edited v2 layout to the [Integration Package Builder](../package/index.html), where you can select Web/Godot, optionally add more templates, and download a ZIP. The transfer uses temporary per-tab browser storage. If storage is unavailable, export JSON first and import it in the package builder.
