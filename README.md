@@ -1,6 +1,6 @@
 # Game Development Toolkit
 
-Reusable, engine-specific foundations for Godot 4 and browser games. **Version 0.1.0** is deliberately small: functioning web utilities, a browser demo, and documented Godot scripts with demo scene. It is not a universal game engine.
+Reusable foundations for Godot 4 and browser games, including a function-first UI layout system, runtime adapters, a visual component showcase, tested web utilities and a Godot demonstration. The toolkit is not a full game engine.
 
 ## Functional UI Builder (recommended)
 
@@ -10,7 +10,6 @@ Built-in functional presets: main menu, pause menu, inventory, upgrades, shop, s
 
 The previous visual editor remains available as [Legacy Visual Studio](web/builder/legacy-studio.html) for old version 1 layout JSON files. Existing visual-only layouts are not silently converted into action-bearing templates.
 
-## Game menu templates
 ## Game menu templates
 
 Explore the [interactive menu templates](web/menu-demo/index.html) for main menu, pause, settings, gameplay and game-over screens. Reuse the [menu state controller](web/ui/game-menu-controller.js) without coupling to the mock gameplay timer. See [integration notes](web/menu-demo/README.md).
@@ -36,6 +35,8 @@ Open [the browser-based component gallery](web/showcase/index.html) to preview r
 | SettingsStore | Godot | ConfigFile settings with defaults |
 | SaveStore | Godot | Versioned JSON save with backup and migration hook |
 | ToastManager | Godot | Single visible message label (no stacked notifications) |
+| Functional UI Layout Kit | Web / Godot | Semantic layout templates, data binding and action events |
+| Functional UI Builder | Web | Arrange and export version 2 layouts and action contracts |
 
 ## Design rules
 
@@ -47,6 +48,6 @@ Open [the browser-based component gallery](web/showcase/index.html) to preview r
 
 See [integration guide](docs/INTEGRATION.md), [module catalog](docs/MODULES.md), and [agent instructions](AGENTS.md).
 
-## Publishing
+## Published editor
 
-Create an empty repository on GitHub, then upload the contents of this folder (not the ZIP itself). Optional: mark your separate starter-game repositories as GitHub templates. This toolkit can be private.
+The browser editor is served from `web/builder/index.html` by GitHub Pages. Browser-local saves are not automatically committed to the repository; export JSON for use in existing projects. The old appearance-focused editor is kept at `web/builder/legacy-studio.html`.
