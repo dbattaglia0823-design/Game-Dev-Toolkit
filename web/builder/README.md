@@ -29,3 +29,7 @@ Earlier appearance-first JSON v1 designs can still be edited at [Legacy Visual S
 - Browser preview and Godot adapter require target-runtime testing in addition to Node schema/unit tests.
 - The exported `actionId` is an event name, not implemented gameplay; Codex must connect game-specific handlers and data.
 - Files are saved locally or downloaded; they are not automatically committed to GitHub.
+
+## Phase 3 templates
+
+Open the [Functional Template Catalog](../catalog/index.html) to find character stats, crafting, skill trees, quest logs, career event selection, leaderboards, garage, dealership and race-selection layouts. Click **Open in builder** to edit a selected template; its geometry and action/data binding IDs carry over. For import details, see `docs/TEMPLATE_LIBRARY.md`.

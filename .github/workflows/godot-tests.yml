@@ -2,7 +2,7 @@ name: Godot adapter smoke tests
 on:
   push:
     branches: [main]
-    paths: ['godot/**', '.github/workflows/godot-tests.yml']
+    paths: ['godot/**', 'web/layout-kit/**', 'web/scripts/export-godot-fixtures.mjs', '.github/workflows/godot-tests.yml']
   pull_request:
     paths: ['godot/**', '.github/workflows/godot-tests.yml']
 jobs:
@@ -15,9 +15,16 @@ jobs:
           curl -fL --retry 3 -o godot.zip https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip
           unzip -q godot.zip
           chmod +x Godot_v4.4.1-stable_linux.x86_64
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Generate real UI template fixtures
+        run: node web/scripts/export-godot-fixtures.mjs
       - name: Import project in headless mode
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --import --quit
       - name: Validate layout creation, data bindings and events
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/integration_smoke.gd
       - name: Validate functional UI behavior controllers
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/behaviors_smoke.gd
+      - name: Validate all registered UI template layouts
+        run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/catalog_smoke.gd

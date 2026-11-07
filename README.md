@@ -16,6 +16,10 @@ Open the [Integration Validator](web/validator/index.html) to check exported lay
 
 Automated checks cover Node unit tests, Chromium desktop/mobile smoke tests and a Godot 4 headless adapter fixture. See [validation instructions](docs/VALIDATION.md) for limits and status.
 
+## Phase 3 — Expanded Functional Template Library
+
+The [template catalog](web/catalog/index.html) includes **19 reusable structural layouts**: character stats, crafting, skill trees, quest logs, career events, leaderboards, garages, dealerships, race selection, and earlier main menu/inventory/settings/shop layouts. Preview, filter, export, and open a template directly in the builder or validator. See [template contracts](docs/TEMPLATE_LIBRARY.md).
+
 ## Phase 2 — Reusable UI behaviors
 
 Functional templates can now use standalone [search/selection, equipment, navigation, and confirmation controllers](docs/BEHAVIORS.md). The [interactive behavior demonstration](web/layout-kit/behaviors-demo/index.html) exercises these workflows. The toolkit defines **where controls go and how UI interactions are routed**, while the consuming game owns gameplay rules, real inventory changes, purchases and visuals.

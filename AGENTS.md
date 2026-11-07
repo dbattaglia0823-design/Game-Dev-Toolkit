@@ -27,3 +27,7 @@ Before importing a UI template into a game, run the `web/layout-kit/validator.js
 ## Phase 2 behavior modules
 
 Use `docs/BEHAVIORS.md` to select UI-only functionality for filtering, selecting, equipment slots, navigation and confirmation. Maintain stable item IDs, avoid hiding gameplay mutations in UI components, and keep purchase/equip requests delegated to the existing game systems. Wire `action_requested` to behavior handling, and pass approved results back into the UI state. Test keyboard, pointer, mobile and Godot behavior where supported.
+
+## Phase 3 template selection
+
+Use `docs/TEMPLATE_LIBRARY.md` and `web/catalog/index.html` to select a functional screen template. Keep action names, data bindings and layout responsibilities, but customize all artwork, branding, text and visuals for the target game. Only use the new nine layouts for placement and interactions: they do not implement crafting, quests, vehicle sales, racing, stats or progression. Run the validator and target-game regression tests for all integrations.

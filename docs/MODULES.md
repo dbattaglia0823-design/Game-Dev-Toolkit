@@ -75,3 +75,13 @@ See `docs/UI_TEMPLATE_CONTRACT.md` and `docs/CODEX_UI_INTEGRATION.md`. The legac
 - `web/layout-kit/presets.js`: equipment, searchable list and confirmation presets.
 
 See `docs/BEHAVIORS.md` for integration boundaries and action conventions.
+
+## Phase 3 — Functional Screen Templates
+
+- `web/layout-kit/phase3-presets.js`: nine new theme-free RPG, economy, racing and progression layouts.
+- `web/layout-kit/catalog.js`: categorized template metadata and discovery.
+- `web/layout-kit/sample-data.js`: neutral data previews for every template, no game state.
+- `web/catalog/`: searchable catalog, live bindings and action preview, direct builder and validator links.
+- `web/tests/phase3-templates.test.js`: schema, contract, layout geometry, neutral sample binding and completeness tests.
+
+See `docs/TEMPLATE_LIBRARY.md` for action/binding mappings and handoff instructions.

@@ -2,6 +2,7 @@ import {NODE_TYPES,makeLayout,normalizeLayout,addNode,modifyNode,deleteNode,reor
 import {PRESETS,getPreset} from '../layout-kit/presets.js';
 import {mountLayout} from '../layout-kit/runtime.js';
 import {calculateCanvasScale} from './viewport.js';
+import {SAMPLE_DATA} from '../layout-kit/sample-data.js';
 
 const $=id=>document.getElementById(id);
 const canvas=$('canvas'),stage=$('canvas-stage'),scroll=$('stage-scroll');
@@ -190,15 +191,9 @@ $('import').addEventListener('change',async ev=>{
  try{if(file.size>250000)throw Error('File too large');restore(parseLayout(await file.text()));past=[];future=[];render();msg('Imported functional layout.');}
  catch(error){msg('Import failed: '+error.message);}ev.target.value='';
 });
-const sample={
- game:{title:'Game title'},inventory:{items:[{name:'Item A'},{name:'Item B'}],selected:{name:'Item A',description:'Selected item'}},
- upgrades:{categories:['Category A','Category B'],selected:{name:'Upgrade',level_percent:45,comparison:'Current vs preview'}},
- shop:{items:[{name:'Product A'},{name:'Product B'}],selected:{name:'Product A',price:'100'},balance:'500'},
- settings:{music:true,sfx:true,volume:65},hud:{score:'1,250',time:'01:30',health:80}
-};
 $('preview').addEventListener('click',()=>{
  if(preview){preview.destroy();preview=null;$('preview').textContent='Test actions';$('event-log').hidden=true;render();return;}
- preview=mountLayout({container:canvas,layout:doc,data:sample,onAction:(id,payload)=>{$('event-output').textContent=JSON.stringify({actionId:id,payload},null,2);}});
+ preview=mountLayout({container:canvas,layout:doc,data:SAMPLE_DATA,onAction:(id,payload)=>{$('event-output').textContent=JSON.stringify({actionId:id,payload},null,2);}});
  $('preview').textContent='Back to editing';$('event-log').hidden=false;msg('Test mode: click a control to inspect emitted actions.');
 });
 document.addEventListener('keydown',ev=>{
@@ -215,6 +210,11 @@ document.addEventListener('keydown',ev=>{
   const node=active();commit(modifyNode(doc,selected,{x:node.x+x,y:node.y+y}),'Control moved');
  }
 });
+const requestedPreset=new URLSearchParams(location.search).get('preset');
+if(requestedPreset && Object.hasOwn(PRESETS,requestedPreset)) {
+ doc=getPreset(requestedPreset);
+ $('template').value=requestedPreset;
+}
 render();fit();
 if(typeof ResizeObserver!=='undefined')new ResizeObserver(fit).observe(scroll);
 window.addEventListener('resize',fit);
