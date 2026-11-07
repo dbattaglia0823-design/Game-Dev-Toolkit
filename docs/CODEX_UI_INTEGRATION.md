@@ -96,3 +96,7 @@ Do not copy the old visual studio's theme or game-specific placeholder content i
 ## Optional Phase 2 UI behaviors
 
 When the exported layout needs filtering, stable item selection, equipment slots, navigation history or confirmation, read `docs/BEHAVIORS.md`. For web, use `web/layout-kit/behaviors.js`, `workflow.js` and the optional `confirmation-dialog.js`. For Godot 4, use `godot/layout-kit/ui_behaviors.gd`. Preserve existing game-owned inventory data, purchase logic and save formats. Action IDs describe requests and do not authorize purchases or item changes without validation in the game.
+
+## Phase 3: Select a screen template
+
+Browse `web/catalog/index.html` and read `docs/TEMPLATE_LIBRARY.md`. Use a catalog layout's exported JSON and contract; apply the project's own data mappings, game actions and appearance. A crafting, attribute allocation, vehicle purchase or race-entry request is only a named event until the actual game's validated systems handle it. Preserve existing game logic and saves.
