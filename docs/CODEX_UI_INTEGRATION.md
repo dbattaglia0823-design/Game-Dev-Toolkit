@@ -100,3 +100,7 @@ When the exported layout needs filtering, stable item selection, equipment slots
 ## Phase 3: Select a screen template
 
 Browse `web/catalog/index.html` and read `docs/TEMPLATE_LIBRARY.md`. Use a catalog layout's exported JSON and contract; apply the project's own data mappings, game actions and appearance. A crafting, attribute allocation, vehicle purchase or race-entry request is only a named event until the actual game's validated systems handle it. Preserve existing game logic and saves.
+
+## Phase 4 — Direct package handoff
+
+Generate an integration ZIP at `web/package/index.html`. Open `manifest.json` and `CODEX_INTEGRATION.md` within the archive, copy the included engine-specific runtime files, and integrate layout contracts with the existing game. The ZIP does not implement game-specific actions or verify the target game's integration. See `docs/INTEGRATION_PACKAGES.md`.
