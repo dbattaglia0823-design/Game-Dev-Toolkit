@@ -1,9 +1,13 @@
 import { ConfigStore } from '../core/config-store.js';
 import { SaveStore } from '../core/save-store.js';
 import { ToastManager } from '../ui/toast-manager.js';
+import { DialogController } from '../ui/dialog.js';
+import { TabsController } from '../ui/tabs.js';
 const config = new ConfigStore({defaults: {sound: true}});
 const saves = new SaveStore({key: 'gdt.demo.save', version: 1});
 const toast = new ToastManager(document.querySelector('#toast'));
+const dialog = new DialogController(document.querySelector('#demo-dialog'));
+const tabs = new TabsController(document.querySelector('#demo-tabs'));
 let score = 0;
 const status = document.querySelector('#status');
 function render() { status.textContent = `Score: ${score} · Sound: ${config.get('sound') ? 'on' : 'off'}`; }
@@ -11,4 +15,5 @@ document.querySelector('#score').addEventListener('click', () => { score += 10; 
 document.querySelector('#save').addEventListener('click', () => toast.show(saves.save({score}) ? 'Saved' : 'Storage unavailable'));
 document.querySelector('#load').addEventListener('click', () => { score = saves.load({score: 0}).score ?? 0; render(); toast.show('Loaded'); });
 document.querySelector('#sound').addEventListener('click', () => { config.set('sound', !config.get('sound')); render(); toast.show('Setting updated'); });
+document.querySelector('#open-dialog').addEventListener('click', () => dialog.open());
 render();
