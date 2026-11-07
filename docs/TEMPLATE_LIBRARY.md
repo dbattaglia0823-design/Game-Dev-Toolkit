@@ -1,8 +1,8 @@
 # Phase 3 — Functional Template Library
 
-The template library contains **19 screen layouts** across four categories. All layouts use the same **version 2 semantic contract**: position, component type, role, action ID, and data binding. They contain **no game-specific art, fonts, rarity systems, product catalogs, financial rules or gameplay implementation**.
+The template library contains **57 screen layouts** (three choices per each of 19 menu types) across four categories. All layouts use the same **version 2 semantic contract**: position, component type, role, action ID, and data binding. They contain **no game-specific art, fonts, rarity systems, product catalogs, financial rules or gameplay implementation**.
 
-Browse the [interactive template catalog](../web/catalog/index.html) to search, preview, export, validate, or load any template into the Functional UI Builder.
+Browse the [interactive template catalog](../web/catalog/index.html) and [variant guide](MENU_VARIANTS.md) to search, preview, export, validate, or load any template into the Functional UI Builder.
 
 ## Characters and progression
 
