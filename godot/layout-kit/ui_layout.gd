@@ -162,7 +162,7 @@ func set_data(data: Dictionary) -> void:
 				if not (ui as LineEdit).has_focus():
 					(ui as LineEdit).text = _display(value)
 			"grid", "list":
-				var items_container: GridContainer = ui.get_node("Entries")
+				var items_container: GridContainer = ui.get_node("Entries") as GridContainer
 				for child in items_container.get_children():
 					items_container.remove_child(child)
 					child.queue_free()
