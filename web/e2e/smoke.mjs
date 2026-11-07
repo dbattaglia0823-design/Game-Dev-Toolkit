@@ -64,6 +64,18 @@ try{
   assert.match(await page.locator('#selected-count').innerText(),/1 selected/);
   await page.locator('#family').selectOption('main-menu');
   assert.equal(await page.locator('.template-entry input').count(),3);
+  // Catalog remains usable if its JavaScript dependencies fail to load.
+  const fallbackPage=await browser.newPage({viewport,javaScriptEnabled:false});
+  await fallbackPage.goto(origin+'/catalog/index.html');
+  assert.equal(await fallbackPage.locator('#catalog-fallback a').count(),57);
+  assert.match(await fallbackPage.locator('#count').innerText(),/57 layouts/);
+  assert.match(await fallbackPage.locator('#catalog-fallback').innerText(),/Main Menu/);
+  await fallbackPage.close();
+  const moduleFailure=await browser.newPage({viewport});
+  await moduleFailure.route('**/layout-kit/runtime.js',route=>route.abort());
+  await moduleFailure.goto(origin+'/catalog/index.html');
+  assert.equal(await moduleFailure.locator('#catalog-fallback a').count(),57);
+  await moduleFailure.close();
   await page.goto(origin+'/catalog/index.html?preset=garage');
   assert.match(await page.locator('#name').innerText(),/Garage/);
   await page.locator('#category').selectOption('racing');
