@@ -69,7 +69,7 @@ export function modifyNode(doc,id,changes) {
  return {...layout,nodes:layout.nodes.map(n=>n.id===id?normalizeNode({...n,...changes,id:n.id,type:n.type}):n)};
 }
 export function deleteNode(doc,id) {
- const layout=normalizeLayout(doc);return {...layout,nodes:layout.nodes.filter(n=>n.id!==id)};
+ const layout=normalizeLayout(doc);return {...layout,nodes:layout.nodes.filter(n=>n.id!==id),edges:layout.edges.filter(e=>e.from!==id&&e.to!==id)};
 }
 export function connectNodes(doc,from,to) {
  const layout=normalizeLayout(doc);
