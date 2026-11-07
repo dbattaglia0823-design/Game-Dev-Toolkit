@@ -25,3 +25,7 @@ Reusable controllers are in `../ui/tabs.js`, `../ui/dialog.js`, `../ui/toast-man
 On GitHub open **Settings → Pages → Build and deployment → Deploy from a branch**, select `main` and `/ (root)`, and save. Your resulting Pages site can serve `/web/showcase/`. GitHub Pages generally requires a public repository on Free plans; do not enable Pages if you want to keep repository contents private.
 
 Note that changing a game's theme is done by overriding `--gdt-*` CSS variables. The gallery accent selector is a preview-only change.
+
+## Game menu preview
+
+Open the [reusable game menu demo](../menu-demo/) to test main menu, pause, settings, and game-over layouts. The underlying [menu controller](../ui/game-menu-controller.js) is standalone and unit-tested.

@@ -24,3 +24,8 @@ Within a root element, create matching ordered `[role=tab]` buttons and `[role=t
 **Status:** Web core utilities and controller logic have Node unit tests. Browser UI and Godot modules still require target-runtime smoke testing. No claims of mobile or Godot validation until tested.
 
 Next: responsive navigation, HUD, inventory and upgrade components, plus equivalent Godot UI where game requirements warrant.
+
+| `web/ui/game-menu-controller.js` | Node/browser ES module | None | Node state transition tests |
+| `web/menu-demo/` | Browser menu template | DOM, CSS, ConfigStore | Manual browser smoke test pending |
+
+Menu controller emits validated transitions; actual games must connect pause and resume to their game-loop state. See `web/menu-demo/README.md`.

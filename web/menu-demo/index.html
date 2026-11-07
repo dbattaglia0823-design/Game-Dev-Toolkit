@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1019">
+<title>GDT · Reusable Game Menus</title>
+<link rel="stylesheet" href="../ui/theme.css">
+<link rel="stylesheet" href="./menus.css">
+</head>
+<body class="gdt-page menu-page">
+  <div class="demo-shell">
+    <header class="demo-toolbar">
+      <a href="../showcase/" class="back-link">← UI Showcase</a>
+      <span>GAME DEVELOPMENT TOOLKIT / MENUS</span>
+    </header>
+    <main class="menu-frame">
+      <div class="stage-top"><span class="mini-logo">GDT <span class="dot">●</span></span><span class="stage-indicator" id="state">MAIN MENU</span></div>
+      <section class="menu-screen" data-screen="main">
+        <p class="overline">INTERACTIVE TEMPLATE</p><h1>NEON<br><em>RUNNER</em></h1>
+        <p class="subline">Reusable game menu system · Demo</p>
+        <nav class="menu-actions" aria-label="Main menu">
+          <button class="menu-button primary" data-action="start">Start game <span>→</span></button>
+          <button class="menu-button" data-action="settings">Settings <span>⚙</span></button>
+        </nav>
+      </section>
+      <section class="menu-screen" data-screen="playing" hidden>
+        <div class="play-hud"><span>RUN IN PROGRESS</span><span>SCORE <strong id="score">0</strong></span></div>
+        <div class="play-field"><span class="play-orb" aria-hidden="true"></span><p>Playable-state preview</p><small>Score increments while running. Use Pause or Esc.</small></div>
+        <div class="play-controls"><button class="menu-button" data-action="pause">Pause <span>Ⅱ</span></button><button class="menu-button" data-action="finish">Finish run <span>■</span></button></div>
+      </section>
+      <section class="menu-screen overlay" data-screen="paused" hidden>
+        <p class="overline">GAME PAUSED</p><h2>Take a break.</h2><p class="subline">Progress is preserved while paused.</p>
+        <nav class="menu-actions" aria-label="Pause menu"><button class="menu-button primary" data-action="resume">Resume <span>▶</span></button><button class="menu-button" data-action="settings">Settings <span>⚙</span></button><button class="menu-button" data-action="main">Main menu <span>⌂</span></button></nav>
+      </section>
+      <section class="menu-screen overlay" data-screen="settings" hidden>
+        <p class="overline">PREFERENCES</p><h2>Settings</h2>
+        <div class="settings-fields">
+          <label class="setting-row" for="sound"><span>Sound effects</span><input type="checkbox" id="sound" checked></label>
+          <label class="setting-row" for="volume"><span>Volume <output id="volume-value" for="volume">70%</output></span><input type="range" min="0" max="100" step="5" value="70" id="volume"></label>
+          <label class="setting-row" for="motion"><span>Reduce motion</span><input type="checkbox" id="motion"></label>
+        </div>
+        <nav class="menu-actions" aria-label="Settings menu"><button class="menu-button primary" data-action="back">Back <span>←</span></button></nav>
+      </section>
+      <section class="menu-screen overlay" data-screen="gameover" hidden>
+        <p class="overline">RUN COMPLETE</p><h2>Game over</h2><p class="subline">Final score</p><div class="final-score" id="final-score">0</div>
+        <nav class="menu-actions" aria-label="Game over menu"><button class="menu-button primary" data-action="start">Try again <span>↻</span></button><button class="menu-button" data-action="main">Main menu <span>⌂</span></button></nav>
+      </section>
+      <div class="stage-bottom"><span>V 0.3 · WEB TEMPLATE</span><span>ESC = PAUSE / BACK</span></div>
+    </main>
+    <p class="demo-footnote">This demo simulates gameplay. Replace its score timer with your real game loop, while reusing the menu controller and CSS.</p>
+  </div>
+  <script type="module" src="./menus.js"></script>
+</body>
+</html>
