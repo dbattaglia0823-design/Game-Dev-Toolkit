@@ -1,30 +1,38 @@
-# Visual UI Builder (initial release)
+# Visual UI Studio v2
 
-Open [the UI builder](index.html) in a browser, or use the GitHub Pages URL `/web/builder/index.html`.
+Open [Visual UI Builder](index.html), or use `/web/builder/index.html` on the project's GitHub Pages site.
 
-## What it does
+## Design tools
 
-- Choose **Blank**, **Main Menu**, or **Game HUD** presets.
-- Click a component in the palette or drag it onto the 800 × 500 canvas.
-- Add **panel**, **button**, **text**, **image placeholder**, and **progress bar** elements.
-- Select an element and drag it to reposition. Use the property inspector to change x/y, width/height, label, fill, corner radius, and applicable text size/progress.
-- Duplicate or delete individual elements, change the background, and clear the current layout.
-- **Save in browser** saves a draft to browser-local storage (not GitHub).
-- **Export JSON** downloads a portable, versioned layout file; **Import JSON** restores it.
+- Drag components to move them; drag the blue bottom-right handle to resize.
+- Snap to a 10-unit grid (toggleable) and see vertical/horizontal center alignment guides near other objects.
+- **Layers** inspector shows elements from front to back. Use Bring forward / Send backward to change draw order.
+- **Undo/Redo** buttons or Ctrl/Cmd+Z and Ctrl/Cmd+Y; Shift+Ctrl/Cmd+Z redoes.
+- **Copy/Paste** buttons or Ctrl/Cmd+C / Ctrl/Cmd+V while the canvas (not a text field) has focus.
+- Arrow keys nudge a selected element one unit; Shift+arrow nudges ten.
+- Select assets from the premade palette: glass and dark panels, primary/secondary buttons, headers, navigation backgrounds, Unicode icons, progress, and artwork placeholders.
+- Background presets: six customizable solid-color schemes.
+- Whole-screen presets: Blank, Main Menu, Game HUD, Inventory, Upgrades, Shop, and Settings.
+- Work on 800×500 design coordinates; preview scales to available monitor size without changing export positions.
 
-This is a visual *layout editor*, not a live game engine or HTML/Godot exporter. The exported file stores component geometry and presentation data so future export adapters can convert it to HTML/CSS, Godot Control scenes, or runtime templates. Backgrounds and image elements use color fills/placeholders in this version.
+## Save and export
 
-## Limits and safety
+**Save in browser** stores the current design in browser-local storage. **Export JSON** produces the full editable document (schema version 1); **Import JSON** restores an editable document.
 
-- Layout format: `version: 1`, `title`, `background`, and `elements`.
-- Maximum 100 elements; all types and ranges are validated on import. No arbitrary code is evaluated or injected as HTML.
-- Canvas uses fixed 800 × 500 coordinate units; smaller windows can scroll horizontally. Mobile editing currently uses tap-to-add plus inspector controls; desktop supports drag and drop.
-- There is no undo/redo, layer ordering, asset upload, resize handles, auto-layout or engine-specific export in this first iteration.
-- Browser-local saves are per browser/device. Export JSON to preserve designs outside that device.
-- Use `cd web && npm test` to run data-model tests. Manual browser smoke testing remains necessary for pointer dragging, colors, import/export and mobile layouts.
+**Export Web HTML** produces a standalone HTML file containing visual layout, text, panels, styled buttons, a progress bar, and placeholders, with embedded CSS. Buttons have no event handlers: connect real game actions in the consuming game. The exported layout scales below 800px width.
 
-## Next steps
+**Export Godot Scene** produces a Godot 4 `.tscn` scene with a root `Control`, static `Panel`, `Button`, `Label`, `ColorRect`, and `ProgressBar` nodes and inlined `StyleBoxFlat` resources. Import the scene into your Godot project, then wire signals, responsive anchors, game logic and fonts as needed. Generated images are placeholders, and some CSS effects are not transferable automatically. The Godot exporter requires an actual Godot runtime smoke test before it should be treated as production-ready.
 
-1. Add reusable presets and component variants (navigation, icons, image assets, inventory tiles, modal shells).
-2. Add undo/redo, layers, snapping and responsive layout modes.
-3. Build HTML/CSS and Godot 4 converters with explicit compatibility tests.
+## Important limitations
+
+- This is a visual UI layout editor, not a full game maker. It does not export behavioral logic or assets.
+- Existing JSON version 1 layouts remain compatible.
+- No external image uploads, full constraint-based responsive layout, arbitrary fonts, user-created reusable collections, or animation timeline yet.
+- Snap currently uses the grid; alignment guides are visual aids, not magnetic object snapping.
+- Premade backgrounds are solid-color presets, not raster artwork.
+- Editor clipboard is internal to the browser page, not system-wide.
+- Exported web UI is an independent fixed-coordinate screen, not a complete website or CSS component framework.
+
+## Validation
+
+Run `cd web && npm test`. Automated tests cover history, screen templates, ordering, JSON model and exporter output shape. They do not prove browser drag/resize correctness or parsing inside Godot. Before shipping a game, smoke-test the exported files in the actual browser/device and Godot version.
