@@ -2,3 +2,14 @@
 .variant-choices{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 14px}
 .variant-choices .gdt-btn{padding:10px 14px;font-size:13px;min-height:40px}
 .variant-choices .gdt-btn[aria-pressed="true"]{border-color:var(--gdt-accent);box-shadow:inset 0 0 0 1px var(--gdt-accent)}
+
+/* Functional links remain usable while JavaScript initializes or fails. */
+.catalog-fallback-notice{color:var(--gdt-muted);font-size:13px;line-height:1.5;grid-column:1/-1;margin:0 0 5px}
+.catalog-fallback{display:grid;gap:12px;grid-column:1/-1}
+.catalog-fallback section{border:1px solid var(--gdt-border);border-radius:10px;padding:12px}
+.catalog-fallback h3{margin:0 0 9px;font-size:14px}
+.fallback-family{display:grid;gap:5px;padding:9px 0;border-top:1px solid var(--gdt-border)}
+.fallback-family strong{font-size:13px}
+.fallback-family div{display:flex;flex-wrap:wrap;gap:8px}
+.fallback-family a{color:var(--gdt-accent);font-size:12px}
+.catalog-preview-error{padding:20px;color:var(--gdt-muted);font-size:14px}
