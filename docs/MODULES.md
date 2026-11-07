@@ -38,3 +38,9 @@ Menu controller emits validated transitions; actual games must connect pause and
 | `web/builder/index.html` | Browser | Interactive visual layout editor | Manual browser testing pending |
 
 Builder exports validated JSON layouts, not executable games or Godot scenes. See `web/builder/README.md`.
+
+## UI Studio v2 modules
+
+- `web/builder/studio.js`: editor history, premade asset library, additional screen presets, layer ordering and movement helpers (unit-tested).
+- `web/builder/exporters.js`: static standalone HTML and Godot 4 Control scene export generators (output-format unit-tested, target runtime smoke testing pending).
+- `web/builder/editor.js`: interactive canvas, resize handle, alignment guides, layer controls and keyboard shortcuts (browser smoke testing pending).
