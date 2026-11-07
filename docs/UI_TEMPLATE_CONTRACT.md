@@ -76,3 +76,7 @@ JSON v1 files made by the previous *visual studio* are **not compatible with v2*
 - Web working example: `web/layout-kit/example/index.html`.
 
 All outputs are scaffolding. The target game's author or Codex must still connect real data, callbacks, assets, styling, and responsive behavior.
+
+## Integration readiness checks
+
+The [Integration Validator](../web/validator/index.html) reviews the raw v2 document before normalization, action-handler mappings and sample-data bindings. It flags malformed coordinates, duplicate IDs, offscreen controls and undersized interactive targets. Download the report and attach it to the target-game integration review. A template with no errors but warnings is structurally valid, **not fully mapped**.

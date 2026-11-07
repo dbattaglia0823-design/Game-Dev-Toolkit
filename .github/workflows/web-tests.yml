@@ -16,3 +16,23 @@ jobs:
       - name: Run web tests
         working-directory: web
         run: npm test
+
+  browser-smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned browser test runner
+        working-directory: web
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run 1440p and mobile browser integration tests
+        working-directory: web
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/gdt-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          node e2e/smoke.mjs
