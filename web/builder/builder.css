@@ -1,0 +1,32 @@
+*{box-sizing:border-box}.builder-page{margin:0;padding:16px;min-height:100vh;font-size:14px}
+.builder-top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin:0 auto 16px;max-width:1800px}
+.builder-top h1{font-size:27px;line-height:1.2;margin:6px 0}.back{color:var(--gdt-accent);text-decoration:none}.back:hover{text-decoration:underline}
+.muted,.sidebar p{color:var(--gdt-muted);font-size:12px}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.toolbar label{font-size:12px;color:var(--gdt-muted)}
+.toolbar select{margin-left:6px}.builder-page input,.builder-page select{background:#172334;border:1px solid var(--gdt-border);color:var(--gdt-text);border-radius:9px;padding:10px;min-width:0;font:inherit}
+.builder-page input:focus-visible,.builder-page select:focus-visible,.builder-page button:focus-visible,.builder-page a:focus-visible{outline:2px solid var(--gdt-accent);outline-offset:2px}
+.file-label{cursor:pointer!important;color:var(--gdt-text)!important;font-size:14px!important;display:inline-flex;align-items:center}
+.workspace{display:grid;grid-template-columns:210px minmax(0,1fr) 255px;gap:14px;align-items:stretch;max-width:1800px;margin:auto}
+.sidebar,.workarea{background:var(--gdt-panel);border:1px solid var(--gdt-border);border-radius:var(--gdt-radius);padding:17px;min-width:0}
+.sidebar h2{font-size:17px;margin:2px 0 6px}.sidebar p{line-height:1.5}.palette{display:grid;gap:9px;margin-top:17px}
+.palette button{color:var(--gdt-text);border:1px solid var(--gdt-border);background:#ffffff0b;border-radius:10px;cursor:grab;display:flex;align-items:center;gap:13px;padding:14px;text-align:left;font:inherit}
+.palette button:hover{background:#ffffff1d}.palette button span{font-size:13px}.hint{margin-top:24px;padding-top:17px;border-top:1px solid var(--gdt-border);font-size:12px;color:var(--gdt-muted)}
+.hint strong{color:var(--gdt-text)}.hint label{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.canvas-toolbar{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}
+.canvas-toolbar label{font-size:12px;color:var(--gdt-muted)}#title{margin-left:7px;width:min(230px,60vw)}
+#canvas-scroll{max-width:100%;overflow:auto;background:#080c13;border:1px solid var(--gdt-border);border-radius:12px;padding:18px;min-height:350px}
+#canvas{width:800px;height:500px;position:relative;overflow:hidden;border:1px solid #ffffff22;background:#101722;transform-origin:top left;box-shadow:0 10px 40px #0005}
+.canvas-item{position:absolute;display:flex;align-items:center;justify-content:center;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;text-align:center;border:1px solid #ffffff22;user-select:none;cursor:move;touch-action:none;color:#fff;font-weight:600;line-height:1.15;padding:3px}
+.canvas-item[data-type="panel"]{border-color:#ffffff1a}.canvas-item[data-type="text"]{border-color:transparent;background:transparent!important}
+.canvas-item[data-type="image"]{border:2px dashed #ffffff70;color:#f4f7fc}
+.canvas-item[data-type="progress"]{border:1px solid #ffffff25;background:#182332!important;padding:0}
+.canvas-item .progress-fill{display:block;position:absolute;left:0;top:0;bottom:0}
+.canvas-item.selected{outline:2px solid #68c5ff;outline-offset:2px;z-index:10}
+#message{margin-top:12px;min-height:20px}
+.inspector label{display:grid;gap:5px;color:var(--gdt-muted);font-size:12px;margin-bottom:12px}
+.inspector input{width:100%}.inspector input[type="color"]{padding:3px;height:40px;min-height:40px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#properties .gdt-btn{width:100%;margin:5px 0}.danger{background:rgba(237,90,90,.14)!important}
+@media(max-width:1150px){.workspace{grid-template-columns:185px minmax(0,1fr)}.inspector{grid-column:1/-1}.inspector #properties{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.inspector #properties[hidden]{display:none}.inspector .hint{margin-top:14px}}
+@media(max-width:700px){.workspace{grid-template-columns:1fr}.inspector{grid-column:auto}.palette{grid-template-columns:repeat(2,minmax(0,1fr))}.palette button{padding:11px}.inspector #properties{grid-template-columns:repeat(2,minmax(0,1fr))}#canvas-scroll{padding:10px}.toolbar{gap:6px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
