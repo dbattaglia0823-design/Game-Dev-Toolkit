@@ -103,7 +103,7 @@ try{
   const circleSize=await page.locator('.wf-node[data-id="skill_root"]').evaluate(el=>({w:el.offsetWidth,h:el.offsetHeight}));
   assert.equal(circleSize.w,circleSize.h,'Circle must have equal width and height');
   await page.locator('#undo').click();
-  assert.equal(await page.locator('.wf-node[data-id="skill_root"]').getAttribute('data-shape'),'circle');
+  assert.equal(await page.locator('.wf-node[data-id="skill_root"]').getAttribute('data-shape'),'rectangle');
   await page.goto(origin+'/builder/index.html');
   await page.locator('#template').selectOption('blank');
   await page.locator('#palette button').filter({hasText:'button'}).click();
