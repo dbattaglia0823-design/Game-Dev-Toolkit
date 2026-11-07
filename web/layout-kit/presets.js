@@ -1,7 +1,8 @@
 import {normalizeLayout} from './schema.js';
+import {PHASE3_PRESETS} from './phase3-presets.js';
 /** Wireframes intentionally describe role and behavior, never artwork or game-specific data. */
 const N=(type,id,x,y,w,h,label='',role='',actionId='',bindingKey='')=>({type,id,x,y,w,h,label,role,actionId,bindingKey});
-export const PRESETS=Object.freeze({
+export const CORE_PRESETS=Object.freeze({
  'main-menu':{name:'Main Menu',nodes:[
   N('panel','menu_container',230,85,340,345,'','main_menu'),
   N('label','game_title',275,115,250,56,'GAME TITLE','screen_title','','game.title'),
@@ -93,6 +94,8 @@ export const PRESETS=Object.freeze({
   N('button','confirm_approve',416,309,147,56,'Confirm','primary_action','ui.confirm')
  ]}
 });
+/** All presets share the same layout contract and can be imported by either engine. */
+export const PRESETS=Object.freeze({...CORE_PRESETS,...PHASE3_PRESETS});
 export function getPreset(name) {
  const raw=PRESETS[name];
  if(!raw)throw new Error('Unknown layout preset');
