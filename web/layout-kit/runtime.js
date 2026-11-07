@@ -9,11 +9,14 @@ export function mountLayout({container,layout,data={},onAction=()=>{}}) {
  root.className='gdt-wireframe';
  root.setAttribute('aria-label',spec.name);
  root.style.aspectRatio=spec.viewport.width+'/'+spec.viewport.height;
+ root.style.width='100%';
+ root.style.height='auto';
+ root.style.position='relative';
  const nodeMap=new Map();
  const getValue=key=>{
   if(!key)return undefined;
   if(bindings!=null&&Object.hasOwn(Object(bindings),key))return bindings[key];
-  return key.split('.').reduce((value,part)=>value!=null?value[part]:undefined,bindings);
+  return key.split('.').reduce((value,part)=>value!=null && typeof value==='object' && Object.hasOwn(value,part)?value[part]:undefined,bindings);
  };
  const emit=(node,payload={})=>{
   if(node.actionId)onAction(node.actionId,{nodeId:node.id,...payload});
@@ -76,6 +79,7 @@ export function mountLayout({container,layout,data={},onAction=()=>{}}) {
    }else if(node.type==='input'){
     if(document.activeElement!==el)el.value=value==null?'':String(value);
    }else if(node.type==='grid'||node.type==='list'){
+    const previousScroll=el.scrollTop;
     el.replaceChildren();
     const values=Array.isArray(value)?value:[];
     for(const [index,item] of values.entries()){
@@ -86,6 +90,7 @@ export function mountLayout({container,layout,data={},onAction=()=>{}}) {
      el.append(btn);
     }
     if(!values.length){const empty=document.createElement('span');empty.className='gdt-wireframe-empty';empty.textContent=node.label||'Empty';el.append(empty);}
+    el.scrollTop=previousScroll;
    }else if(node.type==='slot'&&value!==undefined){
     el.textContent=displayValue(value)||node.label;
    }
