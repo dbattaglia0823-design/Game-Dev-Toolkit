@@ -17,9 +17,11 @@ const num=(x,d,min,max)=>typeof x==='number'&&Number.isFinite(x)?clamp(Math.roun
 export function normalizeNode(raw,index=0) {
  if(!raw||typeof raw!=='object'||!NODE_TYPES.includes(raw.type)) throw new TypeError('Invalid UI node type');
  const [w,h]=DEFAULT_SIZE[raw.type],id=cleanToken(raw.id)||'node_'+(index+1);
+ const circle=(raw.type==='button'||raw.type==='slot')&&raw.shape==='circle';
+ const size=num(raw.w,w,24,4000);
  return {
   id,type:raw.type,x:num(raw.x,30,0,4000),y:num(raw.y,30,0,4000),
-  w:num(raw.w,w,24,4000),h:num(raw.h,h,16,4000),
+  w:size,h:circle?size:num(raw.h,h,16,4000),
   label:text(raw.label,100),role:cleanToken(raw.role),
   shape:raw.type==='button'||raw.type==='slot'?(SHAPES.includes(raw.shape)?raw.shape:'rectangle'):'rectangle',
   actionId:ACTION_TYPES.has(raw.type)?cleanToken(raw.actionId):'',
