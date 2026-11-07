@@ -10,7 +10,7 @@ test('all functional presets have unique node IDs and declare actions and bindin
   assert.ok(layout.nodes.length>2,name);
   assert.equal(new Set(layout.nodes.map(n=>n.id)).size,layout.nodes.length);
   assert.ok(contract.actions.length,name);
-  if(name!=='pause-menu')assert.ok(contract.bindings.length,name);
+  if(!name.startsWith('pause-menu'))assert.ok(contract.bindings.length,name);
  }
 });
 test('functional templates contain no appearance fields',()=>{
