@@ -7,7 +7,7 @@ try{
  for(const viewport of [{width:2560,height:1440},{width:390,height:844}]){
   const page=await browser.newPage({viewport});
   const errors=[];
-  page.on('pageerror',error=>errors.push(error.message));
+  page.on('pageerror',error=>errors.push(error.stack || error.message));
   await page.goto(origin+'/validator/index.html');
   await page.locator('#preset').selectOption('inventory');
   await page.locator('#validate').click();
@@ -24,6 +24,28 @@ try{
   await page.locator('#screen').selectOption('settings');
   await page.locator('[data-node-id="music_toggle"] input').uncheck();
   assert.match(await page.locator('#last-event').innerText(),/settings.music_changed/);
+  await page.goto(origin+'/layout-kit/behaviors-demo/index.html');
+  assert.equal(await page.locator('[data-node-id="item_grid"] button').count(),6);
+  await page.locator('[data-node-id="item_grid"] button').filter({hasText:'Travel shield'}).click();
+  assert.match(await page.locator('#state').innerText(),/item-02/);
+  await page.locator('[data-node-id="search_items"]').fill('shield');
+  await page.locator('[data-node-id="search_items"]').dispatchEvent('change');
+  assert.equal(await page.locator('[data-node-id="item_grid"] button').count(),1);
+  await page.locator('[data-node-id="equip"]').click();
+  assert.match(await page.locator('#events').innerText(),/inventory.equip/);
+  await page.locator('[data-screen="equipment"]').click();
+  assert.match(await page.locator('#state').innerText(),/Travel shield/);
+  await page.locator('[data-screen="shop"]').click();
+  await page.locator('[data-node-id="buy"]').click();
+  assert.match(await page.locator('#state').innerText(),/shop.purchase/);
+  await page.locator('#cancel-confirm').click();
+  assert.doesNotMatch(await page.locator('#state').innerText(),/"pendingAction": "shop.purchase"/);
+  await page.locator('[data-node-id="buy"]').click();
+  await page.locator('#approve-confirm').click();
+  assert.match(await page.locator('#events').innerText(),/shop.purchase/);
+  await page.locator('[data-node-id="buy"]').click();
+  await page.keyboard.press('Escape');
+  assert.doesNotMatch(await page.locator('#state').innerText(),/"pendingAction": "shop.purchase"/);
   await page.goto(origin+'/builder/index.html');
   await page.locator('#template').selectOption('inventory');
   assert.match(await page.locator('#count').innerText(),/9 controls/);

@@ -64,3 +64,14 @@ See `docs/UI_TEMPLATE_CONTRACT.md` and `docs/CODEX_UI_INTEGRATION.md`. The legac
 - `web/validator/`: browser-based diagnostics/report export.
 - `web/e2e/smoke.mjs`: desktop 2560×1440 and mobile 390×844 headless Chromium validation.
 - `godot/tests/integration_smoke.gd`: Godot 4 headless fixture and action/binding tests.
+
+## Phase 2 — Functional UI Behaviors
+
+- `web/layout-kit/behaviors.js`: framework-free searchable collection, stable selection, equipment display slots, history and confirmation queue.
+- `web/layout-kit/workflow.js`: action routing between layout runtime and host game.
+- `web/layout-kit/confirmation-dialog.js`: optional accessible native browser dialog adapter.
+- `web/layout-kit/behaviors-demo/`: working functional reference screen.
+- `godot/layout-kit/ui_behaviors.gd`: equivalent Godot 4 headless UI behaviors.
+- `web/layout-kit/presets.js`: equipment, searchable list and confirmation presets.
+
+See `docs/BEHAVIORS.md` for integration boundaries and action conventions.

@@ -23,3 +23,7 @@ Before writing a new feature, inspect `docs/MODULES.md` for an existing compatib
 ## Integration validation gate
 
 Before importing a UI template into a game, run the `web/layout-kit/validator.js` checks with target action IDs and representative state data. Correct structural errors, resolve warnings or document why they are intentional. Run browser UI smoke tests or Godot headless checks as appropriate. A valid contract does **not** prove the actual game has implemented or tested the handlers.
+
+## Phase 2 behavior modules
+
+Use `docs/BEHAVIORS.md` to select UI-only functionality for filtering, selecting, equipment slots, navigation and confirmation. Maintain stable item IDs, avoid hiding gameplay mutations in UI components, and keep purchase/equip requests delegated to the existing game systems. Wire `action_requested` to behavior handling, and pass approved results back into the UI state. Test keyboard, pointer, mobile and Godot behavior where supported.

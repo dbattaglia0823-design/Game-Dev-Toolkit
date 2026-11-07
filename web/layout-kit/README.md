@@ -23,3 +23,7 @@ screen.setData({inventory: {items: [], selected: null}});
 The adapter handles UI nodes, inputs, list/grid selection, basic reactive data display, and action dispatch. It does **not** provide game data, purchases, saving, scene routing, screen transitions, gamepad support, or visual asset conversion. The generated layout coordinates are relative to the declared design viewport; apply a consuming-game responsive strategy as needed.
 
 See [live functional integration example](example/index.html) and [contract specification](../../docs/UI_TEMPLATE_CONTRACT.md). For Codex integrations, read [the integration guide](../../docs/CODEX_UI_INTEGRATION.md).
+
+## Reusable behavior modules
+
+Use `behaviors.js` and `workflow.js` for search, selection, equipment display slots, navigation and confirmations, or `confirmation-dialog.js` for browser-native modals. Start with the [interactive behavior demonstration](behaviors-demo/index.html). See `docs/BEHAVIORS.md` in the repository for the full contract.

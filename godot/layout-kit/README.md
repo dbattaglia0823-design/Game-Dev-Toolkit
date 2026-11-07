@@ -24,3 +24,7 @@ func _handle_ui_action(action_id: String, payload: Dictionary) -> void:
 **Important:** The imported coordinates reflect the 800×500 design viewport. Apply scale/anchors, focus navigation, accessibility, theme resources, animations and mobile adaptations in the consuming game. The adapter does not replace any inventory, race, shop or save system.
 
 This script has been reviewed and committed but has **not been runtime-validated in Godot** through this environment. Before relying on it, import into Godot 4, test JSON loading, controls and signals, and verify its behavior alongside the game's existing architecture.
+
+## Phase 2 behaviors
+
+Attach `ui_behaviors.gd` to a separate Node. Connect the UI layout adapter's `action_requested` signal to the behavior node's `handle(action_id, payload)`. Connect the behavior's `game_action_requested` signal to the game logic and `state_changed` to refresh layout data. Gameplay remains responsible for approving equipment, purchases and saves. See `docs/BEHAVIORS.md`.

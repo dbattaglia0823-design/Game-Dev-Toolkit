@@ -16,6 +16,10 @@ Open the [Integration Validator](web/validator/index.html) to check exported lay
 
 Automated checks cover Node unit tests, Chromium desktop/mobile smoke tests and a Godot 4 headless adapter fixture. See [validation instructions](docs/VALIDATION.md) for limits and status.
 
+## Phase 2 — Reusable UI behaviors
+
+Functional templates can now use standalone [search/selection, equipment, navigation, and confirmation controllers](docs/BEHAVIORS.md). The [interactive behavior demonstration](web/layout-kit/behaviors-demo/index.html) exercises these workflows. The toolkit defines **where controls go and how UI interactions are routed**, while the consuming game owns gameplay rules, real inventory changes, purchases and visuals.
+
 ## Game menu templates
 
 Explore the [interactive menu templates](web/menu-demo/index.html) for main menu, pause, settings, gameplay and game-over screens. Reuse the [menu state controller](web/ui/game-menu-controller.js) without coupling to the mock gameplay timer. See [integration notes](web/menu-demo/README.md).
