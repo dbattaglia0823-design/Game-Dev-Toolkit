@@ -72,6 +72,21 @@ func _run() -> void:
 				received.clear()
 				(control as Button).pressed.emit()
 				_check(received.size() == 1 and received[0] == action, key + ": button action " + action)
+		if key == "skill-tree":
+			var connections: Array = spec.get("edges", [])
+			_check(connections.size() >= 4, "Skill tree retains graph edges")
+			var line_count: int = 0
+			var circles: int = 0
+			for child in ui.get_children():
+				if child is Line2D:
+					line_count += 1
+			for node in spec.get("nodes", []):
+				if node.get("shape", "") == "circle":
+					circles += 1
+					var button: Button = controls.get(str(node.get("id", ""))) as Button
+					_check(button != null and button.has_theme_stylebox_override("normal"), "Circle shape generates button style")
+			_check(circles >= 5, "Skill tree has multiple circular controls")
+			_check(line_count == connections.size(), "All skill tree connections render in Godot")
 		ui.queue_free()
 	if failures.is_empty():
 		print("GDT_GODOT_CATALOG_PASS: ",manifest_data.size()," layouts")
