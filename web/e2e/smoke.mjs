@@ -7,7 +7,7 @@ try{
  for(const viewport of [{width:2560,height:1440},{width:390,height:844}]){
   const page=await browser.newPage({viewport});
   const errors=[];
-  page.on('pageerror',error=>errors.push(error.message));
+  page.on('pageerror',error=>errors.push(error.stack || error.message));
   await page.goto(origin+'/validator/index.html');
   await page.locator('#preset').selectOption('inventory');
   await page.locator('#validate').click();
