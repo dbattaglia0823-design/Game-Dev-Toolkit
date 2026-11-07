@@ -5,7 +5,7 @@ import {SearchableCollection,EquipmentSlots,NavigationHistory,ConfirmationQueue}
  */
 export class UIWorkflow {
  constructor({
-  items=[],slots=['primary','secondary'],screens=['main-menu','inventory','equipment','shop','settings','confirm'],
+  items=[],slots=['primary','secondary'],screens=['main-menu','pause-menu','inventory','equipment','search-list','shop','upgrades','settings','confirmation'],
   initialScreen='inventory',onGameAction=()=>{},onChange=()=>{},confirmationActions=['shop.purchase','upgrades.purchase']
  }={}){
   if(typeof onGameAction!=='function'||typeof onChange!=='function')throw new TypeError('Callbacks must be functions');
@@ -58,6 +58,7 @@ export class UIWorkflow {
    case 'nav.inventory':return this.navigation.go('inventory');
    case 'nav.equipment':return this.navigation.go('equipment');
    case 'nav.shop':return this.navigation.go('shop');
+   case 'nav.search_list':return this.navigation.go('search-list');
    case 'ui.confirm':{
     const approved=this.confirmation.confirm();
     if(!approved)return false;
