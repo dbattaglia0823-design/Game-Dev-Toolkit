@@ -64,6 +64,34 @@ export const PRESETS=Object.freeze({
   N('progress','health_bar',42,436,285,22,'Health','health_indicator','','hud.health'),
   N('button','pause',670,424,86,43,'Pause','hud_action','game.pause')
  ]}
+  ,
+ equipment:{name:'Equipment',nodes:[
+  N('label','equipment_title',40,25,360,54,'EQUIPMENT','screen_title'),
+  N('panel','inventory_panel',30,95,420,360,'','inventory_panel'),
+  N('input','equipment_search',48,115,230,45,'Search items','filter_search','inventory.search','inventory.search'),
+  N('grid','equipment_items',48,183,382,235,'Inventory','item_grid','inventory.select','inventory.items'),
+  N('panel','equipment_panel',470,95,300,360,'','equipment_panel'),
+  N('label','equipment_selected',486,111,258,46,'Selected item','detail_title','','inventory.selected.name'),
+  N('slot','primary_slot',489,180,114,100,'Primary slot','primary_slot','equipment.slot_primary','equipment.primary'),
+  N('slot','secondary_slot',620,180,114,100,'Secondary slot','secondary_slot','equipment.slot_secondary','equipment.secondary'),
+  N('button','equip_primary',488,305,120,55,'Equip','primary_action','inventory.equip'),
+  N('button','unequip',622,305,116,55,'Unequip','secondary_action','equipment.unequip'),
+  N('button','back_equipment',621,390,110,43,'Back','back_action','nav.back')
+ ]},
+ 'search-list':{name:'Searchable List',nodes:[
+  N('label','list_title',50,35,340,60,'LIST','screen_title'),
+  N('input','list_search',50,115,470,50,'Search','filter_search','inventory.search','inventory.search'),
+  N('button','list_sort',540,115,202,50,'Sort','sort_action','inventory.sort'),
+  N('list','list_results',50,185,690,260,'Results','result_list','inventory.select','inventory.items'),
+  N('label','list_count',50,451,310,34,'Count','status','','inventory.visibleCount')
+ ]},
+ confirmation:{name:'Confirmation Dialog',nodes:[
+  N('panel','confirm_backdrop',185,83,430,340,'','modal_region'),
+  N('label','confirm_heading',232,126,336,55,'Confirm action','modal_title','','confirmation.title'),
+  N('label','confirm_message',232,194,336,76,'Are you sure?','modal_message','','confirmation.message'),
+  N('button','confirm_cancel',236,309,147,56,'Cancel','secondary_action','ui.cancel'),
+  N('button','confirm_approve',416,309,147,56,'Confirm','primary_action','ui.confirm')
+ ]}
 });
 export function getPreset(name) {
  const raw=PRESETS[name];
