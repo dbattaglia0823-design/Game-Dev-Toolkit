@@ -1,3 +1,4 @@
+import {appendVariantOptions} from '../layout-kit/variant-options.js';
 import {getPreset,PRESETS} from '../layout-kit/presets.js';
 import {parseLayout} from '../layout-kit/schema.js';
 import {validateIntegration} from '../layout-kit/validator.js';
@@ -39,6 +40,7 @@ $('download').addEventListener('click',()=>{
  const a=document.createElement('a');a.href=url;a.download='ui-validation-report.json';document.body.append(a);a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
+appendVariantOptions($('preset'));
 const requestedPreset=new URLSearchParams(location.search).get('preset');
 if(requestedPreset && Object.hasOwn(PRESETS,requestedPreset)) {
  current=getPreset(requestedPreset);
