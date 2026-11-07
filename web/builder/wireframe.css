@@ -69,3 +69,12 @@
 #connect-mode[aria-pressed="true"]{border-color:#6ac9ff;box-shadow:inset 0 0 0 1px #6ac9ff}
 
 .wf-node[data-type="panel"]{z-index:0}.wf-edges{z-index:1}.wf-node[data-type="button"],.wf-node[data-type="slot"]{z-index:2}.wf-node.selected{z-index:5}
+
+/* Shape choices must be visibly distinct on the editor canvas. */
+.wf-node[data-type="button"][data-shape="rectangle"],
+.wf-node[data-type="slot"][data-shape="rectangle"]{border-radius:0}
+.wf-node[data-type="button"][data-shape="rounded"],
+.wf-node[data-type="slot"][data-shape="rounded"]{border-radius:16px}
+.wf-node[data-type="button"][data-shape="circle"],
+.wf-node[data-type="slot"][data-shape="circle"]{border-radius:50%}
+.wf-node[data-shape="circle"] small{display:none}
