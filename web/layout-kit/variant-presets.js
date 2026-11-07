@@ -58,8 +58,11 @@ function positionNodes(base,positions){
   return {...node,x,y,w,h, ...(node.shape==='circle'?{h:w}:{})};
  });
 }
-function reversed(base){
- return base.nodes.map(node=>({...node,x:800-node.x-node.w}));
+function reversed(base,key){
+ // Symmetric center dialogs would remain unchanged if mathematically mirrored.
+ // Give those screens a purposefully offset side-dock composition instead.
+ const dockOffset={'main-menu':180,'pause-menu':150,settings:-112,confirmation:150}[key];
+ return base.nodes.map(node=>({...node,x:dockOffset===undefined?800-node.x-node.w:node.x+dockOffset}));
 }
 /** Generated layouts retain stable node IDs, bindings, actions and graph edges. */
 export function createVariantPresets(basePresets){
@@ -67,7 +70,7 @@ export function createVariantPresets(basePresets){
  for(const [key,base] of Object.entries(basePresets)){
   if(!Object.hasOwn(FAMILY_VARIANT_NAMES,key)||!Object.hasOwn(SPOTLIGHT_RECTS,key))throw new Error('Missing authored variants for '+key);
   const [reverseName,spotlightName]=FAMILY_VARIANT_NAMES[key];
-  variants[key+'-reverse']={name:base.name+' — '+reverseName,nodes:reversed(base),edges:structuredClone(base.edges??[])};
+  variants[key+'-reverse']={name:base.name+' — '+reverseName,nodes:reversed(base,key),edges:structuredClone(base.edges??[])};
   variants[key+'-focus']={name:base.name+' — '+spotlightName,nodes:positionNodes(base,SPOTLIGHT_RECTS[key]),edges:structuredClone(base.edges??[])};
  }
  return variants;
