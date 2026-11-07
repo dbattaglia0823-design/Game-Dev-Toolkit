@@ -108,3 +108,7 @@ Generate an integration ZIP at `web/package/index.html`. Open `manifest.json` an
 ## Skill-tree shape and graph integration
 
 When importing a skill-tree layout, preserve every node's optional `shape` and the layout's `edges`. Treat those links as visual graph definitions only. Connect real unlock conditions, prerequisites, points and skills to existing game logic. The Web adapter requires `connections.js` alongside `runtime.js`, and updated ZIP packages include it. See `docs/SKILL_TREE_CONNECTIONS.md`.
+
+## Selecting a menu composition
+
+The catalog offers three functionally equivalent layouts per menu type. Select Original, Reversed or Focus using `docs/MENU_VARIANTS.md`. All variants retain action IDs and binding keys, so Codex can choose the arrangement best suited to the game without changing its existing controls, data model or gameplay logic. Export a single chosen version or several for comparison.
