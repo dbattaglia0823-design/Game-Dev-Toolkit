@@ -25,8 +25,7 @@ function entries(bytes){
  return result;
 }
 const loader=async path=>{
- const actual=path.startsWith('../../')?path.slice(6):path.startsWith('../')?path.slice(3):path;
- return readFile(new URL('../'+actual,import.meta.url),'utf8');
+ return readFile(new URL(path,import.meta.url),'utf8');
 };
 test('ZIP archives have valid headers, CRCs and directory metadata',()=>{
  const out=createZip(new Map([['test/file.txt','hello'],['root.json','{}']]));
