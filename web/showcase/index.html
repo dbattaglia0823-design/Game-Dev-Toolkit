@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1019">
+  <title>Game Development Toolkit — UI Showcase</title>
+  <link rel="stylesheet" href="../ui/theme.css">
+  <link rel="stylesheet" href="./showcase.css">
+</head>
+<body class="gdt-page showcase-page">
+  <div class="gdt-toast" id="toast" hidden></div>
+  <div class="showcase-shell">
+    <header class="showcase-header">
+      <div><p class="eyebrow">GAME DEVELOPMENT TOOLKIT / WEB</p><h1>UI Showcase</h1><p class="gdt-muted">Reusable styles and interactive reference screens. Demo data only.</p></div>
+      <div class="header-controls">
+        <label for="accent">Accent</label>
+        <select id="accent" class="gdt-select"><option value="orange">Orange</option><option value="blue">Blue</option><option value="green">Green</option></select>
+        <button class="gdt-btn" id="reset">Reset demo</button>
+      </div>
+    </header>
+    <div id="showcase-tabs" class="showcase-tabs">
+      <div class="gdt-tablist showcase-nav" role="tablist" aria-label="UI component categories">
+        <button id="nav-components" role="tab" aria-controls="view-components">Components</button>
+        <button id="nav-inventory" role="tab" aria-controls="view-inventory">Inventory</button>
+        <button id="nav-upgrades" role="tab" aria-controls="view-upgrades">Upgrades</button>
+        <button id="nav-hud" role="tab" aria-controls="view-hud">Game HUD</button>
+      </div>
+      <main>
+        <section role="tabpanel" id="view-components" aria-labelledby="nav-components" class="showcase-view">
+          <div class="section-heading"><div><p class="eyebrow">FOUNDATIONS</p><h2>Controls &amp; panels</h2></div><span class="small-note">Reusable CSS + controllers</span></div>
+          <div class="showcase-grid">
+            <article class="gdt-surface"><h3>Buttons</h3><p class="gdt-muted">Primary, secondary, destructive and disabled states.</p><div class="gdt-actions">
+              <button class="gdt-btn gdt-btn--primary" data-toast="Primary action">Primary action</button>
+              <button class="gdt-btn" data-toast="Secondary action">Secondary</button>
+              <button class="gdt-btn gdt-btn--danger" id="open-dialog">Open dialog</button>
+              <button class="gdt-btn" disabled>Disabled</button>
+            </div></article>
+            <article class="gdt-surface"><h3>Cards &amp; badges</h3><p class="gdt-muted">Compact status and item previews.</p>
+              <div class="item-row"><div class="item-icon">◆</div><div class="item-details"><strong>Prototype module</strong><span class="gdt-muted">Legendary · Level 12</span></div><span class="gdt-pill">Equipped</span></div>
+              <div class="item-row"><div class="item-icon">✦</div><div class="item-details"><strong>Upgrade unlocked</strong><span class="gdt-muted">Improved handling</span></div><span class="gdt-pill gdt-pill--positive">Ready</span></div>
+            </article>
+            <article class="gdt-surface"><h3>Progress indicators</h3>
+              <div class="stat-label"><span>Experience</span><strong>72%</strong></div><div class="gdt-progress"><span style="width:72%"></span></div>
+              <div class="stat-label"><span>Energy</span><strong>43%</strong></div><div class="gdt-progress"><span style="width:43%"></span></div>
+              <div class="stat-label"><span>Armor</span><strong>90%</strong></div><div class="gdt-progress"><span style="width:90%"></span></div>
+            </article>
+            <article class="gdt-surface"><h3>Notification manager</h3><p class="gdt-muted">Only one notification is shown at a time.</p>
+              <div class="gdt-actions"><button class="gdt-btn" data-toast="Achievement unlocked">Achievement</button><button class="gdt-btn" data-toast="Inventory full">Inventory full</button></div>
+            </article>
+          </div>
+        </section>
+        <section role="tabpanel" id="view-inventory" aria-labelledby="nav-inventory" class="showcase-view" hidden>
+          <div class="section-heading"><div><p class="eyebrow">DEMO INTERFACE</p><h2>Inventory</h2><p class="gdt-muted">Try filtering, sorting and selecting mock items.</p></div></div>
+          <div class="inventory-layout">
+            <article class="gdt-surface">
+              <div class="filter-controls"><label for="category">Category</label><select id="category" class="gdt-select"><option value="all">All</option><option value="weapon">Weapons</option><option value="armor">Armor</option><option value="material">Materials</option></select>
+              <label for="sort">Sort</label><select id="sort" class="gdt-select"><option value="name">Name</option><option value="rarity">Rarity</option></select></div>
+              <div class="inventory-grid" id="inventory-grid" aria-label="Items"></div>
+              <p id="item-count" class="gdt-muted"></p>
+            </article>
+            <article class="gdt-surface item-inspector"><p class="eyebrow">ITEM DETAILS</p><h3 id="item-name">Choose an item</h3><p id="item-desc" class="gdt-muted">Select an item to preview its information.</p><div class="detail-row"><span>Category</span><strong id="item-category">—</strong></div><div class="detail-row"><span>Rarity</span><strong id="item-rarity">—</strong></div><button class="gdt-btn gdt-btn--primary" id="item-use" disabled>Preview action</button></article>
+          </div>
+        </section>
+        <section role="tabpanel" id="view-upgrades" aria-labelledby="nav-upgrades" class="showcase-view" hidden>
+          <div class="section-heading"><div><p class="eyebrow">DEMO INTERFACE</p><h2>Upgrades</h2><p class="gdt-muted">A configurable appearance pattern, not an economy system.</p></div><span class="gdt-pill" id="credits">Credits: 500</span></div>
+          <div class="showcase-grid" id="upgrade-grid"></div>
+        </section>
+        <section role="tabpanel" id="view-hud" aria-labelledby="nav-hud" class="showcase-view" hidden>
+          <div class="section-heading"><div><p class="eyebrow">DEMO INTERFACE</p><h2>Game HUD</h2><p class="gdt-muted">Responsive HUD illustration with interactive demo values.</p></div></div>
+          <div class="hud-stage"><div class="hud-top"><span class="hud-chip">ROUND 03</span><span class="hud-chip">SCORE <strong id="hud-score">1,250</strong></span></div>
+            <div class="hud-center">GAME VIEWPORT<br><span>Preview area · no game engine attached</span></div>
+            <div class="hud-bottom"><div><small>HEALTH</small><div class="gdt-progress hud-health"><span id="hud-health" style="width:80%"></span></div></div><span class="hud-chip">LVL 12</span></div></div>
+          <div class="gdt-actions gdt-section"><button class="gdt-btn" id="hud-damage">Take damage</button><button class="gdt-btn" id="hud-heal">Restore health</button><button class="gdt-btn" id="hud-points">Gain score</button></div>
+        </section>
+      </main>
+    </div>
+    <footer class="showcase-footer">Component showcase v0.2 · UI demonstration only · Godot components are maintained separately</footer>
+  </div>
+  <dialog class="gdt-dialog" id="confirm-dialog" aria-labelledby="confirm-title"><p class="eyebrow">DIALOG EXAMPLE</p><h2 id="confirm-title">Reusable modal</h2><p class="gdt-muted">Native dialog supports Escape and browser focus management.</p><div class="gdt-actions"><button class="gdt-btn gdt-btn--primary" data-gdt-close>Close dialog</button></div></dialog>
+  <script type="module" src="./showcase.js"></script>
+</body></html>

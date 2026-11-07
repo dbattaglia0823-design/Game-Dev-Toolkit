@@ -2,6 +2,10 @@
 
 Reusable, engine-specific foundations for Godot 4 and browser games. **Version 0.1.0** is deliberately small: functioning web utilities, a browser demo, and documented Godot scripts with demo scene. It is not a universal game engine.
 
+## Visual UI showcase
+
+Open [the browser-based component gallery](web/showcase/index.html) to preview reusable buttons, navigation, dialogs, inventory layouts, upgrade cards and HUD patterns. See [showcase documentation](web/showcase/README.md) for browser testing and optional GitHub Pages setup. Inventory, upgrades and HUD are illustrative UI demos, not production game mechanics.
+
 ## Start here
 
 - **Web:** open `web/demo/index.html` in a browser; run `cd web && npm test` (Node 20+).
