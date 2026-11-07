@@ -44,13 +44,42 @@ export function sourceLocation(engine,path){
  throw new Error('Unknown engine');
 }
 function instructions(engine,docs,includeBehaviors,manifest){
- const layouts=docs.map(x=>'- `layouts/'+x.filename+'.layout.json` (`'+x.layout.name+'`)').join('\n');
- const actions=[...new Set(docs.flatMap(x=>getContract(x.layout).actions))];
- const bindings=[...new Set(docs.flatMap(x=>getContract(x.layout).bindings))];
- const header=`# Codex integration handoff — ${engine==='web'?'Web':'Godot 4'}\n\nThis package contains **functional wireframes** only. Preserve geometry, semantic roles, action IDs and data bindings. Customize visuals, control text, artwork, focus behavior and responsiveness to the target game. **Do not** replace the game's existing inventory, save system, economy or game logic.\n\n## Included layouts\n${layouts}\n\n## Actions to map\n${actions.map(x=>'- `'+x+'`').join('\n')||'- None'}\n\n## Game data to supply\n${bindings.map(x=>'- `'+x+'`').join('\n')||'- None'}\n\n## Integration workflow\n1. Read `manifest.json`, each layout JSON, its contract JSON, and `validation/*.json`. Fix structural issues. Warnings must be reviewed; validator results are not proof of game integration.\n2. Copy the included runtime adapter to the target game, keeping relative dependencies together.\n3. Connect every named action to existing game logic; do not auto-execute purchase/equip/upgrade actions without validation and authorization in that game.\n4. Map the target game's existing state into every declared data binding. Grid/list values must be arrays.\n5. Apply the game's own theme/assets, responsive layout, keyboard/controller and mobile behavior.\n6. Test each navigation path, action, save/load behavior and all supported screen sizes within the real game.\n\n`;
- const platform=engine==='web'?`## Web\nImport `runtime/schema.js` and `runtime/runtime.js` together. For example, in a module placed alongside `runtime/`: \`import {mountLayout} from './runtime/runtime.js';\` followed by loading a layout JSON and calling \`mountLayout({container,layout,data,onAction})\`. The optional `runtime/runtime.css` is plain demo styling: replace it. See `runtime/workflow.js` if included for reusable search, selection, navigation and confirmation. **The app must provide actual handlers and state.**\n`:
- `## Godot 4\nCopy `runtime/ui_layout.gd` to a project directory and attach it to a Control node. Copy JSON layouts to `res://ui/templates/`; load with \`load_from_file("res://ui/templates/your.layout.json")\`. Connect \`action_requested(action_id,payload)\` to the game's existing handlers; call \`set_data(Dictionary)\` with game state. If included, attach `runtime/ui_behaviors.gd` to a separate Node and wire behavior/game-action signals. Establish scaling and focus independently.\n`;
- return header+platform+`\n## Limitations\n- Schema v2 only; older visual-studio v1 files are incompatible.\n- Archive contains no private game files, art, credentials or executable gameplay logic.\n- Exported action names are *requirements*, not completed functionality.\n- This is a static distribution of the adapters at export time, not an auto-updating dependency.\n- Included runtime files: ${manifest.runtimeFiles.join(', ')}\n- Behavior modules: ${includeBehaviors?'Included; optional and require integration':'Not included'}\n`;
+ const contracts=docs.map(x=>getContract(x.layout));
+ const actions=[...new Set(contracts.flatMap(x=>x.actions))].sort();
+ const bindings=[...new Set(contracts.flatMap(x=>x.bindings))].sort();
+ const lines=[
+  '# Codex integration handoff — '+(engine==='web'?'Web':'Godot 4'),'',
+  'These are functional wireframes. Preserve geometry, semantic roles, action IDs and bindings.',
+  'Style the controls and connect gameplay logic in the target game. Never replace existing saves, economy or inventory systems.','',
+  '## Layouts',...docs.map(x=>'- layouts/'+x.filename+'.layout.json ('+x.layout.name+')'),'',
+  '## Action IDs to implement',...(actions.length?actions.map(x=>'- '+x):['- None']),'',
+  '## Data binding keys',...(bindings.length?bindings.map(x=>'- '+x):['- None']),'',
+  '## Codex checklist',
+  '1. Read manifest.json, all contracts and validation reports. Warnings require review.',
+  '2. Copy the included runtime files together; preserve module imports and filenames.',
+  '3. Bind every required data key to the existing game state.',
+  '4. Connect every supported action to the real game logic. Purchases, crafting and equipment require game-side validation.',
+  '5. Replace wireframe styling with the project theme, assets and responsive rules.',
+  '6. Test in the target game on desktop/mobile as applicable, including navigation and save/load.',''
+ ];
+ if(engine==='web')lines.push('## Web',
+  'Copy runtime/ into the web project. Import mountLayout from ./runtime/runtime.js.',
+  'Load the chosen layout JSON, then call mountLayout({container,layout,data,onAction}).',
+  'Call the returned setData after game state changes. runtime.css is optional neutral styling.',
+  'If included, workflow.js uses behaviors.js and optional confirmation-dialog.js.','');
+ else lines.push('## Godot 4',
+  'Attach runtime/ui_layout.gd to a Control node. Copy layout JSON to res://ui/templates/.',
+  'Call load_from_file(path) and set_data(Dictionary); connect action_requested(action_id,payload).',
+  'If included, attach runtime/ui_behaviors.gd to a separate Node and connect its signals.',
+  'Configure responsive anchors, input focus and visual styling inside the game.','');
+ lines.push('## Important limitations',
+  'A valid exported layout does not prove game integration is complete.',
+  'Schema v2 only; legacy visual layouts are not compatible.',
+  'This package contains no game assets, private files, credentials or gameplay logic.',
+  'The runtime code is a static copy, not an auto-updating dependency.',
+  'Included behavior modules: '+(includeBehaviors?'yes':'no'),
+  'Runtime files: '+manifest.runtimeFiles.join(', '),'');
+ return lines.join('\n');
 }
 /** fetchSource is intentionally injectable: tests can supply exact file contents without a network. */
 export async function buildPackage({engine='web',keys=[],custom=[],includeBehaviors=true,fetchSource}={}){
