@@ -174,7 +174,7 @@ for(const field of ['label','x','y','w','h','fill','radius','fontSize','value'])
   if(node){
    Object.assign(node.style,{left:item.x+'px',top:item.y+'px',width:item.w+'px',height:item.h+'px',borderRadius:item.radius+'px',fontSize:item.fontSize+'px'});
    if(item.type==='progress'){node.querySelector('.progress-fill').style.width=item.value+'%';node.querySelector('.progress-fill').style.background=item.fill;}
-   else{node.firstChild.textContent=item.label;node.style[item.type==='text'?'color':'background']=item.fill;}
+   else{const textNode=[...node.childNodes].find(child=>child.nodeType===Node.TEXT_NODE);if(textNode)textNode.textContent=item.label;else node.insertBefore(document.createTextNode(item.label),node.firstChild);node.style[item.type==='text'?'color':'background']=item.fill;}
   }
  });
  input.addEventListener('change',()=>{
