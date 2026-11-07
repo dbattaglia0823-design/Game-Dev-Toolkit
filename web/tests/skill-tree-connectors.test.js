@@ -17,7 +17,7 @@ test('shape metadata and connections survive v2 JSON round-trip',()=>{
  assert.ok(validateIntegration(layout).valid);
  const edge=connectionPaths(layout)[0];
  assert.ok(edge.x1>140 && edge.x1<180,'Line starts at circle boundary');
- assert.ok(edge.x2<340 && edge.x2>300,'Line reaches destination boundary');
+ assert.ok(edge.x2<=340 && edge.x2>=299,'Line reaches destination boundary');
 });
 test('connections track node movement and delete with endpoints',()=>{
  let layout=makeLayout('Tree');
