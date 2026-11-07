@@ -104,3 +104,12 @@ See `docs/INTEGRATION_PACKAGES.md`.
 - `godot/layout-kit/ui_layout.gd`: Line2D connections and StyleBoxFlat circle/rounded buttons.
 
 See `docs/SKILL_TREE_CONNECTIONS.md`.
+
+## Menu layout variants (57 layouts)
+
+- `web/layout-kit/variant-presets.js`: two purposefully rearranged functional compositions per original UI menu type, with original contracts preserved.
+- `web/layout-kit/variant-options.js`: editor and validator variant selectors.
+- `web/layout-kit/catalog.js`: family-aware catalog metadata, filters and variant labels.
+- `web/tests/menu-variants.test.js`: 57-layout structural, contract and persistence checks.
+
+See `docs/MENU_VARIANTS.md`.

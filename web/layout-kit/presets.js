@@ -1,5 +1,6 @@
 import {normalizeLayout} from './schema.js';
 import {PHASE3_PRESETS} from './phase3-presets.js';
+import {createVariantPresets} from './variant-presets.js';
 /** Wireframes intentionally describe role and behavior, never artwork or game-specific data. */
 const N=(type,id,x,y,w,h,label='',role='',actionId='',bindingKey='')=>({type,id,x,y,w,h,label,role,actionId,bindingKey});
 export const CORE_PRESETS=Object.freeze({
@@ -95,7 +96,9 @@ export const CORE_PRESETS=Object.freeze({
  ]}
 });
 /** All presets share the same layout contract and can be imported by either engine. */
-export const PRESETS=Object.freeze({...CORE_PRESETS,...PHASE3_PRESETS});
+export const ORIGINAL_PRESETS=Object.freeze({...CORE_PRESETS,...PHASE3_PRESETS});
+export const VARIANT_PRESETS=Object.freeze(createVariantPresets(ORIGINAL_PRESETS));
+export const PRESETS=Object.freeze({...ORIGINAL_PRESETS,...VARIANT_PRESETS});
 export function getPreset(name) {
  const raw=PRESETS[name];
  if(!raw)throw new Error('Unknown layout preset');

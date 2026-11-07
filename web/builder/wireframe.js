@@ -1,3 +1,4 @@
+import {appendVariantOptions} from '../layout-kit/variant-options.js';
 import {NODE_TYPES,makeLayout,normalizeLayout,addNode,modifyNode,deleteNode,connectNodes,disconnectNodes,reorderNode,duplicateNode,parseLayout,serializeLayout,getContract} from '../layout-kit/schema.js';
 import {PRESETS,getPreset} from '../layout-kit/presets.js';
 import {mountLayout} from '../layout-kit/runtime.js';
@@ -274,6 +275,7 @@ document.addEventListener('keydown',ev=>{
   const node=active();commit(modifyNode(doc,selected,{x:node.x+x,y:node.y+y}),'Control moved');
  }
 });
+appendVariantOptions($('template'));
 const requestedPreset=new URLSearchParams(location.search).get('preset');
 if(requestedPreset && Object.hasOwn(PRESETS,requestedPreset)) {
  doc=getPreset(requestedPreset);

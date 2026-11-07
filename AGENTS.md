@@ -39,3 +39,7 @@ For selected functional layouts, use `web/package/index.html` and the `docs/INTE
 ## Skill-tree graph metadata
 
 Preserve the v2 functional UI `shape` and `edges` fields when importing or transforming layouts. Connections are purely visual associations and must not bypass existing skill prerequisites, ability unlock rules or save-state validation. Use `docs/SKILL_TREE_CONNECTIONS.md` for the editor and runtime contracts.
+
+## Choosing menu variants
+
+Use `docs/MENU_VARIANTS.md` and the catalog's Menu type filter to find three distinct geometric layouts for each menu. All variants preserve semantic action IDs, data bindings, stable node IDs, and skill-tree edges; do not replace game-specific logic or assume a particular appearance. Integrate the chosen layout into existing game state and test screen sizes.

@@ -1,4 +1,5 @@
 import {PRESETS,getPreset} from './presets.js';
+import {FAMILY_VARIANT_NAMES} from './variant-presets.js';
 import {getContract} from './schema.js';
 
 /** Browsable metadata only: games and Codex can replace every visual detail. */
@@ -30,15 +31,26 @@ const DESCRIPTIONS=Object.freeze({
  'race-selection':'Event filters, opponents and race entry'
 });
 export function templateCatalog(){
- return Object.entries(CATEGORIES).flatMap(([category,keys])=>
-  keys.map(key=>{
+ return Object.entries(CATEGORIES).flatMap(([category,families])=>
+  families.flatMap(family=>[family,family+'-reverse',family+'-focus'].map((key,index)=>{
    if(!Object.hasOwn(PRESETS,key))throw new Error('Unknown template in catalog: '+key);
    const template=getPreset(key),contract=getContract(template);
-   return {key,category,name:template.name,description:DESCRIPTIONS[key],
+   const variant=['original','reverse','focus'][index];
+   const variantLabel=index===0?'Original':FAMILY_VARIANT_NAMES[family][index-1];
+   const description=index===0?DESCRIPTIONS[family]:
+    (index===1?'Reversed composition':'Alternative focal composition')+' for '+DESCRIPTIONS[family].toLowerCase();
+   return {key,category,family,variant,variantLabel,name:template.name,description,
     nodeCount:template.nodes.length,actionCount:contract.actions.length,bindingCount:contract.bindings.length};
-  })
+  }))
  );
 }
-export function catalogFor(category='all'){
- return templateCatalog().filter(entry=>category==='all'||entry.category===category);
+export function catalogFor(category='all',family='all'){
+ return templateCatalog().filter(entry=>
+  (category==='all'||entry.category===category) &&
+  (family==='all'||entry.family===family)
+ );
+}
+export function familiesFor(category='all'){
+ return Object.entries(CATEGORIES).filter(([key])=>category==='all'||category===key)
+  .flatMap(([,families])=>families.map(key=>({key,name:getPreset(key).name})));
 }
