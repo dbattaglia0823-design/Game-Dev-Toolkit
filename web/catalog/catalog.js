@@ -7,6 +7,13 @@ import {SAMPLE_DATA} from '../layout-kit/sample-data.js';
 const $=id=>document.getElementById(id);
 let selected='character-stats',mounted=null;
 const getDoc=()=>getPreset(selected);
+function reportPreviewError(error){
+ const preview=$('preview');preview.replaceChildren();
+ const message=document.createElement('p');message.className='catalog-preview-error';
+ message.textContent='Preview unavailable. You can still open or export this template.';
+ preview.append(message);
+ $('action-output').textContent='Preview error: '+String(error?.message??error);
+}
 function download(suffix,content){
  const url=URL.createObjectURL(new Blob([content],{type:'application/json'}));
  const link=document.createElement('a');link.href=url;link.download=selected+suffix;
@@ -24,8 +31,7 @@ function renderCatalog(){
  const query=$('search').value.trim().toLowerCase();
  const entries=catalogFor($('category').value,$('family').value).filter(e=>
   (e.name+' '+e.description+' '+e.key).toLowerCase().includes(query));
- const container=$('templates');container.replaceChildren();
- $('count').textContent=entries.length+' templates';
+ const container=$('templates');const cards=[];
  for(const entry of entries){
   const button=document.createElement('button');button.type='button';button.className='template';
   button.setAttribute('role','listitem');button.setAttribute('aria-pressed',String(entry.key===selected));
@@ -34,7 +40,14 @@ function renderCatalog(){
   const stats=document.createElement('small');stats.textContent=entry.variantLabel+' · '+entry.nodeCount+' controls · '+entry.actionCount+' actions · '+entry.bindingCount+' bindings';
   button.append(name,desc,stats);
   button.addEventListener('click',()=>{selected=entry.key;renderCatalog();renderDetail();});
-  container.append(button);
+  cards.push(button);
+ }
+ container.replaceChildren(...cards);
+ $('count').textContent=entries.length+' templates';
+ if(!entries.length){
+  const empty=document.createElement('p');empty.className='muted';
+  empty.textContent='No templates match these filters. Clear the search or select a different menu type.';
+  container.append(empty);
  }
 }
 function renderDetail(){
@@ -53,15 +66,16 @@ function renderDetail(){
  $('edit').href='../builder/index.html?preset='+encodeURIComponent(selected);
  $('validate').href='../validator/index.html?preset='+encodeURIComponent(selected);
  $('package-link').href='../package/index.html?preset='+encodeURIComponent(selected);
- mounted?.destroy();
- mounted=mountLayout({container:$('preview'),layout:doc,data:SAMPLE_DATA,
-  onAction:(actionId,payload)=>{
-   // Do not execute game actions in the template browser.
-   $('action-output').textContent=JSON.stringify({actionId,nodeId:payload.nodeId,index:payload.index,value:payload.value},null,2);
-  }});
  showValues($('actions'),contract.actions);
  showValues($('bindings'),contract.bindings);
- $('action-output').textContent='Click a button or select an item to see its declared action.';
+ try{
+  mounted?.destroy();
+  mounted=mountLayout({container:$('preview'),layout:doc,data:SAMPLE_DATA,
+   onAction:(actionId,payload)=>{
+    $('action-output').textContent=JSON.stringify({actionId,nodeId:payload.nodeId,index:payload.index,value:payload.value},null,2);
+   }});
+  $('action-output').textContent='Click a button or select an item to see its declared action.';
+ }catch(error){reportPreviewError(error);}
 }
 function refreshFamilies(){
  const value=$('family').value;
