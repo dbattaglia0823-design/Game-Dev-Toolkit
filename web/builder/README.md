@@ -41,3 +41,7 @@ Choose **Package current layout** to hand your current edited v2 layout to the [
 ## Skill tree shapes and connections
 
 Choose a Button or Slot to set Rectangle, Rounded or Circle shape. Toggle **Connect nodes**, then click two nodes to link them. Lines follow nodes when dragged or resized. Delete a link in the Connections inspector. The skill-tree preset demonstrates branching links. Save and export preserve `shape` and `edges`. See `docs/SKILL_TREE_CONNECTIONS.md`.
+
+## Three layouts per menu type
+
+The template selector now includes two additional layouts for every original menu type. Choose one of 57 layouts in the [Template Library](../catalog/index.html), then open it here to adjust placement or export. All three choices preserve the same action/data IDs. See `docs/MENU_VARIANTS.md`.
