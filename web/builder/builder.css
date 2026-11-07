@@ -74,3 +74,27 @@
   #canvas-scroll{height:clamp(260px,48dvh,520px)}
   .builder-top h1{font-size:28px}
 }
+
+/* Studio v2: tool palette, selectable layers, handles and alignment guides. */
+.library-heading{font-size:16px;margin:24px 0 12px;padding-top:17px;border-top:1px solid var(--gdt-border)}
+.asset-library{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:375px;overflow:auto}
+.library-item{border:1px solid var(--gdt-border);border-radius:10px;background:#ffffff0c;color:var(--gdt-text);padding:12px 8px;min-height:60px;text-align:center;cursor:grab;font-size:12px}
+.library-item:hover,.layer-button:hover{background:#ffffff22}
+.layers{display:grid;gap:5px;max-height:240px;overflow:auto}
+.layer-button{background:#ffffff0b;color:var(--gdt-text);border:1px solid var(--gdt-border);border-radius:8px;text-align:left;min-height:40px;padding:9px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;font:inherit;font-size:12px}
+.layer-button.active-layer{border-color:#68c5ff;background:#68c5ff18}
+.layer-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.layer-actions .gdt-btn{font-size:13px;padding:10px 5px}
+.resize-handle{display:none;position:absolute;right:0;bottom:0;width:17px;height:17px;background:#68c5ff;border:2px solid #101722;border-radius:4px 0 0 0;cursor:nwse-resize;z-index:20}
+.canvas-item.selected .resize-handle{display:block}
+.canvas-item{overflow:visible}
+.canvas-item[data-type="text"]{border:1px solid transparent}
+.alignment-guide{pointer-events:none;position:absolute;background:#68c5ff9c;z-index:40}
+.alignment-guide.x{width:1px;top:0;height:500px}
+.alignment-guide.y{height:1px;left:0;width:800px}
+.snap-control{display:flex!important;align-items:center;gap:8px;white-space:nowrap}
+.snap-control input{min-height:0;width:17px;height:17px;accent-color:var(--gdt-accent)}
+.builder-top .toolbar{justify-content:flex-end}
+.inspector .layer-actions .gdt-btn{min-height:44px}
+@media(min-width:2000px){.asset-library{max-height:500px}.layers{max-height:350px}.library-item{font-size:15px}.layer-button{font-size:14px}}
+@media(max-width:700px){.asset-library{grid-template-columns:repeat(3,minmax(0,1fr))}.builder-top .toolbar{justify-content:flex-start}}
