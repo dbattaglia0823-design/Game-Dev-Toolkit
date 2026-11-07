@@ -51,7 +51,7 @@ func apply_layout(spec: Dictionary) -> bool:
 		line.width = 3.0
 		line.add_point(a)
 		line.add_point(b)
-		line.z_index = -1
+		line.z_index = 1
 		add_child(line)
 	var viewport: Dictionary = spec.get("viewport", {})
 	custom_minimum_size = Vector2(float(viewport.get("width", 800)), float(viewport.get("height", 500)))
@@ -130,6 +130,7 @@ func _make_control(entry: Dictionary) -> Control:
 			(ui as Button).add_theme_stylebox_override("normal", style)
 			(ui as Button).add_theme_stylebox_override("hover", style)
 			(ui as Button).add_theme_stylebox_override("pressed", style)
+	ui.z_index = 2 if kind in ["button", "slot"] else 0
 	ui.set_meta("ui_type", kind)
 	return ui
 
