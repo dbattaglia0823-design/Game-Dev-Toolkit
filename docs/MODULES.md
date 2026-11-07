@@ -57,3 +57,10 @@ Builder exports validated JSON layouts, not executable games or Godot scenes. Se
 | `godot/layout-kit/ui_layout.gd` | Godot 4 nodes, bindings and action signals | Godot runtime smoke test pending |
 
 See `docs/UI_TEMPLATE_CONTRACT.md` and `docs/CODEX_UI_INTEGRATION.md`. The legacy `web/builder/legacy-studio.html` preserves earlier appearance-first v1 layouts.
+
+## Phase 1 Validation
+
+- `web/layout-kit/validator.js`: raw layout diagnostics, missing handler/data checks, viewport/touch target warnings.
+- `web/validator/`: browser-based diagnostics/report export.
+- `web/e2e/smoke.mjs`: desktop 2560×1440 and mobile 390×844 headless Chromium validation.
+- `godot/tests/integration_smoke.gd`: Godot 4 headless fixture and action/binding tests.
