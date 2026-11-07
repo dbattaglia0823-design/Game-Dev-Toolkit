@@ -2,10 +2,15 @@
 
 Reusable, engine-specific foundations for Godot 4 and browser games. **Version 0.1.0** is deliberately small: functioning web utilities, a browser demo, and documented Godot scripts with demo scene. It is not a universal game engine.
 
-## Visual UI builder
+## Functional UI Builder (recommended)
 
-Use the [browser-based UI builder](web/builder/index.html) to assemble layouts from preset panels, buttons, text, image placeholders and progress bars. Customize each item and export a portable JSON layout. See [builder documentation](web/builder/README.md). The editor now supports history, snapping, layer management, premade screens and **static HTML / Godot 4 scene exports**; gameplay wiring and engine runtime validation are still required.
+Use the [Functional UI Builder](web/builder/index.html) to design **control placement, semantics, actions and data bindings** without dictating artwork or game-specific mechanics. Export a version 2 `*.layout.json` plus `*.contract.json`, then give both to Codex for the target game.
 
+Built-in functional presets: main menu, pause menu, inventory, upgrades, shop, settings and HUD. Runtime adapters are provided for [web](web/layout-kit/runtime.js) and [Godot 4](godot/layout-kit/ui_layout.gd). See the [layout contract](docs/UI_TEMPLATE_CONTRACT.md) and [Codex integration guide](docs/CODEX_UI_INTEGRATION.md).
+
+The previous visual editor remains available as [Legacy Visual Studio](web/builder/legacy-studio.html) for old version 1 layout JSON files. Existing visual-only layouts are not silently converted into action-bearing templates.
+
+## Game menu templates
 ## Game menu templates
 
 Explore the [interactive menu templates](web/menu-demo/index.html) for main menu, pause, settings, gameplay and game-over screens. Reuse the [menu state controller](web/ui/game-menu-controller.js) without coupling to the mock gameplay timer. See [integration notes](web/menu-demo/README.md).
