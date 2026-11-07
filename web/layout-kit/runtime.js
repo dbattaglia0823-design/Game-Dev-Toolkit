@@ -48,7 +48,10 @@ export function mountLayout({container,layout,data={},onAction=()=>{}}) {
   el.className='gdt-wireframe-node gdt-wireframe-'+node.type;
   el.dataset.nodeId=node.id;
   el.dataset.role=node.role;
-  if(node.type==='button'||node.type==='slot')el.dataset.shape=node.shape;
+  if(node.type==='button'||node.type==='slot'){
+   el.dataset.shape=node.shape;
+   el.style.borderRadius=node.shape==='circle'?'50%':node.shape==='rounded'?'16px':'0px';
+  }
   el.style.left=(node.x/spec.viewport.width*100)+'%';
   el.style.top=(node.y/spec.viewport.height*100)+'%';
   el.style.width=(node.w/spec.viewport.width*100)+'%';
