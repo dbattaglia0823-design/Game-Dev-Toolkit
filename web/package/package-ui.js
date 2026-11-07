@@ -1,4 +1,4 @@
-import {catalogFor,templateCatalog} from '../layout-kit/catalog.js';
+import {catalogFor,templateCatalog,familiesFor} from '../layout-kit/catalog.js';
 import {getPreset} from '../layout-kit/presets.js';
 import {getContract} from '../layout-kit/schema.js';
 import {validateIntegration} from '../layout-kit/validator.js';
@@ -15,7 +15,7 @@ const checkedDocs=()=>[
 ];
 function selection(){
  const query=$('search').value.trim().toLowerCase();
- const choices=catalogFor($('category').value).filter(entry=>
+ const choices=catalogFor($('category').value,$('family').value).filter(entry=>
   (entry.name+' '+entry.key+' '+entry.description).toLowerCase().includes(query));
  const list=$('template-list');list.replaceChildren();
  for(const entry of choices){
@@ -27,7 +27,7 @@ function selection(){
    update();
   });
   const details=document.createElement('span'),name=document.createElement('strong'),description=document.createElement('small');
-  name.textContent=entry.name;description.textContent=entry.description;
+  name.textContent=entry.name;description.textContent=entry.variantLabel+' · '+entry.description;
   details.append(name,description);label.append(box,details);list.append(label);
  }
  update();
@@ -79,11 +79,22 @@ function update(){
  $('download').disabled=busy||docs.length===0||errors>0||docs.length>MAX_TEMPLATES;
  if(!busy)status(!docs.length?'Select at least one template.':errors?'Resolve structural errors before exporting.':'Ready to generate ZIP. Review '+warnings+' template warnings during integration.');
 }
-$('category').addEventListener('change',selection);
+function refreshFamilies(){
+ const previous=$('family').value,select=$('family');
+ select.replaceChildren();
+ const all=document.createElement('option');all.value='all';all.textContent='All menu types';select.append(all);
+ for(const family of familiesFor($('category').value)){
+  const option=document.createElement('option');option.value=family.key;option.textContent=family.name;select.append(option);
+ }
+ select.value=[...select.options].some(x=>x.value===previous)?previous:'all';
+ selection();
+}
+$('category').addEventListener('change',refreshFamilies);
+$('family').addEventListener('change',selection);
 $('search').addEventListener('input',selection);
 $('all').addEventListener('click',()=>{
  const query=$('search').value.trim().toLowerCase();
- for(const entry of catalogFor($('category').value)){
+ for(const entry of catalogFor($('category').value,$('family').value)){
   if(!(entry.name+' '+entry.key+' '+entry.description).toLowerCase().includes(query))continue;
   if(selected.size+custom.length>=MAX_TEMPLATES)break;
   selected.add(entry.key);
@@ -140,4 +151,4 @@ try{
   sessionStorage.removeItem('gdt.package.draft.v2');
  }
 }catch{ /* Private mode or malformed draft: use JSON file import. */ }
-customList();selection();
+customList();refreshFamilies();
