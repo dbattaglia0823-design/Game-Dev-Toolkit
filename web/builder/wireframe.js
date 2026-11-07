@@ -185,6 +185,12 @@ $('redo').addEventListener('click',()=>historyMove(true));
 $('save').addEventListener('click',()=>{try{localStorage.setItem('gdt.functional-layout.v2',serializeLayout(doc));msg('Saved locally. Export JSON for sharing with Codex.');}catch{msg('Local storage unavailable. Export JSON.');}});
 $('load').addEventListener('click',()=>{try{const saved=localStorage.getItem('gdt.functional-layout.v2');if(!saved)return msg('No saved layout.');restore(parseLayout(saved));past=[];future=[];render();msg('Saved layout loaded.');}catch(error){msg('Load failed: '+error.message);}});
 $('export').addEventListener('click',()=>download('.layout.json',serializeLayout(doc)));
+$('package-current').addEventListener('click',()=>{
+ try{
+  sessionStorage.setItem('gdt.package.draft.v2',serializeLayout(doc));
+  location.href='../package/index.html';
+ }catch(error){msg('Browser storage unavailable. Export JSON and import it in the Package Builder: '+error.message);}
+});
 $('contract-export').addEventListener('click',()=>download('.contract.json',JSON.stringify(getContract(doc),null,2)));
 $('import').addEventListener('change',async ev=>{
  const file=ev.target.files?.[0];if(!file)return;
