@@ -92,3 +92,7 @@ The Control should be parented in the UI layer, and you must decide how to scale
 ## What not to do
 
 Do not copy the old visual studio's theme or game-specific placeholder content into the target game. Do not replace existing inventory, upgrade or save systems just to match a layout. Do not treat named actions as automatically implemented game logic. Do not assume the Godot adapter has passed target-runtime tests until it has actually been imported and executed in the target project.
+
+## Optional Phase 2 UI behaviors
+
+When the exported layout needs filtering, stable item selection, equipment slots, navigation history or confirmation, read `docs/BEHAVIORS.md`. For web, use `web/layout-kit/behaviors.js`, `workflow.js` and the optional `confirmation-dialog.js`. For Godot 4, use `godot/layout-kit/ui_behaviors.gd`. Preserve existing game-owned inventory data, purchase logic and save formats. Action IDs describe requests and do not authorize purchases or item changes without validation in the game.
