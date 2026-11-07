@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Functional UI integration example</title>
+<link rel="stylesheet" href="../../ui/theme.css"><link rel="stylesheet" href="../runtime.css">
+<style>body{margin:0;min-height:100vh;padding:30px;background:#0c1320;color:#eef4fd;font:16px system-ui}.shell{max-width:900px;margin:auto}.surface{width:100%;border:1px solid #35455d}select{padding:10px;background:#223248;color:white}pre{white-space:pre-wrap;overflow-wrap:anywhere;min-height:80px;background:#162235;padding:15px;border-radius:10px}</style></head>
+<body><main class="shell"><h1>Functional layout integration demo</h1><p>Neutral wireframe generated from the same schema used by the builder. Actions are reported below.</p>
+<label for="screen">Screen:</label><select id="screen"><option value="inventory">Inventory</option><option value="settings">Settings</option><option value="main-menu">Main menu</option><option value="shop">Shop</option><option value="upgrades">Upgrades</option><option value="hud">HUD</option></select>
+<div id="target" class="surface"></div><h2>Action event</h2><pre id="last-event">Use a control to emit an action.</pre>
+<p><a style="color:#fb8c35" href="../../builder/index.html">Open the wireframe editor</a></p></main>
+<script type="module" src="./main.js"></script></body></html>
