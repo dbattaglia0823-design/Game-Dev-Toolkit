@@ -12,7 +12,7 @@ const items=[
  {id:'item-05',name:'Steel sword',type:'weapon'},
  {id:'item-06',name:'Torch',type:'tool'}
 ];
-let view=null,workflow=null,confirmDialog=null,requests=[];
+let view=null,mountedScreen='',workflow=null,confirmDialog=null,requests=[];
 let settings={music:true,sfx:true,volume:75};
 const onGameAction=(action,payload)=>{
  if(action==='inventory.equip'){
@@ -40,6 +40,9 @@ function render(){
   shop:{items:[{id:'product-01',name:'Sample product'}],selected:{name:'Sample product',price:'100'},balance:'500'},
   settings
  };
+ if(view && mountedScreen===screen){
+  view.setData(data);
+ } else {
  view?.destroy();
  view=mountLayout({container:$('canvas'),layout:getPreset(screen),data,onAction:(id,payload)=>{
   if(id==='equipment.slot_primary'||id==='equipment.slot_secondary'){
@@ -50,6 +53,8 @@ function render(){
   }
   workflow.handle(id,payload);
  }});
+ mountedScreen=screen;
+ }
  $('hint').textContent=pending?'A purchase is awaiting confirmation. Confirm or cancel it in the layout.':
   'Showing '+screen+'. Select items, filter, sort, equip or navigate without changing any real game data.';
  $('state').textContent=JSON.stringify({
