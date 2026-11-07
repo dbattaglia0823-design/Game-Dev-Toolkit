@@ -1,7 +1,23 @@
 import { makePreset, addElement, updateElement, removeElement, importJSON, exportJSON, normalizeDocument } from './model.js';
+import { calculateCanvasScale } from './viewport.js';
 
 const $ = id => document.getElementById(id);
 const canvas = $('canvas');
+const stage = $('canvas-stage');
+const scrollArea = $('canvas-scroll');
+const DESIGN_WIDTH = 800;
+const DESIGN_HEIGHT = 500;
+/** Scale the preview, not document coordinates. Keep pointer math resolution-independent. */
+function fitCanvas() {
+  const styles = getComputedStyle(scrollArea);
+  const usableWidth = scrollArea.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight) - 2;
+  const usableHeight = scrollArea.clientHeight - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom) - 2;
+  const scale = calculateCanvasScale(Math.max(1,usableWidth), Math.max(1,usableHeight));
+  canvas.style.transform = 'scale(' + scale + ')';
+  stage.style.width = Math.ceil(DESIGN_WIDTH * scale) + 'px';
+  stage.style.height = Math.ceil(DESIGN_HEIGHT * scale) + 'px';
+}
+
 let doc = makePreset('blank');
 let selected = null;
 let drag = null;
@@ -177,3 +193,9 @@ document.addEventListener('keydown',event=>{
   deleteSelection();
 });
 render();
+fitCanvas();
+if (typeof ResizeObserver !== 'undefined') {
+  const observer = new ResizeObserver(fitCanvas);
+  observer.observe(scrollArea);
+}
+window.addEventListener('resize', fitCanvas);

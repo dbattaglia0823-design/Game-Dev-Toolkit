@@ -15,7 +15,7 @@
 </div>
 <div class="hint"><strong>How to edit</strong><p>Select an element to change its position, size, text and color. Drag elements to move them. Use Delete to remove the selected element.</p></div></aside>
 <main class="workarea"><div class="canvas-toolbar"><label for="title">Screen name <input id="title" maxlength="100" value="Untitled UI"></label><span id="count" class="muted">0 components</span><button id="clear" class="gdt-btn">Clear</button></div>
-<div id="canvas-scroll"><div id="canvas" role="group" aria-label="UI design canvas" tabindex="0"></div></div>
+<div id="canvas-scroll"><div id="canvas-stage"><div id="canvas" role="group" aria-label="UI design canvas" tabindex="0"></div></div></div>
 <div id="message" class="muted" role="status" aria-live="polite">Choose a component to get started.</div>
 </main>
 <aside class="sidebar inspector"><h2>Properties</h2><p id="selection-info">Select a component to edit it.</p>
@@ -27,6 +27,6 @@
 <div class="two-col"><label>Font size <input id="prop-fontSize" type="number" min="10" max="76"></label><label>Progress (%) <input id="prop-value" type="number" min="0" max="100"></label></div>
 <button id="duplicate" class="gdt-btn">Duplicate</button><button id="delete" class="gdt-btn danger">Delete selected</button>
 </div>
-<div class="hint"><label>Canvas background <input id="background" type="color" value="#101722"></label><p>Canvas: 800 × 500 design units. The editor scales for smaller screens; exported JSON preserves coordinates.</p></div>
+<div class="hint"><label>Canvas background <input id="background" type="color" value="#101722"></label><p>Canvas: 800 × 500 design units. The preview fits the available workspace, including 1440p monitors. Exported JSON keeps the original coordinates.</p></div>
 </aside></div>
 <script type="module" src="./builder.js"></script></body></html>
