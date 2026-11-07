@@ -1,4 +1,5 @@
 import {normalizeLayout,getContract} from './schema.js';
+import {connectionPaths} from './connections.js';
 /** Runtime adapter for DOM games. Views have no game-specific state or theme. */
 export function mountLayout({container,layout,data={},onAction=()=>{}}) {
  if(!container||typeof container.replaceChildren!=='function')throw new TypeError('Container element required');
@@ -12,6 +13,17 @@ export function mountLayout({container,layout,data={},onAction=()=>{}}) {
  root.style.width='100%';
  root.style.height='auto';
  root.style.position='relative';
+ const edgeLayer=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ edgeLayer.setAttribute('viewBox','0 0 '+spec.viewport.width+' '+spec.viewport.height);
+ edgeLayer.setAttribute('preserveAspectRatio','none');
+ edgeLayer.setAttribute('aria-hidden','true');
+ edgeLayer.classList.add('gdt-connections');
+ for(const edge of connectionPaths(spec)){
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  for(const key of ['x1','y1','x2','y2'])line.setAttribute(key,String(edge[key]));
+  edgeLayer.append(line);
+ }
+ root.append(edgeLayer);
  const nodeMap=new Map();
  const getValue=key=>{
   if(!key)return undefined;
@@ -36,6 +48,7 @@ export function mountLayout({container,layout,data={},onAction=()=>{}}) {
   el.className='gdt-wireframe-node gdt-wireframe-'+node.type;
   el.dataset.nodeId=node.id;
   el.dataset.role=node.role;
+  if(node.type==='button'||node.type==='slot')el.dataset.shape=node.shape;
   el.style.left=(node.x/spec.viewport.width*100)+'%';
   el.style.top=(node.y/spec.viewport.height*100)+'%';
   el.style.width=(node.w/spec.viewport.width*100)+'%';
