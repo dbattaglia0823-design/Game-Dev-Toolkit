@@ -50,9 +50,9 @@ try{
   await page.goto(origin+'/catalog/index.html?preset=garage');
   assert.match(await page.locator('#name').innerText(),/Garage/);
   await page.locator('#category').selectOption('racing');
-  assert.match(await page.locator('#count').innerText(),/3 templates/);
+  assert.match(await page.locator('#count').innerText(),/9 templates/);
   await page.locator('#search').fill('dealership');
-  assert.match(await page.locator('#count').innerText(),/1 templates/);
+  assert.match(await page.locator('#count').innerText(),/3 templates/);
   await page.locator('.template').first().click();
   assert.match(await page.locator('#name').innerText(),/Dealership/);
   assert.match(await page.locator('#actions').innerText(),/dealership.purchase_request/);
