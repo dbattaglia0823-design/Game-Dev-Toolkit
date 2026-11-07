@@ -29,3 +29,12 @@ Next: responsive navigation, HUD, inventory and upgrade components, plus equival
 | `web/menu-demo/` | Browser menu template | DOM, CSS, ConfigStore | Manual browser smoke test pending |
 
 Menu controller emits validated transitions; actual games must connect pause and resume to their game-loop state. See `web/menu-demo/README.md`.
+
+## Visual UI builder
+
+| Path | Runtime | Purpose | Validation |
+|---|---|---|---|
+| `web/builder/model.js` | Browser/Node ES module | Versioned layout documents and templates | Node unit tests |
+| `web/builder/index.html` | Browser | Interactive visual layout editor | Manual browser testing pending |
+
+Builder exports validated JSON layouts, not executable games or Godot scenes. See `web/builder/README.md`.
