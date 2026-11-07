@@ -43,6 +43,7 @@ function renderDetail(){
  $('description').textContent=catalogFor().find(x=>x.key===selected)?.description??'';
  $('edit').href='../builder/index.html?preset='+encodeURIComponent(selected);
  $('validate').href='../validator/index.html?preset='+encodeURIComponent(selected);
+ $('package-link').href='../package/index.html?preset='+encodeURIComponent(selected);
  mounted?.destroy();
  mounted=mountLayout({container:$('preview'),layout:doc,data:SAMPLE_DATA,
   onAction:(actionId,payload)=>{
