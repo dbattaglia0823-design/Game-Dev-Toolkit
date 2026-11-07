@@ -4,7 +4,7 @@ Reusable, engine-specific foundations for Godot 4 and browser games. **Version 0
 
 ## Visual UI builder
 
-Use the [browser-based UI builder](web/builder/index.html) to assemble layouts from preset panels, buttons, text, image placeholders and progress bars. Customize each item and export a portable JSON layout. See [builder documentation](web/builder/README.md). This is a layout editor; engine-specific conversion is planned, not yet implemented.
+Use the [browser-based UI builder](web/builder/index.html) to assemble layouts from preset panels, buttons, text, image placeholders and progress bars. Customize each item and export a portable JSON layout. See [builder documentation](web/builder/README.md). The editor now supports history, snapping, layer management, premade screens and **static HTML / Godot 4 scene exports**; gameplay wiring and engine runtime validation are still required.
 
 ## Game menu templates
 
