@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GDT — Visual UI Builder</title><link rel="stylesheet" href="../ui/theme.css"><link rel="stylesheet" href="./builder.css">
+</head><body class="gdt-page builder-page">
+<header class="builder-top"><div><a href="../showcase/index.html" class="back">← Showcase</a><h1>Visual UI Builder</h1><span class="muted">Build and export game interfaces</span></div>
+<div class="toolbar"><label>Template <select id="preset"><option value="blank">Blank canvas</option><option value="menu">Main menu</option><option value="hud">Game HUD</option><option value="inventory">Inventory</option><option value="upgrades">Upgrades</option><option value="shop">Shop</option><option value="settings">Settings</option></select></label><button id="save" class="gdt-btn">Save in browser</button><button id="load" class="gdt-btn">Load saved</button><button id="undo" class="gdt-btn" title="Ctrl+Z">Undo</button><button id="redo" class="gdt-btn" title="Ctrl+Y">Redo</button><button id="download" class="gdt-btn gdt-btn--primary">Export JSON</button><button id="export-web" class="gdt-btn">Export Web HTML</button><button id="export-godot" class="gdt-btn">Export Godot Scene</button><label class="gdt-btn file-label">Import JSON<input id="import" type="file" accept=".json,application/json" hidden></label></div></header>
+<div class="workspace">
+<aside class="sidebar"><h2>Components</h2><p>Click to add, or drag onto the canvas.</p>
+<div id="palette" class="palette">
+<button draggable="true" data-type="panel">▣ <span>Panel</span></button>
+<button draggable="true" data-type="button">▰ <span>Button</span></button>
+<button draggable="true" data-type="text">T <span>Text</span></button>
+<button draggable="true" data-type="image">▧ <span>Image placeholder</span></button>
+<button draggable="true" data-type="progress">▬ <span>Progress bar</span></button>
+</div>
+<h2 class="library-heading">Premade assets</h2><div id="library" class="asset-library" aria-label="Premade UI assets"></div><div class="hint"><strong>How to edit</strong><p>Select an element to change its position, size, text and color. Drag elements to move them. Use Delete to remove the selected element.</p></div></aside>
+<main class="workarea"><div class="canvas-toolbar"><label for="title">Screen name <input id="title" maxlength="100" value="Untitled UI"></label><span id="count" class="muted">0 components</span><label class="snap-control"><input type="checkbox" id="snap" checked> Snap to 10px</label><button id="copy" class="gdt-btn" title="Ctrl+C">Copy</button><button id="paste" class="gdt-btn" title="Ctrl+V">Paste</button><button id="clear" class="gdt-btn">Clear</button></div>
+<div id="canvas-scroll"><div id="canvas-stage"><div id="canvas" role="group" aria-label="UI design canvas" tabindex="0"></div></div></div>
+<div id="message" class="muted" role="status" aria-live="polite">Choose a component to get started.</div>
+</main>
+<aside class="sidebar inspector"><h2>Properties</h2><p id="selection-info">Select a component to edit it.</p>
+<div id="properties" hidden>
+<label>Label <input id="prop-label" maxlength="120"></label>
+<div class="two-col"><label>X <input id="prop-x" type="number" min="0" max="780"></label><label>Y <input id="prop-y" type="number" min="0" max="480"></label></div>
+<div class="two-col"><label>Width <input id="prop-w" type="number" min="24" max="800"></label><label>Height <input id="prop-h" type="number" min="8" max="500"></label></div>
+<div class="two-col"><label>Fill <input id="prop-fill" type="color"></label><label>Radius <input id="prop-radius" type="number" min="0" max="80"></label></div>
+<div class="two-col"><label>Font size <input id="prop-fontSize" type="number" min="10" max="76"></label><label>Progress (%) <input id="prop-value" type="number" min="0" max="100"></label></div>
+<div class="layer-actions"><button id="layer-up" class="gdt-btn">Bring forward</button><button id="layer-down" class="gdt-btn">Send backward</button></div><button id="duplicate" class="gdt-btn">Duplicate</button><button id="delete" class="gdt-btn danger">Delete selected</button>
+</div>
+<h2 class="library-heading">Layers</h2><div id="layers" class="layers" aria-label="UI layers"></div><div class="hint"><label>Canvas background <input id="background" type="color" value="#101722"></label><label for="background-preset">Background preset<select id="background-preset"><option value="">Custom</option><option value="#101722">Midnight</option><option value="#101d31">Deep navy</option><option value="#20242d">Graphite</option><option value="#211c38">Indigo</option><option value="#12251f">Forest</option><option value="#29211f">Warm charcoal</option></select></label><p>Canvas uses 800 × 500 design units; exports preserve coordinates. Web and Godot exports are static interface starting points. Wire interactions in your game.</p></div>
+</aside></div>
+<script type="module" src="./editor.js"></script></body></html>
