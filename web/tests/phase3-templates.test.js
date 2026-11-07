@@ -30,7 +30,7 @@ test('all nine phase 3 wireframes have distinct IDs, no styling and valid contra
   assert.equal(contract.bindings.includes(binding),true,key+' missing '+binding);
   assert.deepEqual(parseLayout(serializeLayout(layout)),layout);
   for(const node of layout.nodes){
-   assert.deepEqual(Object.keys(node),['id','type','x','y','w','h','label','role','actionId','bindingKey']);
+   assert.deepEqual(Object.keys(node),['id','type','x','y','w','h','label','role','shape','actionId','bindingKey']);
    assert.equal(node.x+node.w<=800,true,key+'/'+node.id+' horizontal overflow');
    assert.equal(node.y+node.h<=500,true,key+'/'+node.id+' vertical overflow');
   }
