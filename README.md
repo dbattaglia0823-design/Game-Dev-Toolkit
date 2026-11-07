@@ -16,6 +16,10 @@ Open the [Integration Validator](web/validator/index.html) to check exported lay
 
 Automated checks cover Node unit tests, Chromium desktop/mobile smoke tests and a Godot 4 headless adapter fixture. See [validation instructions](docs/VALIDATION.md) for limits and status.
 
+## Phase 4 — One-click integration packages
+
+Use the [Integration Package Builder](web/package/index.html) to select templates, choose **Web** or **Godot 4**, and download a ZIP with the layouts, action/data contracts, validation reports, engine adapters, and a Codex handoff guide. Import a custom edited layout or send the current builder screen directly. [Export and integration instructions](docs/INTEGRATION_PACKAGES.md).
+
 ## Phase 3 — Expanded Functional Template Library
 
 The [template catalog](web/catalog/index.html) includes **19 reusable structural layouts**: character stats, crafting, skill trees, quest logs, career events, leaderboards, garages, dealerships, race selection, and earlier main menu/inventory/settings/shop layouts. Preview, filter, export, and open a template directly in the builder or validator. See [template contracts](docs/TEMPLATE_LIBRARY.md).
