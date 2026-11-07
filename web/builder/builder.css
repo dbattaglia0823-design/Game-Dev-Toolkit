@@ -30,3 +30,47 @@
 @media(max-width:1150px){.workspace{grid-template-columns:185px minmax(0,1fr)}.inspector{grid-column:1/-1}.inspector #properties{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.inspector #properties[hidden]{display:none}.inspector .hint{margin-top:14px}}
 @media(max-width:700px){.workspace{grid-template-columns:1fr}.inspector{grid-column:auto}.palette{grid-template-columns:repeat(2,minmax(0,1fr))}.palette button{padding:11px}.inspector #properties{grid-template-columns:repeat(2,minmax(0,1fr))}#canvas-scroll{padding:10px}.toolbar{gap:6px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* Large-screen workspace: grow controls and scale the preview without changing saved geometry. */
+.builder-page{padding:clamp(16px,1.2vw,30px);font-size:clamp(15px,.72vw,19px)}
+.builder-top{max-width:none;margin-bottom:clamp(18px,1.2vw,30px);gap:22px}
+.builder-top h1{font-size:clamp(30px,1.65vw,44px)}
+.muted,.sidebar p,.sidebar .hint,.toolbar label,.canvas-toolbar label,.inspector label{font-size:clamp(13px,.66vw,17px)}
+.toolbar{gap:12px}
+.toolbar select,.builder-page input,.builder-page select{padding:clamp(10px,.65vw,16px);min-height:44px}
+.toolbar .gdt-btn,.canvas-toolbar .gdt-btn,.inspector .gdt-btn{font-size:inherit;min-height:48px;padding:12px 18px}
+.file-label{font-size:inherit!important}
+.workspace{max-width:none;grid-template-columns:clamp(245px,13vw,340px) minmax(0,1fr) clamp(310px,16vw,410px);gap:clamp(14px,.9vw,24px)}
+.sidebar,.workarea{padding:clamp(18px,1.1vw,28px)}
+.sidebar h2{font-size:clamp(19px,1vw,26px)}
+.palette{gap:12px;margin-top:22px}
+.palette button{padding:clamp(16px,1vw,24px);min-height:62px;gap:17px}
+.palette button span{font-size:clamp(15px,.75vw,19px)}
+.canvas-toolbar{margin-bottom:18px}
+#title{width:min(320px,45vw)}
+#canvas-scroll{height:clamp(500px,calc(100dvh - 260px),1160px);min-height:0;display:flex;align-items:center;justify-content:center;padding:clamp(12px,1vw,24px)}
+#canvas-stage{position:relative;flex:none;width:800px;height:500px;margin:auto}
+#canvas{transform-origin:top left}
+#message{margin-top:16px;min-height:24px}
+.inspector label{gap:8px;margin-bottom:16px}
+.inspector input{min-height:46px}
+.inspector input[type="color"]{height:48px}
+.two-col{gap:14px}
+@media(max-width:1350px){
+  .workspace{grid-template-columns:220px minmax(0,1fr) 270px}
+  .sidebar,.workarea{padding:18px}
+  #canvas-scroll{height:clamp(430px,calc(100dvh - 255px),900px)}
+}
+@media(max-width:1150px){
+  .workspace{grid-template-columns:210px minmax(0,1fr)}
+  .inspector{grid-column:1/-1}
+  #canvas-scroll{height:clamp(420px,calc(100dvh - 260px),770px)}
+}
+@media(max-width:700px){
+  .workspace{grid-template-columns:1fr}
+  .inspector{grid-column:auto}
+  .palette{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .palette button{min-height:52px;padding:12px}
+  #canvas-scroll{height:clamp(260px,48dvh,520px)}
+  .builder-top h1{font-size:28px}
+}
