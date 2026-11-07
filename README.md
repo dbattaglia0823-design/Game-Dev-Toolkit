@@ -16,6 +16,10 @@ Open the [Integration Validator](web/validator/index.html) to check exported lay
 
 Automated checks cover Node unit tests, Chromium desktop/mobile smoke tests and a Godot 4 headless adapter fixture. See [validation instructions](docs/VALIDATION.md) for limits and status.
 
+## Multiple menu layouts — 57 choices
+
+Choose among **three distinct compositions for each of 19 menu types**, with layouts for main/pause menus, inventory, equipment, shop, settings, HUD, skill trees, crafting, quests, garage, dealership, race selection and more. Browse by **menu type** in the [Template Library](web/catalog/index.html), switch variants above the preview, then export to the builder, validator or Codex integration ZIP. All variants preserve action/data contracts and let Codex customize visuals. See [menu variants guide](docs/MENU_VARIANTS.md).
+
 ## Connected skill-tree editing
 
 The [Functional UI Builder](web/builder/index.html?preset=skill-tree) supports **circle/rounded/rectangular buttons** and **two-click node connections**. Lines follow moved or resized buttons, survive saved JSON, and render in the Web and Godot adapters. These express UI relationships, not gameplay prerequisites. See [skill tree connections](docs/SKILL_TREE_CONNECTIONS.md).
