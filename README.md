@@ -10,6 +10,12 @@ Built-in functional presets: main menu, pause menu, inventory, upgrades, shop, s
 
 The previous visual editor remains available as [Legacy Visual Studio](web/builder/legacy-studio.html) for old version 1 layout JSON files. Existing visual-only layouts are not silently converted into action-bearing templates.
 
+## Phase 1: Integration validation
+
+Open the [Integration Validator](web/validator/index.html) to check exported layouts against schema rules, action-handler mappings, sample data bindings, off-canvas controls and accessible target sizes. The report distinguishes structural validity from actual target-game readiness.
+
+Automated checks cover Node unit tests, Chromium desktop/mobile smoke tests and a Godot 4 headless adapter fixture. See [validation instructions](docs/VALIDATION.md) for limits and status.
+
 ## Game menu templates
 
 Explore the [interactive menu templates](web/menu-demo/index.html) for main menu, pause, settings, gameplay and game-over screens. Reuse the [menu state controller](web/ui/game-menu-controller.js) without coupling to the mock gameplay timer. See [integration notes](web/menu-demo/README.md).
