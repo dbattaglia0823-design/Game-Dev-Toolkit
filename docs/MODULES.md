@@ -1,15 +1,23 @@
-# Component catalog (v0.1.0)
+# Component catalog (v0.2.0 in development)
 
 | Path | Runtime | Requirements | Validation |
 |---|---|---|---|
 | `web/core/config-store.js` | ES modules | Browser storage optional | Node unit tests |
 | `web/core/save-store.js` | ES modules | Browser storage optional | Node unit tests |
 | `web/ui/toast-manager.js` | Browser ES module | DOM | Browser demo |
-| `web/ui/theme.css` | Browser CSS | CSS modern browsers | Browser demo |
+| `web/ui/dialog.js` | Browser ES module | Native HTML dialog | Node controller tests; browser smoke test pending |
+| `web/ui/tabs.js` | Browser ES module | DOM, ARIA tab markup | Node controller tests; browser smoke test pending |
+| `web/ui/theme.css` | Browser CSS | Modern browsers | Browser demo |
 | `godot/core/settings_store.gd` | Godot 4 | `ConfigFile` | Manual Godot demo |
 | `godot/core/save_store.gd` | Godot 4 | `FileAccess`, JSON | Manual Godot demo |
 | `godot/ui/toast_manager.gd` | Godot 4 | `CanvasLayer` and `Label` | Manual Godot demo |
 
-**Status:** Web core utilities are unit-tested; browser UI and Godot modules require target-runtime smoke testing. Do not assume Godot headless validation has occurred.
+### Web dialogs
+Add a native `<dialog aria-labelledby="some-title">`, a close button with `data-gdt-close`, then instantiate `new DialogController(dialogElement)`. Native browser behavior handles focus trapping and Escape; dispose event listeners with `destroy()`.
 
-Next modules (not implemented): input abstraction, audio manager, HUD, upgrade graph, inventory, and engine-specific gameplay systems. Add after concrete game integration requirements are known.
+### Web tabs
+Within a root element, create matching ordered `[role=tab]` buttons and `[role=tabpanel]` sections with unique `id` values and paired `aria-controls` / `aria-labelledby` attributes. Instantiate `new TabsController(root)`. Arrow keys, Home and End navigate; `select(index)` changes the active panel. Dispose with `destroy()`.
+
+**Status:** Web core utilities and controller logic have Node unit tests. Browser UI and Godot modules still require target-runtime smoke testing. No claims of mobile or Godot validation until tested.
+
+Next: responsive navigation, HUD, inventory and upgrade components, plus equivalent Godot UI where game requirements warrant.
