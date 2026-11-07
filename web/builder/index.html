@@ -18,7 +18,7 @@
 <div class="wf-canvasbar"><label>Screen <input id="screen-name" maxlength="90" value="Untitled layout"></label>
 <label class="wf-check"><input type="checkbox" id="snap" checked> Snap 10</label>
 <button id="copy" class="gdt-btn">Copy</button><button id="paste" class="gdt-btn">Paste</button>
-<button id="preview" class="gdt-btn">Test actions</button><span id="count">0 controls</span></div>
+<button id="connect-mode" class="gdt-btn" aria-pressed="false">Connect nodes</button><button id="preview" class="gdt-btn">Test actions</button><span id="count">0 controls</span></div>
 <div class="wf-stage-scroll" id="stage-scroll"><div id="canvas-stage"><div id="canvas" tabindex="0" aria-label="Functional UI canvas" role="group"></div></div></div>
 <div id="status" role="status" aria-live="polite">Choose a template or add a control.</div>
 <div class="wf-event-log" id="event-log" hidden><strong>Action preview</strong><p>Controls emit named events. Codex will connect them to your game.</p><pre id="event-output">Use a control to see its event.</pre></div>
@@ -27,6 +27,7 @@
 <div id="properties" hidden>
 <label>Control ID <input id="prop-id" maxlength="80"></label><label>Label (placeholder) <input id="prop-label" maxlength="100"></label>
 <label>Role <input id="prop-role" maxlength="80" placeholder="e.g. primary_action"></label>
+<label>Button shape <select id="prop-shape"><option value="rectangle">Rectangle</option><option value="rounded">Rounded</option><option value="circle">Circle</option></select></label>
 <label>Action ID <input id="prop-actionId" maxlength="80" placeholder="e.g. inventory.equip"></label>
 <label>Data binding <input id="prop-bindingKey" maxlength="80" placeholder="e.g. inventory.items"></label>
 <div class="wf-two"><label>X <input id="prop-x" type="number"></label><label>Y <input id="prop-y" type="number"></label></div>
@@ -34,5 +35,6 @@
 <div class="wf-two"><button id="forward" class="gdt-btn">Move forward</button><button id="backward" class="gdt-btn">Move backward</button></div>
 <button id="duplicate" class="gdt-btn">Duplicate</button><button id="delete" class="gdt-btn">Delete</button></div>
 <h2 class="wf-separator">Layers</h2><div id="layers" class="wf-layers"></div>
+<h2 class="wf-separator">Connections</h2><p class="wf-tip">Select Connect nodes, then click two buttons. Select a line below to remove it.</p><div id="connections" class="wf-layers"></div>
 <h2 class="wf-separator">Integration contract</h2><div id="contract" class="wf-contract">No actions or bindings.</div>
 </aside></div><script type="module" src="./wireframe.js"></script></body></html>

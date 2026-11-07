@@ -6,7 +6,7 @@ import {getPreset} from '../layout-kit/presets.js';
 class Element {
  constructor(tag='div') {
   this.tagName=tag;this.style={};this.dataset={};this.children=[];this.attributes={};
-  this.events=new Map();this.textContent='';this.value='';this.checked=false;this.className='';
+  this.classList={add:()=>{}};this.events=new Map();this.textContent='';this.value='';this.checked=false;this.className='';
  }
  setAttribute(name,value){this.attributes[name]=value;}
  append(...children){this.children.push(...children);}
@@ -18,7 +18,7 @@ class Element {
 }
 test('browser runtime binds data and dispatches inventory actions',()=>{
  const previous=globalThis.document;
- globalThis.document={createElement:tag=>new Element(tag),activeElement:null};
+ globalThis.document={createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),activeElement:null};
  try{
   const target=new Element(),events=[];
   const ui=mountLayout({
@@ -27,7 +27,7 @@ test('browser runtime binds data and dispatches inventory actions',()=>{
    onAction:(actionId,payload)=>events.push({actionId,payload})
   });
   const root=target.children[0];
-  assert.equal(root.children.length,9);
+  assert.equal(root.children.length,10);
   const grid=root.children.find(child=>child.dataset.nodeId==='item_grid');
   assert.equal(grid.children[0].textContent,'Sword');
   grid.children[1].fire('click');
@@ -46,7 +46,7 @@ test('browser runtime binds data and dispatches inventory actions',()=>{
 });
 test('browser runtime handles toggle and slider events',()=>{
  const previous=globalThis.document;
- globalThis.document={createElement:tag=>new Element(tag),activeElement:null};
+ globalThis.document={createElement:tag=>new Element(tag),createElementNS:(_,tag)=>new Element(tag),activeElement:null};
  try{
   const target=new Element(),events=[];
   const ui=mountLayout({container:target,layout:getPreset('settings'),

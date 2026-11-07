@@ -4,7 +4,7 @@ import {validateIntegration} from '../layout-kit/validator.js';
 import {createZip} from './zip.js';
 export const MAX_TEMPLATES=30;
 export const ENGINE_FILES=Object.freeze({
- web:['layout-kit/schema.js','layout-kit/runtime.js','layout-kit/runtime.css'],
+ web:['layout-kit/schema.js','layout-kit/connections.js','layout-kit/runtime.js','layout-kit/runtime.css'],
  godot:['godot/layout-kit/ui_layout.gd']
 });
 export const BEHAVIOR_FILES=Object.freeze({

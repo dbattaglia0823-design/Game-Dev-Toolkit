@@ -16,7 +16,7 @@ test('all functional presets have unique node IDs and declare actions and bindin
 test('functional templates contain no appearance fields',()=>{
  const layout=getPreset('inventory');
  for(const node of layout.nodes){
-  assert.deepEqual(Object.keys(node),['id','type','x','y','w','h','label','role','actionId','bindingKey']);
+  assert.deepEqual(Object.keys(node),['id','type','x','y','w','h','label','role','shape','actionId','bindingKey']);
   assert.ok(!('fill' in node));
  }
 });

@@ -1,12 +1,13 @@
-import {NODE_TYPES,makeLayout,normalizeLayout,addNode,modifyNode,deleteNode,reorderNode,duplicateNode,parseLayout,serializeLayout,getContract} from '../layout-kit/schema.js';
+import {NODE_TYPES,makeLayout,normalizeLayout,addNode,modifyNode,deleteNode,connectNodes,disconnectNodes,reorderNode,duplicateNode,parseLayout,serializeLayout,getContract} from '../layout-kit/schema.js';
 import {PRESETS,getPreset} from '../layout-kit/presets.js';
 import {mountLayout} from '../layout-kit/runtime.js';
 import {calculateCanvasScale} from './viewport.js';
+import {connectionPaths} from '../layout-kit/connections.js';
 import {SAMPLE_DATA} from '../layout-kit/sample-data.js';
 
 const $=id=>document.getElementById(id);
 const canvas=$('canvas'),stage=$('canvas-stage'),scroll=$('stage-scroll');
-let doc=makeLayout(),selected='',past=[],future=[],clipboard=null,drag=null,preview=null;
+let doc=makeLayout(),selected='',past=[],future=[],clipboard=null,drag=null,preview=null,connectSource='',connectMode=false;
 const actionTypes=new Set(['button','grid','list','slot','toggle','slider','input']);
 const bindingTypes=new Set(['label','grid','list','slot','progress','toggle','slider','input']);
 const editable=el=>Boolean(el?.closest?.('input, textarea, select, [contenteditable="true"]'));
@@ -15,6 +16,7 @@ const msg=s=>$('status').textContent=s;
 const active=()=>doc.nodes.find(n=>n.id===selected);
 function restore(next) {
  if(preview){preview.destroy();preview=null;$('preview').textContent='Test actions';$('event-log').hidden=true;}
+ connectSource='';
  doc=normalizeLayout(next);selected='';render();
 }
 function commit(next,notice='Updated layout'){
@@ -50,11 +52,21 @@ function inspector(){
  const node=active();$('properties').hidden=!node;
  $('selection-summary').textContent=node?node.type+' • '+node.id:'Select a control to edit.';
  if(!node)return;
- for(const field of ['id','label','role','actionId','bindingKey','x','y','w','h'])$('prop-'+field).value=node[field];
+ for(const field of ['id','label','role','shape','actionId','bindingKey','x','y','w','h'])$('prop-'+field).value=node[field];
+ $('prop-shape').disabled=!['button','slot'].includes(node.type);
  $('prop-actionId').disabled=!actionTypes.has(node.type);
  $('prop-bindingKey').disabled=!bindingTypes.has(node.type);
 }
 function select(id){
+ if(connectMode && id){
+  const target=doc.nodes.find(n=>n.id===id);
+  if(!target || !['button','slot'].includes(target.type)){msg('Connections must link buttons or slots.');return;}
+  if(!connectSource){connectSource=id;msg('Select another button to connect from '+id);return;}
+  const from=connectSource;connectSource='';
+  if(from===id){msg('Choose two different buttons.');return;}
+  try{commit(connectNodes(doc,from,id),'Connected '+from+' to '+id);}catch(error){msg(error.message);}
+  return;
+ }
  selected=id;
  for(const el of canvas.querySelectorAll('.wf-node'))el.classList.toggle('selected',el.dataset.id===id);
  for(const el of $('layers').children)el.setAttribute('aria-pressed',String(el.dataset.id===id));
@@ -74,7 +86,7 @@ function guides(node){
  if(y!==undefined){const el=document.createElement('div');el.className='wf-gridguide horizontal';el.style.top=y+'px';canvas.append(el);}
 }
 function nodeElement(node){
- const el=document.createElement('div');el.className='wf-node';el.dataset.id=node.id;el.dataset.type=node.type;el.tabIndex=0;
+ const el=document.createElement('div');el.className='wf-node';el.dataset.id=node.id;el.dataset.type=node.type;el.dataset.shape=node.shape;el.tabIndex=0;
  el.setAttribute('role','button');el.setAttribute('aria-label',node.type+' '+(node.label||node.role||node.id));
  el.style.cssText='left:'+node.x+'px;top:'+node.y+'px;width:'+node.w+'px;height:'+node.h+'px';
  const title=document.createElement('span');title.textContent=node.label||node.role||node.type;el.append(title);
@@ -84,6 +96,7 @@ function nodeElement(node){
  el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(node.id);}});
  el.addEventListener('pointerdown',event=>{
   if(event.button!==0)return;event.preventDefault();event.stopPropagation();
+  if(connectMode)return;
   select(node.id);
   const rect=canvas.getBoundingClientRect();
   drag={id:node.id,mode:event.target===handle?'resize':'move',startX:event.clientX,startY:event.clientY,scaleX:800/rect.width,scaleY:500/rect.height,origin:structuredClone(doc),node:structuredClone(node)};
@@ -93,11 +106,12 @@ function nodeElement(node){
   if(!drag||drag.id!==node.id||!el.hasPointerCapture(event.pointerId))return;
   const dx=(event.clientX-drag.startX)*drag.scaleX,dy=(event.clientY-drag.startY)*drag.scaleY;
   const changes=drag.mode==='move'?{x:snap(drag.node.x+dx),y:snap(drag.node.y+dy)}:{w:snap(drag.node.w+dx),h:snap(drag.node.h+dy)};
+  if(drag.mode==='resize' && drag.node.shape==='circle')changes.h=changes.w;
   const candidate=modifyNode(drag.origin,node.id,changes);
   const current=candidate.nodes.find(n=>n.id===node.id);
   el.style.left=current.x+'px';el.style.top=current.y+'px';el.style.width=current.w+'px';el.style.height=current.h+'px';
   // Use a temporary working document only for guides; history commits on release.
-  doc=candidate;guides(current);inspector();
+  doc=candidate;drawConnections();guides(current);inspector();
  });
  const end=event=>{
   if(!drag||drag.id!==node.id)return;
@@ -109,8 +123,21 @@ function nodeElement(node){
  el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end);
  return el;
 }
+function drawConnections(){
+ canvas.querySelector('.wf-edges')?.remove();
+ if(!doc.edges.length)return;
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ svg.classList.add('wf-edges');svg.setAttribute('viewBox','0 0 800 500');svg.setAttribute('aria-hidden','true');
+ for(const edge of connectionPaths(doc)){
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  for(const key of ['x1','y1','x2','y2'])line.setAttribute(key,String(edge[key]));
+  svg.append(line);
+ }
+ canvas.prepend(svg);
+}
 function render(){
  canvas.replaceChildren();
+ drawConnections();
  for(const node of doc.nodes)canvas.append(nodeElement(node));
  const layers=$('layers');layers.replaceChildren();
  for(const node of [...doc.nodes].reverse()){
@@ -118,6 +145,15 @@ function render(){
   b.textContent=node.type+' · '+(node.role||node.label||node.id);
   b.addEventListener('click',()=>select(node.id));layers.append(b);
  }
+ const connections=$('connections');connections.replaceChildren();
+ for(const edge of doc.edges){
+  const row=document.createElement('div');row.className='wf-connection-row';
+  const title=document.createElement('span');title.textContent=edge.from+' → '+edge.to;
+  const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.className='gdt-btn';
+  remove.addEventListener('click',()=>commit(disconnectNodes(doc,edge.from,edge.to),'Connection removed'));
+  row.append(title,remove);connections.append(row);
+ }
+ if(!doc.edges.length)connections.textContent='No connections.';
  $('screen-name').value=doc.name;$('count').textContent=doc.nodes.length+' controls';
  $('undo').disabled=!past.length;$('redo').disabled=!future.length;
  const contract=getContract(doc),element=$('contract');element.replaceChildren();
@@ -134,7 +170,7 @@ function add(type,pos={}){
 }
 function remove(){
  if(!selected)return;
- const next=deleteNode(doc,selected);selected='';commit(next,'Control removed');
+ const next=deleteNode(doc,selected);connectSource='';selected='';commit(next,'Control removed');
 }
 function duplicate(){
  if(!selected)return;
@@ -158,18 +194,28 @@ canvas.addEventListener('drop',ev=>{
  add(type,{x:snap((ev.clientX-rect.left)*800/rect.width),y:snap((ev.clientY-rect.top)*500/rect.height)});
 });
 canvas.addEventListener('click',ev=>{if(ev.target===canvas)select('');});
-for(const field of ['id','label','role','actionId','bindingKey','x','y','w','h']){
+for(const field of ['id','label','role','shape','actionId','bindingKey','x','y','w','h']){
  $('prop-'+field).addEventListener('change',ev=>{
   const current=active();if(!current)return;
   const value=['x','y','w','h'].includes(field)?Number(ev.target.value):ev.target.value;
   const next=structuredClone(doc);
   const target=next.nodes.find(x=>x.id===selected);
   target[field]=value;
-  if(field==='id')selected=value;
+  if(field==='id'){
+   next.edges=next.edges.map(edge=>({from:edge.from===current.id?value:edge.from,to:edge.to===current.id?value:edge.to}));
+   selected=value;
+  }
+  if(field==='shape'&&value==='circle')target.h=target.w;
+  if(['w','h'].includes(field)&&target.shape==='circle')target.w=target.h=value;
   try{commit(normalizeLayout(next),'Updated '+field);}
   catch(error){selected=current.id;render();msg(error.message);}
  });
 }
+$('connect-mode').addEventListener('click',()=>{
+ connectMode=!connectMode;connectSource='';$('connect-mode').setAttribute('aria-pressed',String(connectMode));
+ $('connect-mode').textContent=connectMode?'Finish connecting':'Connect nodes';
+ msg(connectMode?'Click two buttons to create a connection.':'Connection mode disabled.');
+});
 $('template').addEventListener('change',ev=>{
  const key=ev.target.value;selected='';
  commit(key==='blank'?makeLayout():getPreset(key),'Loaded '+key);

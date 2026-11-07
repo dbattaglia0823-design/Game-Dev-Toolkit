@@ -30,6 +30,29 @@ func apply_layout(spec: Dictionary) -> bool:
 		child.queue_free()
 	controls.clear()
 	layout = spec.duplicate(true)
+	var lookup: Dictionary = {}
+	for item in nodes:
+		if item is Dictionary:
+			lookup[str(item.get("id", ""))] = item
+	for edge in spec.get("edges", []):
+		if not edge is Dictionary:
+			continue
+		var from_id: String = str(edge.get("from", ""))
+		var to_id: String = str(edge.get("to", ""))
+		if not lookup.has(from_id) or not lookup.has(to_id):
+			continue
+		var first: Dictionary = lookup[from_id]
+		var last: Dictionary = lookup[to_id]
+		var a := Vector2(float(first.get("x", 0)) + float(first.get("w", 0)) / 2.0, float(first.get("y", 0)) + float(first.get("h", 0)) / 2.0)
+		var b := Vector2(float(last.get("x", 0)) + float(last.get("w", 0)) / 2.0, float(last.get("y", 0)) + float(last.get("h", 0)) / 2.0)
+		var line := Line2D.new()
+		line.name = "Connection_" + from_id + "_" + to_id
+		line.default_color = Color(0.64, 0.72, 0.80)
+		line.width = 3.0
+		line.add_point(a)
+		line.add_point(b)
+		line.z_index = 1
+		add_child(line)
 	var viewport: Dictionary = spec.get("viewport", {})
 	custom_minimum_size = Vector2(float(viewport.get("width", 800)), float(viewport.get("height", 500)))
 	for entry in nodes:
@@ -97,6 +120,17 @@ func _make_control(entry: Dictionary) -> Control:
 		_:
 			return null
 	ui.name = node_id.validate_node_name()
+	if kind in ["button", "slot"]:
+		var shape: String = str(entry.get("shape", "rectangle"))
+		if shape in ["circle", "rounded"]:
+			var style := StyleBoxFlat.new()
+			style.bg_color = Color(0.22, 0.31, 0.43)
+			var radius: int = 999 if shape == "circle" else 16
+			style.set_corner_radius_all(radius)
+			(ui as Button).add_theme_stylebox_override("normal", style)
+			(ui as Button).add_theme_stylebox_override("hover", style)
+			(ui as Button).add_theme_stylebox_override("pressed", style)
+	ui.z_index = 2 if kind in ["button", "slot"] else 0
 	ui.set_meta("ui_type", kind)
 	return ui
 

@@ -104,3 +104,7 @@ Browse `web/catalog/index.html` and read `docs/TEMPLATE_LIBRARY.md`. Use a catal
 ## Phase 4 — Direct package handoff
 
 Generate an integration ZIP at `web/package/index.html`. Open `manifest.json` and `CODEX_INTEGRATION.md` within the archive, copy the included engine-specific runtime files, and integrate layout contracts with the existing game. The ZIP does not implement game-specific actions or verify the target game's integration. See `docs/INTEGRATION_PACKAGES.md`.
+
+## Skill-tree shape and graph integration
+
+When importing a skill-tree layout, preserve every node's optional `shape` and the layout's `edges`. Treat those links as visual graph definitions only. Connect real unlock conditions, prerequisites, points and skills to existing game logic. The Web adapter requires `connections.js` alongside `runtime.js`, and updated ZIP packages include it. See `docs/SKILL_TREE_CONNECTIONS.md`.

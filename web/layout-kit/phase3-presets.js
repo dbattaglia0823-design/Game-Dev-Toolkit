@@ -30,13 +30,23 @@ export const PHASE3_PRESETS=Object.freeze({
  'skill-tree':{name:'Skill Tree',nodes:[
   N('label','heading',35,25,345,54,'SKILLS','screen_title'),
   N('label','points',521,29,244,44,'Available points','points_balance','','skills.points'),
-  N('list','branches',35,98,179,338,'Branches','branch_list','skills.select_branch','skills.branches'),
+  N('list','branches',35,98,179,138,'Branches','branch_list','skills.select_branch','skills.branches'),
+  N('list','skill_nodes',35,254,179,182,'Skills','skill_list','skills.select_node','skills.nodes'),
   N('panel','tree_region',230,97,329,339,'','skill_tree_region'),
-  N('grid','skill_nodes',248,123,291,288,'Skill nodes','skill_grid','skills.select_node','skills.nodes'),
+  {...N('button','skill_root',351,123,72,72,'1','skill_node','skills.select_node'),shape:'circle'},
+  {...N('button','skill_left',273,237,70,70,'2','skill_node','skills.select_node'),shape:'circle'},
+  {...N('button','skill_right',433,237,70,70,'3','skill_node','skills.select_node'),shape:'circle'},
+  {...N('button','skill_final_left',258,341,64,64,'4','skill_node','skills.select_node'),shape:'circle'},
+  {...N('button','skill_final_right',455,341,64,64,'5','skill_node','skills.select_node'),shape:'circle'},
   N('panel','skill_details',573,97,194,339,'','skill_details'),
   N('label','skill_name',585,122,171,60,'Skill','detail_title','','skills.selected.name'),
   N('label','skill_description',585,196,171,98,'Description','skill_description','','skills.selected.description'),
   N('button','unlock',583,347,175,57,'Unlock','primary_action','skills.unlock_request')
+ ],edges:[
+  {from:'skill_root',to:'skill_left'},
+  {from:'skill_root',to:'skill_right'},
+  {from:'skill_left',to:'skill_final_left'},
+  {from:'skill_right',to:'skill_final_right'}
  ]},
  'quest-log':{name:'Quest Log',nodes:[
   N('label','heading',35,24,350,52,'QUESTS','screen_title'),

@@ -94,3 +94,13 @@ See `docs/TEMPLATE_LIBRARY.md` for action/binding mappings and handoff instructi
 - `web/tests/package-builder.test.js`: archive integrity, runtime source, engine options and invalid input.
 
 See `docs/INTEGRATION_PACKAGES.md`.
+
+## Skill tree geometry (v2)
+
+- `web/layout-kit/connections.js`: circle/rectangle link endpoint geometry.
+- `web/layout-kit/schema.js`: shape and optional connection graph persistence.
+- `web/builder/wireframe.js`: two-click node connections, live redraw, delete/undo/redo.
+- `web/layout-kit/runtime.js`: SVG connections and button shape metadata.
+- `godot/layout-kit/ui_layout.gd`: Line2D connections and StyleBoxFlat circle/rounded buttons.
+
+See `docs/SKILL_TREE_CONNECTIONS.md`.

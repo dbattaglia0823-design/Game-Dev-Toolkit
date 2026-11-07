@@ -37,3 +37,7 @@ Open the [Functional Template Catalog](../catalog/index.html) to find character 
 ## Export current screen directly
 
 Choose **Package current layout** to hand your current edited v2 layout to the [Integration Package Builder](../package/index.html), where you can select Web/Godot, optionally add more templates, and download a ZIP. The transfer uses temporary per-tab browser storage. If storage is unavailable, export JSON first and import it in the package builder.
+
+## Skill tree shapes and connections
+
+Choose a Button or Slot to set Rectangle, Rounded or Circle shape. Toggle **Connect nodes**, then click two nodes to link them. Lines follow nodes when dragged or resized. Delete a link in the Connections inspector. The skill-tree preset demonstrates branching links. Save and export preserve `shape` and `edges`. See `docs/SKILL_TREE_CONNECTIONS.md`.

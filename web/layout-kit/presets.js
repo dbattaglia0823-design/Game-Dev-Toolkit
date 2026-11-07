@@ -99,5 +99,5 @@ export const PRESETS=Object.freeze({...CORE_PRESETS,...PHASE3_PRESETS});
 export function getPreset(name) {
  const raw=PRESETS[name];
  if(!raw)throw new Error('Unknown layout preset');
- return normalizeLayout({version:2,name:raw.name,viewport:{width:800,height:500},nodes:structuredClone(raw.nodes)});
+ return normalizeLayout({version:2,name:raw.name,viewport:{width:800,height:500},nodes:structuredClone(raw.nodes),edges:structuredClone(raw.edges??[])});
 }

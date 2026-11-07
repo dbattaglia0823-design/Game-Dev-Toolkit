@@ -80,3 +80,7 @@ All outputs are scaffolding. The target game's author or Codex must still connec
 ## Integration readiness checks
 
 The [Integration Validator](../web/validator/index.html) reviews the raw v2 document before normalization, action-handler mappings and sample-data bindings. It flags malformed coordinates, duplicate IDs, offscreen controls and undersized interactive targets. Download the report and attach it to the target-game integration review. A template with no errors but warnings is structurally valid, **not fully mapped**.
+
+## Optional shape and connection metadata (v2)
+
+Buttons/slots may declare `shape: "rectangle" | "rounded" | "circle"`. When circle is selected, dimensions remain square. Layout documents may declare `edges: [{"from":"node_id","to":"other_id"}]`. Links refer to distinct existing nodes and are stored as structural relationships; no unlock logic is implied. Older v2 JSON with no shape/edges is supported. See `docs/SKILL_TREE_CONNECTIONS.md`.

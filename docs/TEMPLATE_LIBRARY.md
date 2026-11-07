@@ -51,3 +51,7 @@ The optional Phase 2 behavior modules handle generic search, item selection, nav
 ## Verification
 
 The `web/tests/phase3-templates.test.js` suite validates each template's semantic schema, unique control IDs, offscreen positions, stable JSON round-trips, action/data binding contracts, catalog membership and neutral preview fixture coverage. Chromium tests exercise the catalog, deep links and selected templates on desktop and mobile. These tests do not replace target-game integration checks.
+
+## Interactive skill tree graphs
+
+The Skill Tree preset now includes circular skill buttons and branching connection lines. Its `edges` describe visual associations only; Codex must supply actual prerequisites and skill state from the game. See `docs/SKILL_TREE_CONNECTIONS.md`.
