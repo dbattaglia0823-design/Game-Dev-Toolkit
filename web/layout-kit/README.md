@@ -27,3 +27,7 @@ See [live functional integration example](example/index.html) and [contract spec
 ## Reusable behavior modules
 
 Use `behaviors.js` and `workflow.js` for search, selection, equipment display slots, navigation and confirmations, or `confirmation-dialog.js` for browser-native modals. Start with the [interactive behavior demonstration](behaviors-demo/index.html). See `docs/BEHAVIORS.md` in the repository for the full contract.
+
+## Phase 3 screen library
+
+The [catalog](../catalog/index.html) organizes 19 semantic UI layouts and provides a browser preview, contract inspection and export. The [template catalog guide](../../docs/TEMPLATE_LIBRARY.md) documents screen actions and data requirements. The preview fixtures in `sample-data.js` are examples, not gameplay definitions.
