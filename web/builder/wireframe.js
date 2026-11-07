@@ -89,6 +89,11 @@ function nodeElement(node){
  const el=document.createElement('div');el.className='wf-node';el.dataset.id=node.id;el.dataset.type=node.type;el.dataset.shape=node.shape;el.tabIndex=0;
  el.setAttribute('role','button');el.setAttribute('aria-label',node.type+' '+(node.label||node.role||node.id));
  el.style.cssText='left:'+node.x+'px;top:'+node.y+'px;width:'+node.w+'px;height:'+node.h+'px';
+ // Apply shape directly as well as through CSS so changing the inspector always
+ // changes actual canvas geometry, even when a cached stylesheet is stale.
+ if(node.type==='button'||node.type==='slot'){
+  el.style.borderRadius=node.shape==='circle'?'50%':node.shape==='rounded'?'16px':'0px';
+ }
  const title=document.createElement('span');title.textContent=node.label||node.role||node.type;el.append(title);
  const tag=document.createElement('small');tag.textContent=node.type.toUpperCase();el.append(tag);
  const handle=document.createElement('div');handle.className='wf-resize';el.append(handle);
@@ -205,7 +210,14 @@ for(const field of ['id','label','role','shape','actionId','bindingKey','x','y',
    next.edges=next.edges.map(edge=>({from:edge.from===current.id?value:edge.from,to:edge.to===current.id?value:edge.to}));
    selected=value;
   }
-  if(field==='shape'&&value==='circle')target.h=target.w;
+  if(field==='shape'&&value==='circle'){
+   // Turning a default 180×54 rectangular button into a circle should make a
+   // 54px circle, not a giant 180px disc that overlaps neighboring controls.
+   const diameter=Math.min(target.w,target.h);
+   target.x+=Math.round((target.w-diameter)/2);
+   target.y+=Math.round((target.h-diameter)/2);
+   target.w=diameter;target.h=diameter;
+  }
   if(['w','h'].includes(field)&&target.shape==='circle')target.w=target.h=value;
   try{commit(normalizeLayout(next),'Updated '+field);}
   catch(error){selected=current.id;render();msg(error.message);}
