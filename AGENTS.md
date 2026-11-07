@@ -35,3 +35,7 @@ Use `docs/TEMPLATE_LIBRARY.md` and `web/catalog/index.html` to select a function
 ## Phase 4 integration packages
 
 For selected functional layouts, use `web/package/index.html` and the `docs/INTEGRATION_PACKAGES.md` instructions to collect compatible engine files. Inspect `manifest.json`, individual `*.layout.json` and `*.contract.json`, and validation warnings before changing the target game. Preserve existing game state, save formats and gameplay systems. Wiring and verification are mandatory; the package cannot prove those steps are complete.
+
+## Skill-tree graph metadata
+
+Preserve the v2 functional UI `shape` and `edges` fields when importing or transforming layouts. Connections are purely visual associations and must not bypass existing skill prerequisites, ability unlock rules or save-state validation. Use `docs/SKILL_TREE_CONNECTIONS.md` for the editor and runtime contracts.
