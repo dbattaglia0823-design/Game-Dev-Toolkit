@@ -40,6 +40,12 @@ try{
   assert.match(await page.locator('#state').innerText(),/shop.purchase/);
   await page.locator('#cancel-confirm').click();
   assert.doesNotMatch(await page.locator('#state').innerText(),/"pendingAction": "shop.purchase"/);
+  await page.locator('[data-node-id="buy"]').click();
+  await page.locator('#approve-confirm').click();
+  assert.match(await page.locator('#events').innerText(),/shop.purchase/);
+  await page.locator('[data-node-id="buy"]').click();
+  await page.keyboard.press('Escape');
+  assert.doesNotMatch(await page.locator('#state').innerText(),/"pendingAction": "shop.purchase"/);
   await page.goto(origin+'/builder/index.html');
   await page.locator('#template').selectOption('inventory');
   assert.match(await page.locator('#count').innerText(),/9 controls/);
