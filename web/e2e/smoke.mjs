@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {readFile} from 'node:fs/promises';
 
 const origin=process.env.GDT_TEST_ORIGIN || 'http://127.0.0.1:8765';
 const browser=await chromium.launch({headless:true});
@@ -65,6 +66,24 @@ try{
   await page.goto(origin+'/validator/index.html?preset=race-selection');
   assert.equal(await page.locator('#preset').inputValue(),'race-selection');
   assert.match(await page.locator('#status').innerText(),/Structurally valid/);
+  await page.goto(origin+'/package/index.html?preset=inventory');
+  assert.match(await page.locator('#selected-count').innerText(),/1 selected/);
+  await page.locator('#search').fill('settings');
+  await page.locator('.template-entry input[value="settings"]').check();
+  assert.match(await page.locator('#selected-count').innerText(),/2 selected/);
+  assert.match(await page.locator('#action-count').innerText(),/^[1-9]/);
+  const downloadPromise=page.waitForEvent('download');
+  await page.locator('#download').click();
+  const packageDownload=await downloadPromise;
+  assert.match(packageDownload.suggestedFilename(),/gdt-ui-web-2-templates\.zip/);
+  const zipBytes=await readFile(await packageDownload.path());
+  assert.equal(zipBytes.readUInt32LE(0),0x04034b50);
+  assert.ok(zipBytes.includes(Buffer.from('contracts/inventory.contract.json')));
+  assert.ok(zipBytes.includes(Buffer.from('CODEX_INTEGRATION.md')));
+  await page.goto(origin+'/builder/index.html?preset=garage');
+  await page.locator('#package-current').click();
+  await page.waitForURL('**/package/index.html');
+  assert.match(await page.locator('#selected-count').innerText(),/1 selected/);
   await page.goto(origin+'/builder/index.html');
   await page.locator('#template').selectOption('inventory');
   assert.match(await page.locator('#count').innerText(),/9 controls/);

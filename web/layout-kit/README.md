@@ -31,3 +31,7 @@ Use `behaviors.js` and `workflow.js` for search, selection, equipment display sl
 ## Phase 3 screen library
 
 The [catalog](../catalog/index.html) organizes 19 semantic UI layouts and provides a browser preview, contract inspection and export. The [template catalog guide](../../docs/TEMPLATE_LIBRARY.md) documents screen actions and data requirements. The preview fixtures in `sample-data.js` are examples, not gameplay definitions.
+
+## Export to a target game
+
+The [Integration Package Builder](../package/index.html) produces one ZIP per chosen engine, including selected v2 layouts, contracts, validation reports and runtime adapter files. See [full instructions](../../docs/INTEGRATION_PACKAGES.md).

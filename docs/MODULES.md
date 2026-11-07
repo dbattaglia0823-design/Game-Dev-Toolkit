@@ -85,3 +85,12 @@ See `docs/BEHAVIORS.md` for integration boundaries and action conventions.
 - `web/tests/phase3-templates.test.js`: schema, contract, layout geometry, neutral sample binding and completeness tests.
 
 See `docs/TEMPLATE_LIBRARY.md` for action/binding mappings and handoff instructions.
+
+## Phase 4 — Integration Packages
+
+- `web/package/index.html` and `package-ui.js`: multiselect presets, custom layout import, target engine options and browser download.
+- `web/package/package-builder.js`: tested packaging, validation, contract and Codex guide generation, dependency inclusion.
+- `web/package/zip.js`: no-dependency ZIP store writer with CRC32 and path validation.
+- `web/tests/package-builder.test.js`: archive integrity, runtime source, engine options and invalid input.
+
+See `docs/INTEGRATION_PACKAGES.md`.
