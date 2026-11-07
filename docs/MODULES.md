@@ -18,6 +18,9 @@ Add a native `<dialog aria-labelledby="some-title">`, a close button with `data-
 ### Web tabs
 Within a root element, create matching ordered `[role=tab]` buttons and `[role=tabpanel]` sections with unique `id` values and paired `aria-controls` / `aria-labelledby` attributes. Instantiate `new TabsController(root)`. Arrow keys, Home and End navigate; `select(index)` changes the active panel. Dispose with `destroy()`.
 
+| `web/showcase/index.html` | Browser preview | Modern DOM + ES modules | Manual browser test pending |
+| `web/showcase/demo-data.js` | Node/browser ES module | No runtime dependencies | Node unit tests |
+
 **Status:** Web core utilities and controller logic have Node unit tests. Browser UI and Godot modules still require target-runtime smoke testing. No claims of mobile or Godot validation until tested.
 
 Next: responsive navigation, HUD, inventory and upgrade components, plus equivalent Godot UI where game requirements warrant.
