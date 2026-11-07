@@ -25,7 +25,7 @@ func _run() -> void:
 	if not manifest_data is Array:
 		quit(1)
 		return
-	_check(manifest_data.size() >= 19, "All registered templates should be covered")
+	_check(manifest_data.size() >= 57, "All 57 registered templates should be covered")
 	for entry in manifest_data:
 		var key: String = str(entry.get("key", ""))
 		var path: String = "res://tests/generated/" + key + ".layout.json"
