@@ -31,3 +31,7 @@ Use `docs/BEHAVIORS.md` to select UI-only functionality for filtering, selecting
 ## Phase 3 template selection
 
 Use `docs/TEMPLATE_LIBRARY.md` and `web/catalog/index.html` to select a functional screen template. Keep action names, data bindings and layout responsibilities, but customize all artwork, branding, text and visuals for the target game. Only use the new nine layouts for placement and interactions: they do not implement crafting, quests, vehicle sales, racing, stats or progression. Run the validator and target-game regression tests for all integrations.
+
+## Phase 4 integration packages
+
+For selected functional layouts, use `web/package/index.html` and the `docs/INTEGRATION_PACKAGES.md` instructions to collect compatible engine files. Inspect `manifest.json`, individual `*.layout.json` and `*.contract.json`, and validation warnings before changing the target game. Preserve existing game state, save formats and gameplay systems. Wiring and verification are mandatory; the package cannot prove those steps are complete.
