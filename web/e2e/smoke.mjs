@@ -38,7 +38,7 @@ try{
   await page.locator('[data-screen="shop"]').click();
   await page.locator('[data-node-id="buy"]').click();
   assert.match(await page.locator('#state').innerText(),/shop.purchase/);
-  await page.locator('[data-node-id="confirm_cancel"]').click();
+  await page.locator('#cancel-confirm').click();
   assert.doesNotMatch(await page.locator('#state').innerText(),/"pendingAction": "shop.purchase"/);
   await page.goto(origin+'/builder/index.html');
   await page.locator('#template').selectOption('inventory');
