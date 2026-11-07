@@ -96,7 +96,7 @@ function nodeElement(node){
  el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();select(node.id);}});
  el.addEventListener('pointerdown',event=>{
   if(event.button!==0)return;event.preventDefault();event.stopPropagation();
-  if(connectMode){select(node.id);return;}
+  if(connectMode)return;
   select(node.id);
   const rect=canvas.getBoundingClientRect();
   drag={id:node.id,mode:event.target===handle?'resize':'move',startX:event.clientX,startY:event.clientY,scaleX:800/rect.width,scaleY:500/rect.height,origin:structuredClone(doc),node:structuredClone(node)};
