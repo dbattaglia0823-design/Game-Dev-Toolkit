@@ -15,6 +15,10 @@ This is a **functional wireframe designer**. Arrange neutral controls, define th
 
 See the [layout format](../../docs/UI_TEMPLATE_CONTRACT.md), the [Codex import procedure](../../docs/CODEX_UI_INTEGRATION.md), and the [runnable browser runtime demo](../layout-kit/example/index.html).
 
+## Phase 2 behavior presets
+
+The editor includes **Equipment**, **Searchable list**, and **Confirmation** layouts. Try the [interactive functional behavior example](../layout-kit/behaviors-demo/index.html) to test actions and navigation without any final-game visuals. The optional controllers are documented in `docs/BEHAVIORS.md`.
+
 ## Old layouts
 
 Earlier appearance-first JSON v1 designs can still be edited at [Legacy Visual Studio](legacy-studio.html). This functional editor uses JSON version 2 and has its own browser-local save key so it does not overwrite legacy layouts. No automatic v1 → v2 migration is performed.
