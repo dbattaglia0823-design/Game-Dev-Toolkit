@@ -16,6 +16,10 @@ Open the [Integration Validator](web/validator/index.html) to check exported lay
 
 Automated checks cover Node unit tests, Chromium desktop/mobile smoke tests and a Godot 4 headless adapter fixture. See [validation instructions](docs/VALIDATION.md) for limits and status.
 
+## Connected skill-tree editing
+
+The [Functional UI Builder](web/builder/index.html?preset=skill-tree) supports **circle/rounded/rectangular buttons** and **two-click node connections**. Lines follow moved or resized buttons, survive saved JSON, and render in the Web and Godot adapters. These express UI relationships, not gameplay prerequisites. See [skill tree connections](docs/SKILL_TREE_CONNECTIONS.md).
+
 ## Phase 4 — One-click integration packages
 
 Use the [Integration Package Builder](web/package/index.html) to select templates, choose **Web** or **Godot 4**, and download a ZIP with the layouts, action/data contracts, validation reports, engine adapters, and a Codex handoff guide. Import a custom edited layout or send the current builder screen directly. [Export and integration instructions](docs/INTEGRATION_PACKAGES.md).
