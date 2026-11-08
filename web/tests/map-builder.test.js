@@ -6,6 +6,7 @@ import {
   addTileset, addObject, updateObject, removeObject, cellIndex
 } from '../map-builder/model.js';
 import {portableMap, buildGodotZip} from '../map-builder/export.js';
+import {readFile} from 'node:fs/promises';
 const tile=(index=0)=>({set:'starter',index});
 const at=(map,x,y)=>map.layers[0].tiles[cellIndex(map,x,y)];
 
@@ -104,4 +105,10 @@ test('portable exports embed the original atlas and include Godot runtime and ma
   assert.ok(pkg.files.has('maps/forest-crossing.map.json'));
   assert.deepEqual(JSON.parse(pkg.files.get('maps/forest-crossing.map.json')).tilesets[0].src,png);
   assert.equal(new DataView(pkg.bytes.buffer).getUint32(0,true),0x04034b50);
+});
+
+test('web package ships an identical Godot loader to the source adapter',async()=>{
+  const browserLoader=await readFile(new URL('../map-builder/map_loader.gd',import.meta.url),'utf8');
+  const engineLoader=await readFile(new URL('../../godot/map-kit/map_loader.gd',import.meta.url),'utf8');
+  assert.equal(browserLoader,engineLoader);
 });
