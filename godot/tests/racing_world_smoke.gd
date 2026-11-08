@@ -20,6 +20,7 @@ func _run() -> void:
     root.add_child(world)
     _expect(world.call("load_world","res://tests/racing-world-smoke.json"), "Must load a v2 freeform world")
     _expect(world.call("get_world_size") == Vector2(1000,800), "World dimensions preserved")
+    _expect((world.get("_sprite_textures") as Dictionary).size() == 1, "Embedded PNG scenery sprite decoded")
     var routes: Array = world.call("get_road_paths")
     _expect(routes.size() == 2, "Two exported road paths")
     if routes.size() > 0:
