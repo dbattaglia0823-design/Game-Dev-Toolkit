@@ -9,6 +9,23 @@ try{
   const page=await browser.newPage({viewport});
   const errors=[];
   page.on('pageerror',error=>errors.push(error.stack || error.message));
+  // GitHub Pages home: static links and search must work at desktop and mobile widths.
+  await page.goto(new URL('../../index.html', import.meta.url).href);
+  assert.match(await page.title(),/Game Dev Toolkit/);
+  assert.equal(await page.locator('[data-tool-card]').count(),12);
+  assert.equal(await page.locator('[data-tool-card]:visible').count(),12);
+  assert.equal(await page.locator('#results-count').innerText(),'12 tools and demos');
+  assert.equal(await page.locator('a[href="web/map-builder/index.html"]').count(),2);
+  await page.locator('#tool-search').fill('collision');
+  assert.equal(await page.locator('[data-tool-card]:visible').count(),1);
+  assert.equal(await page.locator('[data-tool-card]:visible').first().getAttribute('href'),'web/map-builder/index.html');
+  await page.locator('#tool-search').fill('not-a-real-tool-name');
+  assert.equal(await page.locator('[data-tool-card]:visible').count(),0);
+  assert.equal(await page.locator('#empty-results').isVisible(),true);
+  await page.locator('#tool-search').press('Escape');
+  assert.equal(await page.locator('[data-tool-card]:visible').count(),12);
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),true,
+    'Homepage must not overflow horizontally at viewport width '+viewport.width);
   await page.goto(origin+'/validator/index.html');
   await page.locator('#preset').selectOption('inventory');
   await page.locator('#validate').click();
