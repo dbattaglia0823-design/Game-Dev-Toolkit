@@ -261,6 +261,7 @@ try{
   // Custom sprites are self-contained in exported world JSON and Godot packages.
   const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC','base64');
   await page.locator('#import-sprite').setInputFiles({name:'garage.png',mimeType:'image/png',buffer:png});
+  await page.waitForFunction(() => document.querySelectorAll('#prop-asset option').length === 2, {timeout:10000});
   assert.equal(await page.locator('#prop-asset option').count(),2);
   await page.locator('[data-tool="prop"]').click();
   await page.locator('#prop-type').selectOption('garage');
