@@ -3,6 +3,7 @@
  */
 import {getEntity,createEntity,updateEntity} from './world-model.js';
 import {boundsOf,clamp,distance,pointSegment,regionAt,roadAt,sampleRoad} from './world-geometry.js';
+import {placeBesideRoad,placementFootprint,roadwayClearance} from './world-road-placement.js';
 
 const shapeType = type => type==='roads'||type==='regions';
 const bounded = (v,min,max)=>clamp(v,min,max);
@@ -119,14 +120,20 @@ export function paintSceneryBrush(doc,center,opts,random=Math.random){
     const angle=random()*2*Math.PI,extent=radius*Math.sqrt(random());
     const p={x:center.x+Math.cos(angle)*extent,y:center.y+Math.sin(angle)*extent};
     if(!inWorld(next,p))continue;
-    if(avoidRoads&&roadAt(next,p))continue;
-    const region=avoidWater?regionAt(next,p):null;
-    if(region&&(region.biome==='ocean'||region.biome==='lake'))continue;
-    if(next.props.some(other=>Math.abs(other.x-p.x)<spacing&&Math.abs(other.y-p.y)<spacing&&distance(other,p)<spacing))continue;
     const rotation=variation?Math.round((random()*360-180)*10)/10:0;
     const scale=variation?Math.round((.75+random()*.55)*100)/100:1;
-    next=createEntity(next,'props',{type:opts.type,assetId,name:opts.type.replaceAll('_',' '),
-      x:+p.x.toFixed(2),y:+p.y.toFixed(2),rotation,scale});
+    const proposed={type:opts.type,assetId,name:opts.type.replaceAll('_',' '),
+      x:+p.x.toFixed(2),y:+p.y.toFixed(2),rotation,scale};
+    let placed;
+    try{placed=placeBesideRoad(next,proposed);}
+    catch{continue;}
+    if(avoidRoads&&roadwayClearance(next,placed,placementFootprint(next,placed))<0)continue;
+    const region=avoidWater?regionAt(next,placed):null;
+    if(region&&(region.biome==='ocean'||region.biome==='lake'))continue;
+    if(distance(placed,center)>radius+placementFootprint(next,placed)*.5)continue;
+    if(next.props.some(other=>Math.abs(other.x-placed.x)<spacing&&Math.abs(other.y-placed.y)<spacing&&
+      distance(other,placed)<spacing))continue;
+    next=createEntity(next,'props',placed);
     painted++;
   }
   return next;

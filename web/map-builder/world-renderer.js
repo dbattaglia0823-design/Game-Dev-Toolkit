@@ -259,7 +259,7 @@ export function drawWorld(ctx,doc,options={}){
 /** Overlays are editor-only; exports intentionally omit editor node handles. */
 export function drawEditorOverlay(ctx,doc,{
   selection=null,draft=null,zoom=1,hover=null,insertMode=null,insertHover=null,
-  brushPreview=null,showBoundaries=true
+  brushPreview=null,roadsidePreview=null,showBoundaries=true
 }={}){
   const radius=clamp(7/zoom,5,35);
   if(showBoundaries){
@@ -321,6 +321,21 @@ export function drawEditorOverlay(ctx,doc,{
         }
       }
     }
+  }
+  if(roadsidePreview){
+    // Dashed ghost shows where the actual asset footprint will be kept clear of the road.
+    const p=roadsidePreview,r=clamp(p.radius,12,200);
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rotation*Math.PI/180);
+    ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);
+    ctx.fillStyle='#a8e6bc16';ctx.fill();
+    ctx.setLineDash([Math.max(4/zoom,3),Math.max(2/zoom,2)]);
+    ctx.strokeStyle='#b9f3cf';ctx.lineWidth=Math.max(1.6/zoom,1.2);ctx.stroke();
+    ctx.setLineDash([]);
+    const half=clamp(25/zoom,6,r*.85);
+    ctx.strokeStyle='#eeffe7';ctx.lineWidth=2/zoom;
+    ctx.beginPath();ctx.moveTo(0,-half);ctx.lineTo(0,half);ctx.moveTo(-half*.5,half*.52);
+    ctx.lineTo(0,half);ctx.lineTo(half*.5,half*.52);ctx.stroke();
+    ctx.restore();
   }
   if(brushPreview?.position && Number.isFinite(brushPreview.radius)){
     ctx.beginPath();ctx.arc(brushPreview.position.x,brushPreview.position.y,brushPreview.radius,0,Math.PI*2);

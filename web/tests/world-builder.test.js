@@ -9,6 +9,8 @@ import {distance,nearestOnPath,pointInPolygon,polygonArea,roadAt,regionAt,
 import {buildWorldZip,buildRoadNetwork} from '../map-builder/world-export.js';
 import {roadInsertCandidate,regionInsertCandidate,insertShapePoint,translateEntity,
   duplicateEntity,paintSceneryBrush,eraseSceneryBrush} from '../map-builder/world-edit-tools.js';
+import {nearestRoadPlacement,roadwayClearance,placementFootprint,placeBesideRoad,
+  placeSiteMarker,repairRoadsideObjects,normalizeAngle} from '../map-builder/world-road-placement.js';
 
 const coords=(...xy)=>xy.map(([x,y])=>({x,y}));
 test('v2 racing worlds have no tiles or cell grid and roundtrip with stable IDs',()=>{
@@ -291,4 +293,113 @@ test('separate intersecting road pairs retain their own junction references',()=
   const hit=roadIntersections(doc.roads);
   assert.equal(hit.length,3,'All three intersecting road pairs need navigation hints');
   assert.equal(new Set(hit.map(h=>h.roads.join(','))).size,3);
+});
+
+
+test('roadside placement aligns houses to actual curved road tangents and avoids shoulders',()=>{
+  let doc=createWorld({width:1800,height:1600});
+  const roadBase={name:'Riverside Crescent',roadClass:'city',surface:'asphalt',
+    width:52,lanes:2,shoulder:7,markings:true,smooth:true,
+    points:coords([120,520],[430,690],[710,510],[1020,700],[1500,510])};
+  doc=createEntity(doc,'roads',roadBase);
+  const polyline=sampleRoad(doc.roads[0].points,true,9);
+  const probe=polyline[Math.floor(polyline.length*.55)];
+  doc=createEntity(doc,'props',{name:'Curve house',type:'house',x:probe.x,y:probe.y,
+    scale:1,rotation:0,assetId:''});
+  const house=doc.props[0],r=placementFootprint(doc,house);
+  assert.ok(roadwayClearance(doc,house,r)>=0,'Building footprint must clear road and shoulder');
+  assert.ok(distance(house,probe)>52/2+7+40,'Building must shift off the road');
+  const near=nearestRoadPlacement(doc,house,200);
+  assert.ok(near,'Placed house should remain by the curved street');
+  const side=(house.x-near.x)*near.normal.x+(house.y-near.y)*near.normal.y>=0?1:-1;
+  const expected=normalizeAngle(Math.atan2(near.tangent.y,near.tangent.x)*180/Math.PI+
+    (side>0?180:0));
+  const delta=normalizeAngle(house.rotation-expected);
+  assert.ok(Math.abs(delta)<14,'Facade should follow local spline tangent rather than fixed 90-degree grid: '+delta);
+  assert.ok(Math.abs(house.rotation)%90>3,'Curve alignment should not default to four cardinal directions');
+});
+test('all editor model mutations protect scenery: placement, numerical move, resizing and manual rotation',()=>{
+  let doc=createWorld({width:1500,height:1000});
+  doc=createEntity(doc,'roads',{name:'Main street',roadClass:'city',surface:'asphalt',width:54,
+    lanes:2,shoulder:6,markings:true,smooth:false,points:coords([80,500],[1440,500])});
+  doc=createEntity(doc,'props',{name:'Showroom',type:'building',x:350,y:500,rotation:15,scale:1,assetId:''});
+  const p=doc.props[0];
+  assert.ok(roadwayClearance(doc,p,placementFootprint(doc,p))>=0);
+  assert.ok(Math.abs(p.rotation)%180<.5,'Road parallel east-west means a north/south facing facade');
+  doc=updateEntity(doc,p.id,{x:720,y:500});
+  assert.ok(roadwayClearance(doc,doc.props[0],placementFootprint(doc,doc.props[0]))>=0);
+  doc=updateEntity(doc,p.id,{scale:2.4});
+  assert.ok(roadwayClearance(doc,doc.props[0],placementFootprint(doc,doc.props[0]))>=0);
+  doc=updateEntity(doc,p.id,{rotation:41});
+  assert.equal(doc.props[0].rotation,41,'Manual sprite rotation remains possible');
+  assert.ok(roadwayClearance(doc,doc.props[0],placementFootprint(doc,doc.props[0]))>=0);
+  const duplicated=duplicateEntity(doc,p.id);
+  assert.ok(roadwayClearance(duplicated.doc,duplicated.doc.props.at(-1),
+    placementFootprint(duplicated.doc,duplicated.doc.props.at(-1)))>=0);
+  const translated=translateEntity(doc,p.id,0,-450);
+  assert.ok(roadwayClearance(translated,translated.props[0],
+    placementFootprint(translated,translated.props[0]))>=0);
+  assert.equal(duplicated.doc.roads.length,1);
+});
+test('site markers are roadside, but race/checkpoint and traffic spawns intentionally stay on road',()=>{
+  let doc=createWorld({width:1600,height:900});
+  doc=createEntity(doc,'roads',{name:'Start straight',roadClass:'track',surface:'track',
+    width:52,lanes:2,shoulder:6,markings:true,smooth:false,points:coords([100,400],[1500,400])});
+  doc=createEntity(doc,'markers',{name:'Car dealership',type:'dealership',x:350,y:400,
+    rotation:0,properties:{classes:['C','B','A']}});
+  assert.ok(roadwayClearance(doc,doc.markers[0],26)>=0);
+  doc=createEntity(doc,'markers',{name:'Race Start',type:'race_start',x:550,y:400,rotation:0,properties:{}});
+  doc=createEntity(doc,'markers',{name:'Checkpoint',type:'checkpoint',x:850,y:400,rotation:0,properties:{}});
+  doc=createEntity(doc,'markers',{name:'Traffic Spawn',type:'traffic_spawn',x:1050,y:400,rotation:0,properties:{}});
+  assert.equal(doc.markers[1].y,400);
+  assert.equal(doc.markers[2].y,400);
+  assert.equal(doc.markers[3].y,400);
+  doc=updateEntity(doc,doc.markers[0].id,{x:700,y:400});
+  assert.ok(roadwayClearance(doc,doc.markers[0],26)>=0);
+});
+test('scenery paint and region scatter cannot put a prop on a road even if avoidRoads option is false',()=>{
+  let doc=createWorld({width:1500,height:1000,seed:30});
+  doc=createEntity(doc,'roads',{name:'Asphalt lane',roadClass:'city',surface:'asphalt',
+    width:80,lanes:2,shoulder:8,smooth:false,markings:true,
+    points:coords([100,500],[1400,500])});
+  doc=createEntity(doc,'regions',{name:'Roadside meadow',biome:'grass',elevation:0,
+    points:coords([100,280],[1400,280],[1400,770],[100,770])});
+  const brush=paintSceneryBrush(doc,{x:700,y:500},{type:'oak',count:12,radius:140,
+    spacing:25,avoidRoads:false,avoidWater:true,variation:false},seeded(99));
+  for(const p of brush.props)assert.ok(roadwayClearance(brush,p,placementFootprint(brush,p))>=0);
+  const filled=scatterVegetation(doc,doc.regions[0].id,40);
+  for(const p of filled.props)assert.ok(roadwayClearance(filled,p,placementFootprint(filled,p))>=0);
+});
+test('road shape updates can reflow existing scene props without changing race checkpoints',()=>{
+  let doc=createWorld({width:1500,height:1000});
+  doc=createEntity(doc,'props',{name:'Unmoved Cottage',type:'house',x:650,y:510,scale:1,rotation:45,assetId:''});
+  doc=createEntity(doc,'markers',{name:'Checkpoint',type:'checkpoint',x:850,y:500,rotation:0,properties:{}});
+  doc=createEntity(doc,'roads',{name:'New boulevard',roadClass:'city',surface:'asphalt',width:60,
+    lanes:2,shoulder:6,smooth:true,markings:true,
+    points:coords([150,400],[700,510],[1200,600])});
+  assert.ok(roadwayClearance(doc,doc.props[0],placementFootprint(doc,doc.props[0]))<0);
+  const fixed=repairRoadsideObjects(doc,{alignAll:false});
+  assert.equal(fixed.failed,0);
+  assert.ok(fixed.moved>=1);
+  assert.ok(roadwayClearance(fixed.doc,fixed.doc.props[0],placementFootprint(fixed.doc,fixed.doc.props[0]))>=0);
+  assert.deepEqual(fixed.doc.markers[0],doc.markers[0]);
+});
+test('Atlas Coast organic city roads and full world props pass conservative roadway clearance',async()=>{
+  const atlas=parseWorld(await readFile(new URL('../map-builder/atlas-coast.world.json',import.meta.url),'utf8'));
+  const gridNames=atlas.roads.filter(r=>/North-South \d+|East-West \d+|Village Street \d+|South Harbor Street \d+/.test(r.name));
+  assert.equal(gridNames.length,0,'Original repetitive numbered city grids should be replaced');
+  const organic=atlas.roads.filter(r=>['city','country'].includes(r.roadClass)&&r.points.length>=5&&r.smooth);
+  assert.ok(organic.length>=60,'Cities should feature curved, irregular block-scale streets');
+  const rotations=new Set(atlas.props.filter(p=>['building','house','warehouse','garage','parking'].includes(p.type))
+    .map(p=>Math.round(p.rotation/10)*10));
+  assert.ok(rotations.size>=10,'Road-facing facades need varied angles for organic streets');
+  for(const p of atlas.props){
+    const clearance=roadwayClearance(atlas,p,placementFootprint(atlas,p));
+    assert.ok(clearance>=-0.03,'Atlas object overlaps a road: '+p.name+' ('+p.id+') gap '+clearance);
+  }
+  for(const m of atlas.markers.filter(m=>['garage','dealership','fuel'].includes(m.type)))
+    assert.ok(roadwayClearance(atlas,m,26)>=-0.05,'Atlas site marker overlaps road: '+m.name);
+  assert.equal(atlas.markers.filter(m=>m.type==='race_start').length,7);
+  assert.equal(atlas.roads.length,132);
+  assert.equal(atlas.props.length,2079);
 });

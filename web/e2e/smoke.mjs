@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {readFile} from 'node:fs/promises';
 import {sampleRoad} from '../map-builder/world-geometry.js';
+import {roadwayClearance,placementFootprint,normalizeAngle} from '../map-builder/world-road-placement.js';
 
 const origin=process.env.GDT_TEST_ORIGIN || 'http://127.0.0.1:8765';
 const browser=await chromium.launch({headless:true});
@@ -326,6 +327,23 @@ try{
   await page.locator('#scatter').click();
   world=await exportWorld();
   assert.ok(world.props.length>0,'Scattering must create freeform world-space props');
+  // Click directly on the visible curved road with a building selected.
+  await page.locator('[data-tool="prop"]').click();
+  await page.locator('#prop-type').selectOption('house');
+  await page.locator('#fit').click();
+  world=await exportWorld();
+  const bend=sampleRoad(world.roads[0].points,true,9);
+  const roadClick=bend[Math.floor(bend.length*.47)];
+  const snapCanvas=await page.locator('#world-canvas').boundingBox();
+  const snapViewport=await page.locator('#viewport').evaluate(el=>({w:el.clientWidth,h:el.clientHeight}));
+  const scaleToFit=Math.min((snapViewport.w-36)/world.world.width,(snapViewport.h-36)/world.world.height);
+  await page.mouse.click(snapCanvas.x+(snapViewport.w-world.world.width*scaleToFit)/2+roadClick.x*scaleToFit,
+    snapCanvas.y+(snapViewport.h-world.world.height*scaleToFit)/2+roadClick.y*scaleToFit);
+  world=await exportWorld();
+  const placedHouse=world.props.at(-1);
+  assert.equal(placedHouse.type,'house','House should be placeable directly on an existing road');
+  assert.ok(roadwayClearance(world,placedHouse,placementFootprint(world,placedHouse))>=0,
+    'The road-snapped house footprint must not overlap asphalt or shoulder');
   // Custom sprites are self-contained in exported world JSON and Godot packages.
   const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC','base64');
   await page.locator('#import-sprite').setInputFiles({name:'garage.png',mimeType:'image/png',buffer:png});
@@ -342,14 +360,21 @@ try{
   await page.locator('#entity-list .entity-row').filter({hasText:'garage'}).last().click();
   await page.locator('#duplicate-entity').click();
   assert.equal((await exportWorld()).props.length,world.props.length+1,'Duplicate must preserve existing scenery');
-  const originalCloneX=(await exportWorld()).props.at(-1).x;
+  const originalClone=(await exportWorld()).props.at(-1);
   await page.locator('#nudge-step').fill('20');
   await page.locator('[data-nudge="1,0"]').click();
-  assert.equal((await exportWorld()).props.at(-1).x,originalCloneX+20);
+  let movedWorld=await exportWorld();
+  assert.ok(roadwayClearance(movedWorld,movedWorld.props.at(-1),placementFootprint(movedWorld,movedWorld.props.at(-1)))>=0,
+    'Nudging cannot place a garage inside a road');
+  const beforeRotate=movedWorld.props.at(-1).rotation;
   await page.locator('#rotate-prop-right').click();
-  assert.equal((await exportWorld()).props.at(-1).rotation,15);
+  movedWorld=await exportWorld();
+  assert.ok(Math.abs(normalizeAngle(movedWorld.props.at(-1).rotation-beforeRotate)-15)<.001);
   await page.locator('#scale-prop-up').click();
-  assert.equal((await exportWorld()).props.at(-1).scale,1.1);
+  movedWorld=await exportWorld();
+  assert.equal(movedWorld.props.at(-1).scale,1.1);
+  assert.ok(roadwayClearance(movedWorld,movedWorld.props.at(-1),placementFootprint(movedWorld,movedWorld.props.at(-1)))>=0,
+    'Resizing a placed garage must keep its new footprint clear');
   // Hold the left mouse button down to continuously spray scenery; one stroke, one history entry.
   await page.locator('#scenery-paint').check();
   await page.locator('#brush-radius').fill('70');
@@ -383,6 +408,9 @@ try{
   assert.ok((await exportWorld()).props.length<afterBrush,'Brush eraser removes placed scenery');
   await page.locator('#scenery-erase').uncheck();
   await page.locator('#scenery-paint').uncheck();
+  // A full repair and explicit alignment control should be callable without errors.
+  await page.locator('#repair-roadside').click();
+  assert.match(await page.locator('#roadside-status').innerText(),/Moved/);
   await page.locator('[data-tool="marker"]').click();
   await page.locator('#marker-type').selectOption('race_start');
   await clickWorld(.58,.63);

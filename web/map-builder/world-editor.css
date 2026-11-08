@@ -176,3 +176,12 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 .world-page .atlas-preset-details a{color:#b9e0d4;font-size:11px}
 .world-page .atlas-preset-details .gdt-btn{white-space:normal}
 @media(max-width:480px){.world-page .atlas-preset{grid-template-columns:1fr}.world-page .atlas-preview-link{max-height:180px}.world-page dialog{max-height:calc(100dvh - 20px);overflow-y:auto}}
+
+
+/* Roadside asset placement: show protected curbs and a compact repair workflow. */
+.world-page .roadside-controls{padding:12px;margin:12px 0;border:1px solid #73a99855;border-radius:10px;background:#102832}
+.world-page .roadside-controls h3{margin:0 0 8px;font-size:12px;color:#b9efcc}
+.world-page .roadside-controls p{font-size:11px;line-height:1.5;color:#c0d6d1;margin:7px 0}
+.world-page .roadside-controls .inspector-actions{gap:7px;margin-top:12px}
+.world-page .roadside-controls .gdt-btn{flex:1 1 100px;font-size:10px;min-width:0;white-space:normal}
+.world-page #roadside-status{font-size:10px;color:#9db8aa}
