@@ -248,7 +248,7 @@ try{
   assert.equal(world.tileSize,undefined,'New world must not be tile-based');
   await page.locator('[data-tool="terrain"]').click();
   await page.locator('#biome').selectOption('forest');
-  await clickWorld(.12,.1);await clickWorld(.31,.13);await clickWorld(.29,.34);await clickWorld(.11,.3);
+  await clickWorld(.32,.37);await clickWorld(.47,.35);await clickWorld(.47,.49);await clickWorld(.32,.50);
   await page.keyboard.press('Enter');
   world=await exportWorld();
   assert.equal(world.regions.length,1);
