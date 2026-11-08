@@ -10,7 +10,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .world-header{border:1px solid var(--wc-edge);border-radius:13px;background:#142031f2;padding:10px 16px;display:flex;gap:15px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:11px;min-width:265px}
 .hub-link{text-decoration:none;color:#f1ae77;font-size:11px;white-space:nowrap;font-weight:700;margin-right:7px}
-.brand-mark{height:40px;width:40px;background:linear-gradient(135deg,#ad663d,#e3a76d);border-radius:10px;display:grid;place-items:center;color:#221508;font-size:30px;font-weight:bold;box-shadow:0 0 23px #eb995326}
+.brand-mark{height:40px;width:40px;background:linear-gradient(135deg,#ad663d,#e3a76d);border-radius:10px;display:grid;place-items:center;color:#221508;font-size:30px;font-weight:bold;box-shadow:none}
 .eyebrow{margin:0 0 2px;color:#a7bdd1;font-size:8px;font-weight:750;letter-spacing:.19em}
 .brand h1{font-size:19px;letter-spacing:.035em;line-height:1.13;margin:0;font-weight:850}
 .brand h1 span{color:#f6a56b}
@@ -67,11 +67,11 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 .viewport{position:relative;flex:1;min-height:450px;background:#2c4c40;overflow:hidden;touch-action:none}
 #world-canvas{width:100%;height:100%;display:block;outline:none;touch-action:none;cursor:crosshair}
 .canvas-help{position:absolute;bottom:11px;left:11px;pointer-events:none;padding:7px 10px;border:1px solid #ffffff19;border-radius:7px;background:#101e2cdb;color:#cad5de;font-size:10px}
-.view-tools{position:absolute;right:12px;top:12px;display:flex;align-items:center;gap:5px;background:#111c2ddd;border:1px solid #ffffff21;border-radius:8px;padding:5px;box-shadow:0 5px 15px #0003}
+.view-tools{position:absolute;right:12px;top:12px;display:flex;align-items:center;gap:5px;background:#111c2ddd;border:1px solid #ffffff21;border-radius:8px;padding:5px;box-shadow:none}
 .view-tools button{color:#e0eaf6;border:1px solid #ffffff16;border-radius:5px;background:#25374b;min-width:31px;min-height:29px}
 .view-tools button:hover{background:#344c63}
 .view-tools span{min-width:53px;text-align:center;color:#d1dde9;font-size:10px;font-weight:750}
-.minimap-wrap{position:absolute;right:12px;bottom:12px;background:#111c2de8;border:1px solid #ffffff30;border-radius:9px;padding:6px;pointer-events:auto;box-shadow:0 5px 20px #0006}
+.minimap-wrap{position:absolute;right:12px;bottom:12px;background:#111c2de8;border:1px solid #ffffff30;border-radius:9px;padding:6px;pointer-events:auto;box-shadow:none}
 .minimap-wrap canvas{display:block;width:190px;height:125px;border-radius:5px;cursor:pointer}
 .minimap-wrap>span{display:block;text-align:right;font-size:8px;letter-spacing:.13em;font-weight:700;color:#bacada;margin:4px 2px 1px}
 .statusbar{background:#111c2a;border-top:1px solid #ffffff18;padding:9px 13px;display:flex;flex-wrap:wrap;align-items:center;gap:9px 17px;color:#8da1b8;font-size:10px}
@@ -93,7 +93,7 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 .entity-row .entity-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
 .entity-row .entity-type{font-size:9px;color:#8299ad}
 .project-note{margin-top:19px;padding:12px;background:#0b1926;border:1px solid #ffffff15;border-radius:9px;color:#8098ad;font-size:10px;line-height:1.6}
-.world-page dialog{max-width:min(480px,calc(100vw - 30px));background:#19283b;border:1px solid #516478;color:#eaf1fb;border-radius:14px;box-shadow:0 20px 80px #0009;padding:24px}
+.world-page dialog{max-width:min(480px,calc(100vw - 30px));background:#19283b;border:1px solid #516478;color:#eaf1fb;border-radius:14px;box-shadow:none;padding:24px}
 .world-page dialog::backdrop{background:#000a}
 .world-page dialog h2{font-size:20px;margin:0 0 8px}
 .world-page dialog p{font-size:12px;color:#a6bbcc}
@@ -153,3 +153,14 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 .world-page .compact-tip{margin-top:10px;padding-top:0;border:0}
 .world-page #point-coordinate-fields{padding:8px;border:1px solid #4d687a66;background:#102232;border-radius:9px}
 .world-page #point-help{font-size:10px}
+
+
+/* World Forge is entirely flat: suppress inherited toolkit and browser component shadows.
+   Borders, selected outlines and terrain coloration remain for accessibility. */
+.world-page,
+.world-page *,
+.world-page *::before,
+.world-page *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}

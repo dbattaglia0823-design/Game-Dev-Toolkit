@@ -217,6 +217,13 @@ try{
   // Freeform racing world: draw and inspect curved roads, polygons and gameplay.
   await page.goto(origin+'/map-builder/index.html');
   assert.match(await page.title(),/World Forge/);
+  // Shadowless design: no inherited box/text shadows on any World Forge UI element.
+  const shadowStyles=await page.evaluate(()=>Array.from(document.querySelectorAll('body, body *')).flatMap(element=>{
+    const styles=[['element',getComputedStyle(element)],['before',getComputedStyle(element,'::before')],['after',getComputedStyle(element,'::after')]];
+    return styles.filter(([,style])=>style.boxShadow!=='none'||style.textShadow!=='none')
+      .map(([part,style])=>({part,tag:element.tagName,box:style.boxShadow,text:style.textShadow}));
+  }));
+  assert.deepEqual(shadowStyles,[],'World Forge should have no CSS shadows');
   assert.ok((await page.locator('#object-count').innerText()).includes('9 roads'),'Example world should contain roads');
   await page.locator('#new-world').click();
   await page.locator('#new-name').fill('Coastal smoke');
