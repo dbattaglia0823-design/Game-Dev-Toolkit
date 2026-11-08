@@ -6,6 +6,10 @@
 
 This is an original 22,000 × 18,000-unit, continuous-coordinate, top-down **level layout**, not a finished game or final art pack. It is deliberately built for replacement with cozy illustrated top-down assets without cast shadows. World units are authoring units and are not automatically meters.
 
+**Organic city revision:** The initial straight, repetitive city streets have been redesigned into **62 irregular and curved urban routes** across Avalon, Westhaven, Seabright, Summit Village, and South Harbor. Streets now include crescents, offset intersections, nonlinear branches, shorter residential roads and diagonally sloped port approaches. Atlas Coast's roadside structures have been moved off road surfaces and oriented using each road's local tangent; garages, dealerships, and fuel stop markers were also moved off the lanes where necessary. All authored race starts and traffic path markers remain attached to the roadway.
+
+**Placement behavior:** World Forge now checks a conservative bound around the entire sprite, including road shoulders. Buildings and lots snap to nearby road edges and face the road; landscape props remain freeform outside road bounds. The new **Fix all road overlaps** command offers explicit repairs for older/imported worlds. This does not replace detailed physics/collision geometry, production road-junction validation or guaranteed driveway access.
+
 ## Regional layout
 
 | Region | Approximate placement | Content and intended gameplay |
