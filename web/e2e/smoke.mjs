@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {readFile} from 'node:fs/promises';
+import {sampleRoad} from '../map-builder/world-geometry.js';
 
 const origin=process.env.GDT_TEST_ORIGIN || 'http://127.0.0.1:8765';
 const browser=await chromium.launch({headless:true});
@@ -271,8 +272,18 @@ try{
   assert.equal((await exportWorld()).roads.length,1,'One undo restores original road');
   await page.locator('#entity-list .entity-row').filter({hasText:'City road'}).click();
   await page.locator('#fit').click();
+  // Shift-click the actual sampled road centerline (not an approximate pixel location).
+  world=await exportWorld();
+  const onRoad=sampleRoad(world.roads[0].points,world.roads[0].smooth,9);
+  const insertAt=onRoad[Math.floor(onRoad.length*.66)];
+  await page.locator('#world-canvas').scrollIntoViewIfNeeded();
+  const roadBox=await page.locator('#world-canvas').boundingBox();
+  const fitted=await page.locator('#viewport').evaluate(el=>({width:el.clientWidth,height:el.clientHeight}));
+  const roadZoom=Math.min((fitted.width-36)/world.world.width,(fitted.height-36)/world.world.height);
+  const px=roadBox.x+(fitted.width-world.world.width*roadZoom)/2+insertAt.x*roadZoom;
+  const py=roadBox.y+(fitted.height-world.world.height*roadZoom)/2+insertAt.y*roadZoom;
   await page.keyboard.down('Shift');
-  await clickWorld(.59,.47);
+  await page.mouse.click(px,py);
   await page.keyboard.up('Shift');
   assert.equal((await exportWorld()).roads[0].points.length,6,'Shift-click inserts road point');
   await page.locator('[data-tool="terrain"]').click();
