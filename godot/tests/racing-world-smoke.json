@@ -114,7 +114,8 @@
       "x": 550,
       "y": 460,
       "rotation": 0,
-      "scale": 1.2
+      "scale": 1.2,
+      "assetId": "asset-1"
     },
     {
       "id": "prop-2",
@@ -148,6 +149,15 @@
       "properties": {
         "track": "coast"
       }
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset-1",
+      "name": "Custom garage sprite",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC",
+      "width": 32,
+      "height": 32
     }
   ]
 }
