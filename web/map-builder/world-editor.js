@@ -10,6 +10,10 @@ import {
 import {distance,clamp,nearestOnPath,pointInPolygon,regionAt,sampleRoad} from './world-geometry.js';
 import {drawWorld,drawEditorOverlay} from './world-renderer.js';
 import {buildWorldZip,worldSlug} from './world-export.js';
+import {
+  placeBesideRoad,placeSiteMarker,nearestRoadPlacement,placementFootprint,
+  roadwayClearance,repairRoadsideObjects
+} from './world-road-placement.js';
 
 const $=id=>document.getElementById(id);
 const viewport=$('viewport'),canvas=$('world-canvas'),ctx=canvas.getContext('2d');
@@ -51,7 +55,16 @@ function render(){
   const bounds={minX:Math.max(0,-offsetX/zoom),minY:Math.max(0,-offsetY/zoom),
     maxX:Math.min(doc.world.width,(w-offsetX)/zoom),maxY:Math.min(doc.world.height,(h-offsetY)/zoom)};
   drawWorld(ctx,doc,{...currentDisplay(),bounds,quality:zoom<.08?0:1});
-  drawEditorOverlay(ctx,doc,{selection,hover:draft?hover:null,draft,zoom,
+  let roadsidePreview=null;
+  if(tool==='prop'&&hover&&!$('scenery-paint').checked&&!$('scenery-erase').checked){
+    try{
+      const proposed={type:$('prop-type').value,assetId:$('prop-asset').value,
+        x:hover.x,y:hover.y,rotation:0,scale:1};
+      const placed=placeBesideRoad(doc,proposed);
+      roadsidePreview={...placed,radius:placementFootprint(doc,placed)};
+    }catch{/* Invalid placements do not render a misleading ghost. */}
+  }
+  drawEditorOverlay(ctx,doc,{selection,hover:draft?hover:null,draft,zoom,roadsidePreview,
     insertMode:pointInsertMode,insertHover:tool==='select'?hover:null,
     brushPreview:tool==='prop'&&($('scenery-paint').checked||$('scenery-erase').checked)&&hover
       ?{position:hover,radius:Number($('brush-radius').value),erase:$('scenery-erase').checked}:null,
@@ -112,8 +125,17 @@ function makeSnapshot(before,label){
 }
 function change(edit,label){
   const before=doc;
-  try{const next=edit(doc);if(next!==doc){doc=next;makeSnapshot(before,label);}else requestRender();return true;}
-  catch(e){doc=before;errorMessage(e);return false;}
+  try{
+    let next=edit(doc);
+    if(next.roads!==before.roads){
+      const fixed=repairRoadsideObjects(next);
+      if(fixed.failed)throw new RangeError('Road change would overlap '+fixed.failed+
+        ' placed objects. Try moving them or widening the surrounding area first.');
+      next=fixed.doc;
+    }
+    if(next!==doc){doc=next;makeSnapshot(before,label);}else requestRender();
+    return true;
+  }catch(e){doc=before;errorMessage(e);return false;}
 }
 function undo(){
   if(!undoStack.length)return status('No earlier changes.');
@@ -172,7 +194,14 @@ function insertSelectedPoint(p,mode='between'){
   const threshold=clamp(14/zoom,17,75);
   try{
     const result=insertShapePoint(doc,found.item.id,worldPoint(p.x,p.y),{mode,maxDistance:threshold});
-    const before=doc;doc=result.doc;pointInsertMode=null;makeSnapshot(before,'Added control point '+(result.index+1)+'. Drag it to reshape the '+(found.type==='roads'?'road':'coastline')+'.');
+    const before=doc;
+    let next=result.doc;
+    if(found.type==='roads'){
+      const fixed=repairRoadsideObjects(next);
+      if(fixed.failed)throw new RangeError('Some roadside props cannot be moved clear of this edit.');
+      next=fixed.doc;
+    }
+    doc=next;pointInsertMode=null;makeSnapshot(before,'Added control point '+(result.index+1)+'. Drag it to reshape the '+(found.type==='roads'?'road':'coastline')+'.');
     setSelection(found.item.id,result.index);
     return true;
   }catch(e){errorMessage(e);return false;}
@@ -397,13 +426,19 @@ canvas.addEventListener('pointerdown',event=>{
   if(tool==='prop'){
     if($('scenery-paint').checked||$('scenery-erase').checked){beginSpray(event,p);return;}
     const type=$('prop-type').value;
-    change(d=>createEntity(d,'props',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,scale:1,rotation:0,assetId:$('prop-asset').value}),'Placed '+type.replace(/_/g,' ')+'.');
-    setSelection(doc.props.at(-1)?.id);return;
+    const before=doc;
+    if(change(d=>createEntity(d,'props',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,scale:1,rotation:0,assetId:$('prop-asset').value}),
+      'Placed '+type.replace(/_/g,' ')+' beside the nearest road (if nearby).')&&doc!==before)
+      setSelection(doc.props.at(-1)?.id);
+    return;
   }
   if(tool==='marker'){
     const type=$('marker-type').value;
-    change(d=>createEntity(d,'markers',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,rotation:0,properties:{}}),'Placed '+type.replace(/_/g,' ')+'.');
-    setSelection(doc.markers.at(-1)?.id);return;
+    const before=doc;
+    if(change(d=>createEntity(d,'markers',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,rotation:0,properties:{}}),
+      'Placed '+type.replace(/_/g,' ')+'.')&&doc!==before)
+      setSelection(doc.markers.at(-1)?.id);
+    return;
   }
   if(tool==='select'){
     const current=selectedShape();
@@ -476,8 +511,18 @@ function pointerEnd(event,wasCancelled=false){
   }
   const current=gesture;gesture=null;
   if(wasCancelled && current.before){doc=current.before;refreshUI();}
-  else if(current.before && current.before!==doc)makeSnapshot(current.before,
-    'Moved '+(current.mode==='control'?'control point':current.mode==='shape'?'entire shape':'object')+'.');
+  else if(current.before && current.before!==doc){
+    try{
+      if(doc.roads!==current.before.roads){
+        const fixed=repairRoadsideObjects(doc);
+        if(fixed.failed)throw new RangeError('Road edit would overlap '+fixed.failed+
+          ' existing object(s). Try another curve or clear the area first.');
+        doc=fixed.doc;
+      }
+      makeSnapshot(current.before,'Moved '+(current.mode==='control'?'control point':
+        current.mode==='shape'?'entire shape':'object')+' and updated roadside clearance.');
+    }catch(e){doc=current.before;refreshUI();errorMessage(e);}
+  }
   else requestRender();
   if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
 }
