@@ -131,3 +131,6 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 /* Embedded user artwork is optional; built-in illustrated props remain the default. */
 .upload-asset{display:block;cursor:pointer;text-align:center;margin-top:8px}
 .asset-hint{font-size:10px;line-height:1.55;color:#8599ac;margin:7px 0 0}
+
+.map-heading #world-title{width:min(28vw,235px);min-width:110px;color:#e9eff7;font-weight:750;font-size:13px;background:transparent;border:1px solid transparent;padding:3px 5px;border-radius:6px}
+.map-heading #world-title:hover,.map-heading #world-title:focus{border-color:#ffffff4c;background:#172536}
