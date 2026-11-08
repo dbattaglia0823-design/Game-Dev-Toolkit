@@ -1,4 +1,5 @@
 import {distance, polygonArea, roadAt, scatterPoints, stringSeed} from './world-geometry.js';
+import {placeBesideRoad,placeSiteMarker,roadwayClearance,placementFootprint} from './world-road-placement.js';
 
 export const WORLD_FORMAT='gdt.racing-world';
 export const WORLD_VERSION=2;
@@ -123,8 +124,13 @@ export function createEntity(doc,type,input){
   if(doc[type].length>=LIM[type])throw new RangeError('Maximum '+type+' reached');
   const id=unique(type==='roads'?'road':type==='regions'?'region':type==='props'?'prop':'marker',
     ['roads','regions','props','markers'].flatMap(t=>doc[t]));
-  const item=validEntity({id,...input},type,doc.world.width,doc.world.height);
-  if(type==='props'&&item.assetId&&!doc.assets.some(a=>a.id===item.assetId))throw new TypeError('Unknown sprite asset');
+  let item=validEntity({id,...input},type,doc.world.width,doc.world.height);
+  if(type==='props'){
+    if(item.assetId&&!doc.assets.some(a=>a.id===item.assetId))throw new TypeError('Unknown sprite asset');
+    item=validEntity(placeBesideRoad(doc,item),type,doc.world.width,doc.world.height);
+  }else if(type==='markers'){
+    item=validEntity(placeSiteMarker(doc,item),type,doc.world.width,doc.world.height);
+  }
   return {...doc,[type]:[...doc[type],item]};
 }
 /** Keep imported artwork embedded in versioned world JSON; no external image hosts. */
@@ -137,8 +143,19 @@ export function updateEntity(doc,id,patch){
   const found=getEntity(doc,id);
   if(!found)return doc;
   const {type,item}=found;
-  const updated=validEntity({...item,...patch,id},type,doc.world.width,doc.world.height);
-  if(type==='props'&&updated.assetId&&!doc.assets.some(a=>a.id===updated.assetId))throw new TypeError('Unknown sprite asset');
+  let updated=validEntity({...item,...patch,id},type,doc.world.width,doc.world.height);
+  if(type==='props'){
+    if(updated.assetId&&!doc.assets.some(a=>a.id===updated.assetId))throw new TypeError('Unknown sprite asset');
+    // Hand-authored rotation remains editable. Position, type and scale edits
+    // recalculate the curb setback and local road tangent automatically.
+    if(['x','y','scale','type','assetId'].some(key=>Object.hasOwn(patch,key))){
+      updated=validEntity(placeBesideRoad(doc,updated),type,doc.world.width,doc.world.height);
+    }else if(roadwayClearance(doc,updated,placementFootprint(doc,updated))<0){
+      updated=validEntity(placeBesideRoad(doc,updated,{snap:false,align:false}),type,doc.world.width,doc.world.height);
+    }
+  }else if(type==='markers'&&['x','y','type'].some(key=>Object.hasOwn(patch,key))){
+    updated=validEntity(placeSiteMarker(doc,updated),type,doc.world.width,doc.world.height);
+  }
   return {...doc,[type]:doc[type].map(value=>value.id===id?updated:value)};
 }
 export function removeEntity(doc,id){
@@ -195,8 +212,15 @@ export function scatterVegetation(doc,regionId,count=50,type='auto'){
   for(const p of points){
     while(occupied.has('prop-'+n))n++;
     const id='prop-'+n++;occupied.add(id);
-    newProps.push(validEntity({id,name:propType.replace(/_/g,' '),type:propType,x:p.x,y:p.y,
-      rotation:(seed+n*71)%360,scale:.65+((seed+n*197)%115)/100},'props',doc.world.width,doc.world.height));
+    const initial=validEntity({id,name:propType.replace(/_/g,' '),type:propType,x:p.x,y:p.y,
+      rotation:(seed+n*71)%360,scale:.65+((seed+n*197)%115)/100},'props',doc.world.width,doc.world.height);
+    try{
+      const placed=placeBesideRoad({...doc,props:[...doc.props,...newProps]},initial);
+      // Sampling a point in a terrain region must not teleport objects outside it.
+      if(roadwayClearance(doc,placed,placementFootprint(doc,placed))>=0 &&
+          newProps.every(other=>distance(other,placed)>=Math.min(25,placementFootprint(doc,placed))))
+        newProps.push(validEntity(placed,'props',doc.world.width,doc.world.height));
+    }catch{/* Skip unavailable curb space; never place a prop into a road. */}
   }
   return {...doc,props:[...doc.props,...newProps]};
 }
