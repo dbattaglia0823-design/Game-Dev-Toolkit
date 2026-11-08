@@ -14,9 +14,11 @@ Built-in functional presets: main menu, pause menu, inventory, upgrades, shop, s
 
 The previous visual editor remains available as [Legacy Visual Studio](web/builder/legacy-studio.html) for old version 1 layout JSON files. Existing visual-only layouts are not silently converted into action-bearing templates.
 
-## 2D Top-Down Map Builder
+## World Forge — Continuous Racing World Builder
 
-Use the [2D Map Builder](web/map-builder/index.html) to paint tile-based worlds for top-down games. It includes a starter pixel-art atlas, custom sprite-sheet import, ordered tile layers, collision painting, gameplay markers, undo/redo, zoom/pan, local saves and portable JSON/PNG/Godot 4 ZIP export. Maps are distinct from functional UI layouts and game saves. See the [map editor guide](web/map-builder/README.md) and [Godot map loader](godot/map-kit/README.md).
+Use [World Forge](web/map-builder/index.html) to create detailed, **non-tile-based** top-down open worlds with curved spline roads, shoulder/lanes/surfaces, freeform cities, forests, mountains, sand, beaches, oceans, scenery and gameplay markers. Adjust individual spline points, scatter vegetation, import custom PNG/WebP scenery sprites, edit biomes, and export versioned world JSON, a PNG preview or a Godot 4 ZIP with continuous road geometry and marker data. See the [World Forge guide](web/map-builder/README.md) and [Godot world adapter](godot/world-kit/README.md).
+
+The [Legacy Tile Map Builder](web/map-builder/legacy.html) preserves all previous tile editing, maps and browser storage. World Forge version 2 geometry is intentionally distinct from old version 1 tile maps; no automatic conversion or game-save migration is performed.
 
 ## Phase 1: Integration validation
 

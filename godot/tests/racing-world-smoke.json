@@ -1,0 +1,163 @@
+{
+  "format": "gdt.racing-world",
+  "version": 2,
+  "name": "World loader smoke",
+  "world": {
+    "width": 1000,
+    "height": 800,
+    "seed": 12,
+    "base": "grass"
+  },
+  "roads": [
+    {
+      "id": "road-1",
+      "name": "Test coast road",
+      "roadClass": "country",
+      "surface": "asphalt",
+      "width": 40,
+      "lanes": 2,
+      "shoulder": 4,
+      "smooth": true,
+      "markings": true,
+      "points": [
+        {
+          "x": 100,
+          "y": 130
+        },
+        {
+          "x": 340,
+          "y": 130
+        },
+        {
+          "x": 625,
+          "y": 250
+        }
+      ]
+    },
+    {
+      "id": "road-2",
+      "name": "Side road",
+      "roadClass": "service",
+      "surface": "gravel",
+      "width": 22,
+      "lanes": 1,
+      "shoulder": 2,
+      "smooth": false,
+      "markings": false,
+      "points": [
+        {
+          "x": 340,
+          "y": 130
+        },
+        {
+          "x": 440,
+          "y": 380
+        }
+      ]
+    }
+  ],
+  "regions": [
+    {
+      "id": "region-1",
+      "name": "East ocean",
+      "biome": "ocean",
+      "elevation": 0,
+      "points": [
+        {
+          "x": 780,
+          "y": 0
+        },
+        {
+          "x": 1000,
+          "y": 0
+        },
+        {
+          "x": 1000,
+          "y": 800
+        },
+        {
+          "x": 770,
+          "y": 800
+        }
+      ]
+    },
+    {
+      "id": "region-2",
+      "name": "West forest",
+      "biome": "forest",
+      "elevation": 100,
+      "points": [
+        {
+          "x": 0,
+          "y": 500
+        },
+        {
+          "x": 240,
+          "y": 490
+        },
+        {
+          "x": 250,
+          "y": 780
+        },
+        {
+          "x": 0,
+          "y": 800
+        }
+      ]
+    }
+  ],
+  "props": [
+    {
+      "id": "prop-1",
+      "name": "Garage",
+      "type": "garage",
+      "x": 550,
+      "y": 460,
+      "rotation": 0,
+      "scale": 1.2,
+      "assetId": "asset-1"
+    },
+    {
+      "id": "prop-2",
+      "name": "Oak",
+      "type": "oak",
+      "x": 190,
+      "y": 350,
+      "rotation": 0,
+      "scale": 1
+    }
+  ],
+  "markers": [
+    {
+      "id": "marker-1",
+      "name": "Start",
+      "type": "player_spawn",
+      "x": 105,
+      "y": 132,
+      "rotation": 0,
+      "properties": {
+        "team": "player"
+      }
+    },
+    {
+      "id": "marker-2",
+      "name": "Finish",
+      "type": "finish",
+      "x": 610,
+      "y": 246,
+      "rotation": 0,
+      "properties": {
+        "track": "coast"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset-1",
+      "name": "Custom garage sprite",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC",
+      "width": 32,
+      "height": 32
+    }
+  ]
+}

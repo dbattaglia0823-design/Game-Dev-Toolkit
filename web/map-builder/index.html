@@ -1,112 +1,189 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b1019">
-  <title>2D Map Builder · Game Development Toolkit</title>
-  <link rel="stylesheet" href="../ui/theme.css">
-  <link rel="stylesheet" href="./map-builder.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c111a"><meta name="description" content="Build detailed top-down racing worlds with freeform spline roads, forests, mountains, cities, beaches and ocean.">
+<title>World Forge — Freeform Racing Map Builder</title>
+<link rel="stylesheet" href="../ui/theme.css"><link rel="stylesheet" href="./world-editor.css">
 </head>
-<body class="gdt-page map-page">
-  <header class="map-header">
-    <div class="map-brand">
-      <a href="../../index.html" class="back-link">← Tool Hub</a>
-      <div><span class="eyebrow">GAME DEVELOPMENT TOOLKIT / LEVEL DESIGN</span><h1>2D Map Builder</h1></div>
-    </div>
-    <div class="header-actions">
-      <button id="new-map" class="gdt-btn">New map</button>
-      <button id="save-map" class="gdt-btn">Save locally</button>
-      <button id="load-map" class="gdt-btn">Load saved</button>
-      <label class="gdt-btn file-button">Import map<input id="import-map" type="file" accept=".json,application/json" hidden></label>
-      <button id="export-json" class="gdt-btn">Map JSON</button>
-      <button id="export-png" class="gdt-btn">PNG preview</button>
-      <button id="export-godot" class="gdt-btn gdt-btn--primary">Godot 4 ZIP</button>
-    </div>
-  </header>
-  <div class="map-layout">
-    <aside class="map-sidebar">
-      <div class="section-head"><h2>Tile library</h2><span id="tile-count" class="quiet">32 tiles</span></div>
-      <label class="field">Tileset <select id="tileset-select"></select></label>
-      <label class="gdt-btn upload-tiles">+ Import PNG / JPG / WebP tileset<input id="import-tileset" type="file" accept="image/png,image/jpeg,image/webp" hidden></label>
-      <p class="hint">Tiles are sliced using the map's grid size. Select a tile, then paint on the canvas.</p>
-      <div id="tile-palette" class="tile-palette" aria-label="Selectable tiles"></div>
-      <div class="section-head layer-title"><h2>Tile layers</h2><span class="quiet">Bottom → top</span></div>
-      <div id="layers-list" class="layers-list" aria-label="Map layers"></div>
-      <div class="small-actions">
-        <button id="add-layer" class="gdt-btn" title="Add layer">+ Layer</button>
-        <button id="remove-layer" class="gdt-btn" title="Remove selected layer">Remove</button>
-        <button id="layer-down" class="gdt-btn" title="Move layer down">↓</button>
-        <button id="layer-up" class="gdt-btn" title="Move layer up">↑</button>
-      </div>
-      <label class="field">Layer name<input id="layer-name" maxlength="80"></label>
-      <div class="two-fields">
-        <label class="field">Opacity <input id="layer-opacity" type="range" min="0" max="100" value="100"></label>
-        <output id="opacity-label">100%</output>
-      </div>
-    </aside>
-    <main class="map-workspace">
-      <div class="map-tools" role="toolbar" aria-label="Map painting tools">
-        <button class="tool active" data-tool="brush" title="Brush (B)" aria-pressed="true">Brush <kbd>B</kbd></button>
-        <button class="tool" data-tool="erase" title="Erase (E)" aria-pressed="false">Erase <kbd>E</kbd></button>
-        <button class="tool" data-tool="fill" title="Flood fill (F)" aria-pressed="false">Fill <kbd>F</kbd></button>
-        <button class="tool" data-tool="line" title="Paint a line (L)" aria-pressed="false">Line <kbd>L</kbd></button>
-        <button class="tool" data-tool="rectangle" title="Filled rectangle (R)" aria-pressed="false">Rect <kbd>R</kbd></button>
-        <button class="tool" data-tool="eyedropper" title="Pick tile (I)" aria-pressed="false">Pick <kbd>I</kbd></button>
-        <span class="tool-divider"></span>
-        <button class="tool" data-tool="block" title="Paint blocked collision (C)" aria-pressed="false">Block <kbd>C</kbd></button>
-        <button class="tool" data-tool="unblock" title="Clear collision (X)" aria-pressed="false">Unblock <kbd>X</kbd></button>
-        <button class="tool" data-tool="object" title="Place / select a game marker (O)" aria-pressed="false">Marker <kbd>O</kbd></button>
-        <button class="tool" data-tool="pan" title="Pan canvas (H or Space-drag)" aria-pressed="false">Pan <kbd>H</kbd></button>
-        <span class="tool-divider"></span>
-        <button id="undo-map" class="tool secondary" title="Undo (Ctrl+Z)">Undo</button>
-        <button id="redo-map" class="tool secondary" title="Redo (Ctrl+Y or Ctrl+Shift+Z)">Redo</button>
-      </div>
-      <div id="map-viewport" class="map-viewport">
-        <canvas id="map-canvas" aria-label="Editable tile map. Use the brush and other tools above." tabindex="0"></canvas>
-        <div class="canvas-hint">Scroll to zoom · Space or middle-drag to pan · Right click to pick a tile</div>
-      </div>
-      <div class="map-status"><span id="status" role="status" aria-live="polite">Choose a tile and paint.</span><span id="cursor-position">—</span><span id="map-size-label">—</span></div>
-    </main>
-    <aside class="map-sidebar map-inspector">
-      <div class="section-head"><h2>Map settings</h2><span class="quiet">Orthogonal grid</span></div>
-      <label class="field">Map name<input id="map-name" maxlength="80"></label>
-      <div class="two-fields">
-        <label class="field">Width (tiles)<input id="map-width" type="number" min="1" max="128" step="1"></label>
-        <label class="field">Height (tiles)<input id="map-height" type="number" min="1" max="128" step="1"></label>
-      </div>
-      <p class="hint">Grid size: <strong id="tile-size-label">32 px</strong> · Change it when creating a new map.</p>
-      <button id="resize-map" class="gdt-btn resize-button">Apply map dimensions</button>
-      <div class="section-head settings-divider"><h2>Display</h2></div>
-      <label class="toggle-field"><input type="checkbox" id="show-grid" checked> Grid lines</label>
-      <label class="toggle-field"><input type="checkbox" id="show-collision" checked> Collision overlay</label>
-      <label class="toggle-field"><input type="checkbox" id="show-objects" checked> Object markers</label>
-      <div class="zoom-row"><label for="zoom">Zoom</label><input type="range" id="zoom" min="25" max="300" step="25" value="100"><output id="zoom-label">100%</output></div>
-      <button id="fit-map" class="gdt-btn resize-button">Fit map to canvas</button>
-      <div class="section-head settings-divider"><h2>Game markers</h2></div>
-      <p class="hint">Spawns, exits, NPCs and triggers are metadata for your game to implement.</p>
-      <label class="field">New marker type<select id="object-type">
-        <option value="player_spawn">Player spawn</option><option value="enemy_spawn">Enemy spawn</option><option value="npc">NPC</option>
-        <option value="exit">Exit / transition</option><option value="trigger">Trigger zone</option><option value="loot">Loot</option>
-        <option value="custom">Custom</option>
-      </select></label>
-      <div id="objects-list" class="objects-list" aria-label="Placed markers"></div>
-      <div id="object-properties" class="marker-editor" hidden>
-        <div class="section-head"><h3>Selected marker</h3><button id="delete-object" class="text-action">Delete</button></div>
-        <label class="field">Name<input id="object-name" maxlength="80"></label>
-        <div class="two-fields"><label class="field">X<input id="object-x" type="number" min="0" step="1"></label><label class="field">Y<input id="object-y" type="number" min="0" step="1"></label></div>
-        <label class="field">Properties (JSON object)<textarea id="object-json" spellcheck="false" rows="4" placeholder='{"target":"level-2"}'></textarea></label>
-        <button id="apply-object" class="gdt-btn resize-button">Apply marker edits</button>
-      </div>
-      <div class="shortcut-tip">Shortcuts: B/E/F/L/R/I brush tools, C/X collision, O markers, H pan. Ctrl+Z/Y for history. Right-click picks a tile. Delete removes a selected marker.</div>
-    </aside>
+<body class="gdt-page world-page">
+<header class="world-header">
+  <div class="brand">
+    <a class="hub-link" href="../../index.html">← Tool Hub</a>
+    <span class="brand-mark" aria-hidden="true">◇</span>
+    <div><p class="eyebrow">GAME DEV TOOLKIT / WORLD DESIGN</p><h1>WORLD <span>FORGE</span></h1><p class="tagline">Freeform 2D racing world editor</p></div>
   </div>
-  <dialog class="gdt-dialog new-dialog" id="new-dialog" aria-labelledby="new-heading">
-    <h2 id="new-heading">Create a map</h2><p class="hint">This replaces the current map. Export your work first if you need a separate copy.</p>
-    <label class="field">Name<input id="new-name" maxlength="80" value="New map"></label>
-    <div class="two-fields"><label class="field">Width<input id="new-width" type="number" min="1" max="128" value="32"></label><label class="field">Height<input id="new-height" type="number" min="1" max="128" value="24"></label></div>
-    <label class="field">Tile size<select id="new-tile-size"><option value="16">16 × 16</option><option value="32" selected>32 × 32</option><option value="48">48 × 48</option><option value="64">64 × 64</option></select></label>
-    <div class="dialog-actions"><button id="cancel-new" class="gdt-btn">Cancel</button><button id="confirm-new" class="gdt-btn gdt-btn--primary">Create map</button></div>
-  </dialog>
-  <script type="module" src="./editor.js"></script>
-</body>
-</html>
+  <div class="header-actions">
+    <button id="new-world" class="gdt-btn">New world</button>
+    <button id="save-world" class="gdt-btn">Save</button>
+    <button id="load-world" class="gdt-btn">Load</button>
+    <label class="gdt-btn upload">Import JSON <input id="import-world" type="file" accept=".json,application/json" hidden></label>
+    <button id="export-world" class="gdt-btn">Export JSON</button>
+    <button id="export-png" class="gdt-btn">PNG Preview</button>
+    <button id="export-godot" class="gdt-btn gdt-btn--primary">Godot 4 ZIP</button>
+    <a class="gdt-btn link-button" href="./legacy.html">Legacy tiles ↗</a>
+  </div>
+</header>
+<div class="world-workspace">
+  <aside class="panel left-panel">
+    <div class="panel-head"><h2>Create</h2><span class="micro-tag">WORLD TOOLS</span></div>
+    <div class="tool-buttons" role="toolbar" aria-label="World editing tools">
+      <button class="mode active" data-tool="select" aria-pressed="true"><span>↖</span><strong>Select / Edit</strong><kbd>V</kbd></button>
+      <button class="mode" data-tool="road" aria-pressed="false"><span>〰</span><strong>Draw road</strong><kbd>R</kbd></button>
+      <button class="mode" data-tool="terrain" aria-pressed="false"><span>⬡</span><strong>Terrain region</strong><kbd>T</kbd></button>
+      <button class="mode" data-tool="prop" aria-pressed="false"><span>♣</span><strong>Scenery</strong><kbd>P</kbd></button>
+      <button class="mode" data-tool="marker" aria-pressed="false"><span>◇</span><strong>Game marker</strong><kbd>M</kbd></button>
+      <button class="mode" data-tool="pan" aria-pressed="false"><span>✥</span><strong>Pan view</strong><kbd>H</kbd></button>
+    </div>
+    <div class="settings-group">
+      <h3>Road designer</h3>
+      <div class="field"><label for="road-class">Road type</label><select id="road-class">
+        <option value="city">City streets</option><option value="highway">Highway / freeway</option>
+        <option value="country">Country road</option><option value="mountain">Mountain pass</option>
+        <option value="track">Race circuit</option><option value="service">Service / access</option>
+      </select></div>
+      <div class="field"><label for="road-surface">Surface</label><select id="road-surface">
+        <option value="asphalt">Asphalt</option><option value="concrete">Concrete</option>
+        <option value="dirt">Dirt</option><option value="gravel">Gravel</option><option value="track">Racing asphalt</option>
+      </select></div>
+      <div class="double-fields">
+        <div class="field"><label for="road-width">Road width</label><input id="road-width" type="number" min="6" max="160" value="36"></div>
+        <div class="field"><label for="road-lanes">Lanes</label><select id="road-lanes">
+          <option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+        </select></div>
+      </div>
+      <div class="field"><label for="road-shoulder">Shoulder width</label><input id="road-shoulder" type="range" min="0" max="16" value="5"><output id="shoulder-label">5 m</output></div>
+      <label class="check"><input id="road-smooth" type="checkbox" checked> Smooth Bézier-style curves</label>
+      <label class="check"><input id="road-markings" type="checkbox" checked> Lane lines / road edges</label>
+    </div>
+    <div class="settings-group">
+      <h3>Terrain & biomes</h3>
+      <div class="field"><label for="biome">Terrain material</label><select id="biome">
+        <option value="grass">Grassland</option><option value="forest">Forest</option><option value="mountain">Mountains / highlands</option>
+        <option value="rock">Rocky ground</option><option value="city">City ground</option><option value="beach">Sand / beach</option>
+        <option value="ocean">Ocean water</option><option value="lake">Lake / river water</option>
+        <option value="desert">Desert</option><option value="farmland">Farmland</option>
+      </select></div>
+      <div class="field"><label for="elevation">Elevation metadata (m)</label><input type="number" min="0" max="2000" id="elevation" value="0"></div>
+      <div class="scatter">
+        <div class="field"><label for="scatter-count">Scatter density</label><select id="scatter-count"><option value="20">Light · 20</option><option value="60" selected>Medium · 60</option><option value="140">Dense · 140</option><option value="260">Very dense · 260</option></select></div>
+        <button id="scatter" class="gdt-btn">Scatter selected region</button>
+        <p>Scatter trees, palms, rocks, or bushes into a selected land region. Roads stay clear.</p>
+      </div>
+    </div>
+    <div class="settings-group">
+      <h3>World details</h3>
+      <div class="field"><label for="prop-type">Scenery asset</label><select id="prop-type">
+        <optgroup label="Nature">
+          <option value="oak">Deciduous tree</option><option value="pine">Pine tree</option><option value="palm">Palm tree</option>
+          <option value="bush">Bush</option><option value="rock">Rock</option><option value="boulder">Boulder</option>
+        </optgroup>
+        <optgroup label="City & infrastructure">
+          <option value="house">House</option><option value="building">Office / building</option><option value="warehouse">Warehouse</option>
+          <option value="garage">Racing garage</option><option value="gas_station">Fuel station</option><option value="streetlight">Street light</option>
+          <option value="sign">Road sign</option><option value="barrier">Barrier</option><option value="dock">Dock</option><option value="parking">Parking lot</option>
+        </optgroup>
+      </select></div>
+      <div class="field"><label for="prop-asset">Artwork (optional)</label>
+        <select id="prop-asset"><option value="">Built-in illustrated scenery</option></select>
+      </div>
+      <label class="gdt-btn upload-asset">Import PNG / WebP sprite
+        <input id="import-sprite" type="file" accept="image/png,image/webp" hidden>
+      </label>
+      <p class="asset-hint">Replace the built-in scenery artwork with your own top-down sprites. Imported images travel with the world file.</p>
+      <div class="field"><label for="marker-type">Gameplay marker</label><select id="marker-type">
+        <option value="player_spawn">Player spawn</option><option value="race_start">Race start</option><option value="checkpoint">Checkpoint</option>
+        <option value="finish">Race finish</option><option value="garage">Garage</option><option value="dealership">Dealership</option>
+        <option value="fuel">Fuel station</option><option value="mission">Mission</option>
+        <option value="fast_travel">Fast travel</option><option value="traffic_spawn">Traffic spawn</option><option value="custom">Custom marker</option>
+      </select></div>
+    </div>
+    <p class="sidebar-tip">Click points to create a curved road or terrain boundary, then press <kbd>Enter</kbd> to finish. Select a shape to move its points.</p>
+  </aside>
+  <main class="viewport-panel">
+    <div class="canvasbar">
+      <div class="map-heading"><span class="map-icon" aria-hidden="true">◈</span><div><input id="world-title" aria-label="Editable world name" maxlength="80" value="Coastal Ridge"><span id="world-dimensions">3400 × 2300 world units</span></div></div>
+      <div class="bar-tools">
+        <button id="finish-shape" class="compact-btn" disabled>Finish shape</button>
+        <button id="cancel-shape" class="compact-btn" disabled>Cancel</button>
+        <button id="undo-world" class="compact-btn" title="Undo (Ctrl+Z)">↶ Undo</button>
+        <button id="redo-world" class="compact-btn" title="Redo (Ctrl+Y)">↷ Redo</button>
+        <button id="delete-entity" class="compact-btn danger" title="Delete selected (Delete)">Delete</button>
+      </div>
+    </div>
+    <div id="viewport" class="viewport">
+      <canvas id="world-canvas" tabindex="0" aria-label="Freeform world canvas. Click to draw roads, regions and place scenery."></canvas>
+      <span class="canvas-help">Wheel to zoom · Space or middle-drag to pan · Enter finishes a shape</span>
+      <div class="view-tools">
+        <button id="zoom-out" aria-label="Zoom out">−</button><span id="zoom-value">100%</span><button id="zoom-in" aria-label="Zoom in">+</button>
+        <button id="fit" aria-label="Fit world to viewport" title="Fit entire world">Fit</button>
+      </div>
+      <div class="minimap-wrap"><canvas id="minimap" width="190" height="125" aria-label="World overview minimap"></canvas><span>WORLD OVERVIEW</span></div>
+    </div>
+    <div class="statusbar"><span id="status" role="status" aria-live="polite">Select a tool to begin.</span><span id="coordinates">x — / y —</span><span id="object-count">—</span></div>
+  </main>
+  <aside class="panel right-panel">
+    <div class="panel-head"><h2>World layers</h2><span class="micro-tag">VISIBILITY</span></div>
+    <div class="visibility-list">
+      <label class="check"><input type="checkbox" id="show-terrain" checked> Terrain regions</label>
+      <label class="check"><input type="checkbox" id="show-roads" checked> Roads and curves</label>
+      <label class="check"><input type="checkbox" id="show-scenery" checked> Buildings and nature</label>
+      <label class="check"><input type="checkbox" id="show-markers" checked> Gameplay markers</label>
+      <label class="check"><input type="checkbox" id="show-boundaries"> Terrain outlines</label>
+    </div>
+    <div class="panel-head section-divider"><h2>Inspector</h2><span id="selected-type" class="micro-tag">NOTHING SELECTED</span></div>
+    <p id="inspector-empty" class="muted-copy">Select a road, region, building, or marker to change its properties. Drag the orange handles to adjust curves and coastlines.</p>
+    <section id="inspector" hidden>
+      <div class="field"><label for="inspector-name">Name</label><input id="inspector-name" maxlength="80"></div>
+      <div id="inspect-road" hidden>
+        <div class="field"><label for="inspect-road-class">Road type</label><select id="inspect-road-class"><option value="city">City</option><option value="highway">Highway</option><option value="country">Country</option><option value="mountain">Mountain</option><option value="track">Track</option><option value="service">Service</option></select></div>
+        <div class="field"><label for="inspect-road-surface">Surface</label><select id="inspect-road-surface"><option value="asphalt">Asphalt</option><option value="concrete">Concrete</option><option value="dirt">Dirt</option><option value="gravel">Gravel</option><option value="track">Racing asphalt</option></select></div>
+        <div class="double-fields"><div class="field"><label for="inspect-road-width">Width</label><input id="inspect-road-width" type="number" min="6" max="160"></div><div class="field"><label for="inspect-road-lanes">Lanes</label><input id="inspect-road-lanes" type="number" min="1" max="6"></div></div>
+        <div class="field"><label for="inspect-road-shoulder">Shoulder</label><input id="inspect-road-shoulder" type="number" min="0" max="16"></div>
+        <label class="check"><input id="inspect-road-smooth" type="checkbox"> Smooth curves</label>
+        <label class="check"><input id="inspect-road-markings" type="checkbox"> Road markings</label>
+      </div>
+      <div id="inspect-region" hidden>
+        <div class="field"><label for="inspect-biome">Biome</label><select id="inspect-biome"><option value="grass">Grassland</option><option value="forest">Forest</option><option value="mountain">Mountain</option><option value="rock">Rock</option><option value="beach">Beach</option><option value="ocean">Ocean</option><option value="lake">Lake</option><option value="city">City</option><option value="desert">Desert</option><option value="farmland">Farmland</option></select></div>
+        <div class="field"><label for="inspect-elevation">Height metadata (m)</label><input id="inspect-elevation" type="number" min="0" max="2000"></div>
+      </div>
+      <div id="inspect-prop" hidden>
+        <div class="field"><label for="inspect-prop-type">Asset type</label><select id="inspect-prop-type">
+          <option value="oak">Tree</option><option value="pine">Pine</option><option value="palm">Palm</option><option value="bush">Bush</option><option value="rock">Rock</option><option value="boulder">Boulder</option>
+          <option value="house">House</option><option value="building">Building</option><option value="warehouse">Warehouse</option><option value="garage">Garage</option><option value="gas_station">Fuel station</option>
+          <option value="streetlight">Street light</option><option value="sign">Sign</option><option value="barrier">Barrier</option><option value="dock">Dock</option><option value="parking">Parking</option>
+        </select></div>
+        <div class="field"><label for="inspect-asset">Artwork override</label><select id="inspect-asset"><option value="">Built-in illustration</option></select></div>
+        <div class="double-fields"><div class="field"><label for="inspect-scale">Scale</label><input id="inspect-scale" type="number" step=".1" min=".25" max="5"></div><div class="field"><label for="inspect-rotation">Rotation</label><input id="inspect-rotation" type="number" min="-360" max="360"></div></div>
+      </div>
+      <div id="inspect-marker" hidden>
+        <div class="field"><label for="inspect-marker-type">Marker type</label><select id="inspect-marker-type">
+          <option value="player_spawn">Player spawn</option><option value="race_start">Race start</option><option value="checkpoint">Checkpoint</option><option value="finish">Finish</option>
+          <option value="garage">Garage</option><option value="dealership">Dealership</option><option value="fuel">Fuel</option><option value="mission">Mission</option><option value="fast_travel">Fast travel</option><option value="traffic_spawn">Traffic</option><option value="custom">Custom</option>
+        </select></div>
+        <div class="field"><label for="inspect-properties">Game properties (JSON)</label><textarea id="inspect-properties" rows="5" spellcheck="false"></textarea></div>
+      </div>
+      <div id="position-fields" class="double-fields" hidden><div class="field"><label for="inspect-x">X</label><input id="inspect-x" type="number"></div><div class="field"><label for="inspect-y">Y</label><input id="inspect-y" type="number"></div></div>
+      <p id="point-help" class="muted-copy" hidden>Double-click a segment to insert a point. Select a handle and use “Remove point” below.</p>
+      <div class="inspector-actions">
+        <button id="remove-point" class="gdt-btn" hidden>Remove point</button>
+        <button id="move-forward" class="gdt-btn">Bring forward</button>
+        <button id="move-backward" class="gdt-btn">Send backward</button>
+      </div>
+    </section>
+    <div class="panel-head section-divider"><h2>Entities</h2><span id="entities-count" class="micro-tag">—</span></div>
+    <div class="filter-row"><label for="entities-filter">Show</label><select id="entities-filter"><option value="all">All objects</option><option value="roads">Roads</option><option value="regions">Terrain</option><option value="props">Scenery</option><option value="markers">Markers</option></select></div>
+    <div id="entity-list" class="entity-list" aria-label="World entities"></div>
+    <div class="project-note">This is continuous 2D world geometry, not a tile map. Vector artwork is an original preview; export geometry and replace visuals with your game's production assets.</div>
+  </aside>
+</div>
+<dialog id="new-dialog" class="gdt-dialog" aria-labelledby="new-title">
+  <h2 id="new-title">Create a world</h2>
+  <p>Start blank or load a ready-made coastal racing landscape. Creating a new world replaces the current canvas.</p>
+  <div class="field"><label for="new-name">World name</label><input id="new-name" value="My Racing World" maxlength="80"></div>
+  <div class="double-fields"><div class="field"><label for="new-width">Width (world units)</label><input id="new-width" type="number" min="600" max="24000" value="3400"></div><div class="field"><label for="new-height">Height</label><input id="new-height" type="number" min="600" max="24000" value="2300"></div></div>
+  <div class="field"><label for="new-base">Base ground</label><select id="new-base"><option value="grass">Grassland</option><option value="city">City</option><option value="beach">Beach</option><option value="desert">Desert</option></select></div>
+  <div class="dialog-actions"><button id="cancel-new" class="gdt-btn">Cancel</button><button id="create-demo" class="gdt-btn">Coastal demo</button><button id="confirm-new" class="gdt-btn gdt-btn--primary">Create blank</button></div>
+</dialog>
+<script type="module" src="./world-editor.js"></script>
+</body></html>

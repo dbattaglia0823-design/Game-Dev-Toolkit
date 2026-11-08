@@ -1,38 +1,46 @@
-# 2D Top-Down Map Builder
+# World Forge — Freeform 2D Open-World Map Builder
 
-Open [index.html](index.html) through the toolkit's GitHub Pages site or a local HTTP server (ES modules need HTTP). This is a **separate tile-map and level-data editor**, not part of the functional UI layout builder.
+Open [World Forge](index.html) from the Toolkit GitHub Pages homepage. This is a continuous world geometry editor for top-down racing games, **not a tile editor**. For existing version 1 maps, use the [Legacy Tile Editor](legacy.html); old saves and files remain independent.
 
-## Included
+The visual direction uses an original illustrated top-down style. WORKS: Motorsport Factory is a general perspective and legibility reference, not an asset source. No copyrighted assets or game data were reused.
 
-- Orthogonal tile maps up to 128×128 cells, using a configurable 16/32/48/64px grid (8–64px is supported by JSON).
-- A generated, original 32-tile starter atlas and PNG/JPEG/WebP sprite-sheet import (grid-aligned images, up to 512 tiles/atlas).
-- Ordered layers with visibility, locks, names, opacity and reordering.
-- Brush, erase, contiguous flood fill, line, rectangle, tile eyedropper and camera pan/zoom.
-- Independent blocked/walkable collision grid, with a live red collision overlay.
-- Object/gameplay marker placement, drag-to-move, deletion, JSON properties and common types (player/enemy spawn, exit, NPC, trigger, loot).
-- History with one undo operation per stroke, redo and a 35-step bound.
-- Autosave/recovery and explicit local Save/Load; portable standalone JSON, flattened PNG preview and Godot 4 integration ZIP.
+## Features
 
-The included example illustrates how tiles, blockers and markers coexist. Exporting a PNG creates an **image**, not a playable level. Exported JSON and ZIP include the generated starter artwork as embedded PNG data; they don't depend on external tileset URLs.
+- **Spline road drawing:** Click centerline points, finish the road, then select and drag its handles to create smooth curves. City roads, highways, country lanes, mountain passes, circuits and service roads, with asphalt, racing asphalt, concrete, dirt and gravel. Set continuous world-unit road width, 1–6 lanes, shoulders and lane markings. Join road endpoints by clicking near existing endpoints.
+- **Freeform biomes:** Draw and reshape polygon terrain regions: grass, forests, mountains, rock, beaches, ocean, lakes, cities, desert and farmland. Overlap regions and adjust their ordering.
+- **Scenery:** Place trees, conifers, palms, bushes, rocks, houses, office buildings, warehouses, racing garages, fuel stations, signs, parking areas, barriers, streetlights and docks. Import your own top-down PNG/WebP scenery sprites (up to 950 KB each) and attach them to individual objects as an artwork override; images are embedded in the world JSON and Godot ZIP. Scatter vegetation inside selected land regions while avoiding roads.
+- **Gameplay markers:** Player/traffic spawns, race starts, checkpoints, finish, garage, dealership, fuel, mission and fast-travel points, with editable JSON properties.
+- **Editing and navigation:** Per-point curve and coastline editing, double-click to insert a point, control-point deletion, entity ordering, visibility controls, pan/zoom, minimap, undo/redo and automatic browser-local recovery.
+- **Export:** World JSON, flattened PNG preview, and Godot 4 ZIP including the vector world loader, road centerlines and junction hints, marker metadata and integration guide.
 
-## Quick start
+The included Coastal Ridge example has a city, forests, mountains, lake, sand and ocean, winding road networks, buildings, nature and race markers.
 
-1. Open the editor. Explore **Forest crossing**, then choose **New map** for a blank level.
-2. Use the left panel to select a tile and a tile layer, paint in the center, and create terrain layers as needed.
-3. Use **Block** and **Unblock** to define physics-obstacle cells independently of artwork.
-4. Choose **Marker** to place spawns, exits, items, NPCs or triggers. Add game-specific metadata in the inspector's JSON properties.
-5. Save locally for editing sessions; download **Map JSON** for source control. Use **Godot 4 ZIP** for a ready-to-copy adapter and instructions.
+## Draw a road
 
-Keyboard shortcuts: B brush, E erase, F fill, L line, R rectangle, I picker, C block, X unblock, O marker, H pan, Space/middle-button drag pan, wheel zoom, Ctrl/Cmd+Z undo and Ctrl/Cmd+Y or Shift+Z redo. Right-click picks a tile. Delete removes a selected marker when focus isn't in a text input.
+1. Choose **Draw road (R)**, road class, surface, width, lane count and shoulder.
+2. Click to create the centerline. Add points around bends. Click near existing road endpoints to snap.
+3. Press **Enter**, double-click, right-click or **Finish shape** to save.
+4. Switch to **Select (V)**. Drag its control points to reshape. Double-click along an existing road segment to insert a point. Select a point and choose **Remove point**.
+5. Edit road attributes on the right-side inspector.
 
-## Data contract
+For a coast, choose **Terrain (T)** and Beach or Ocean, click the polygon boundary, then press Enter. Select the resulting region and drag its outline to refine the shoreline. Use **Scatter selected region** to populate land with biome-appropriate trees/rocks/palms. Roads and polygon shapes are based on floating-point world coordinates; there is no snapped grid.
 
-The editor uses \`format: "gdt.topdown-map"\` and \`version: 1\`. The file contains width/height/tileSize, embedded tilesets with integer atlas indices, ordered tile layers with row-major \`tiles\` arrays, a separate row-major 0/1 \`collision\` array, and an \`objects\` list of IDs, cell coordinates, type, name and JSON properties.
+Keyboard: V select, R road, T terrain, P scenery, M marker, H pan, Enter finish, Esc cancel, Delete remove selected, Space or middle-button drag pan, mouse wheel zoom, Ctrl/Cmd+Z undo, Ctrl/Cmd+Y or Ctrl/Cmd+Shift+Z redo.
 
-JSON import validates bounds, identifiers, tile references, image media types and total counts. It does not modify functional UI layout documents or existing game save files. Maps are browser-local unless you download the JSON or ZIP; they are **not committed to GitHub automatically**.
+## Versioned world data
 
-## Godot 4 usage
+World Forge exports JSON with format name **gdt.racing-world**, version **2**. It contains world dimensions and seed, then arrays of roads (control points and material), regions (polygon points, biome, elevation), props (positions, rotation and scale) and markers (positions and JSON properties). There are no tilesets, tile indices or cell grids in version 2.
 
-The ZIP includes \`maps/<name>.map.json\`, \`runtime/map_loader.gd\`, \`manifest.json\` and \`CODEX_IMPORT.md\`. Attach the loader to a Node2D, set \`map_path\` to the map JSON, and connect player/AI/NPC code to the markers and collision queries. The renderer draws texture regions and builds horizontal runs of rectangle collision shapes. It does not generate a TileMapLayer scene, navigation regions, animated tiles, lighting, scripts for markers, or game logic.
+Limits: 600–24,000 world units per axis, 180 roads with up to 100 points each, 220 regions, 4,000 props, 400 markers, and an 8 MB import size. Invalid and old-format imports are rejected instead of silently migrated. Separate browser storage keys protect old map saves. Always export a portable JSON backup; saving in the browser does not commit changes to GitHub.
 
-Tests: \`cd web && npm test\`; browser smoke checks run for desktop/mobile via \`web/e2e/smoke.mjs\` in CI. Test in your actual game and device before relying on collisions or marker behavior.
+## Godot 4 integration
+
+The exported ZIP contains editable world JSON, a sampled road-centerline network with junction hints, a GDScript Node2D runtime adapter, a manifest and CODEX_IMPORT.md. The loader draws stylized freeform terrain, roads and props, builds collision for bodies of water and solid scenery, and supports marker, road-path and terrain-surface queries.
+
+This is a **level authoring tool**, not a full game engine. The consuming game must implement vehicle physics, traffic routing, race progression, streaming/chunk loading, proper production sprites/3D assets, animation, elevation geometry and advanced intersections. Height values are metadata, not an actual elevation mesh. Sampled road junctions are hints for an AI routing implementation, not a solved navigation network. Keep map geometry separate from player save files.
+
+## Verification
+
+Run npm test from web/ for model/schema/export tests. CI runs browser smoke tests at desktop/mobile sizes and a Godot 4.4 headless loader fixture. Test the exported world inside your target racing game before shipping.
+
+See also [Godot world loader](../../godot/world-kit/README.md) and [Legacy tile map guide](LEGACY_TILES.md).

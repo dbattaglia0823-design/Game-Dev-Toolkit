@@ -30,3 +30,5 @@ jobs:
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/catalog_smoke.gd
       - name: Validate top-down map loader and collision geometry
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/map_smoke.gd
+      - name: Validate freeform world renderer, roads, surfaces and obstacles
+        run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/racing_world_smoke.gd

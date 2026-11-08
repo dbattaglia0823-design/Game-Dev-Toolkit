@@ -173,8 +173,8 @@ try{
   await page.locator('#preview').click();
   await page.locator('[data-node-id="equip"]').click();
   assert.match(await page.locator('#event-output').innerText(),/inventory.equip/);
-  // Top-down map builder: edit, undo/redo, collision, markers and portable export.
-  await page.goto(origin+'/map-builder/index.html');
+  // Legacy tile editor remains supported with its original v1 exports.
+  await page.goto(origin+'/map-builder/legacy.html');
   await page.locator('#new-map').click();
   await page.locator('#new-name').fill('Smoke room');
   await page.locator('#new-width').fill('8');
@@ -213,6 +213,77 @@ try{
   const mapZip=await zipDownload;
   assert.match(mapZip.suggestedFilename(),/smoke-room-godot4\.zip/);
   assert.ok((await readFile(await mapZip.path())).includes(Buffer.from('runtime/map_loader.gd')));
+  // Freeform racing world: draw and inspect curved roads, polygons and gameplay.
+  await page.goto(origin+'/map-builder/index.html');
+  assert.match(await page.title(),/World Forge/);
+  assert.ok((await page.locator('#object-count').innerText()).includes('9 roads'),'Example world should contain roads');
+  await page.locator('#new-world').click();
+  await page.locator('#new-name').fill('Coastal smoke');
+  await page.locator('#new-width').fill('1200');
+  await page.locator('#new-height').fill('800');
+  await page.locator('#confirm-new').click();
+  assert.match(await page.locator('#world-dimensions').innerText(),/1200 × 800/);
+  async function clickWorld(x,y) {
+    await page.locator('#world-canvas').scrollIntoViewIfNeeded();
+    const bounds=await page.locator('#world-canvas').boundingBox();
+    await page.mouse.click(bounds.x+bounds.width*x,bounds.y+bounds.height*y);
+  }
+  async function exportWorld() {
+    const result=page.waitForEvent('download');
+    await page.locator('#export-world').click();
+    const file=await result;
+    return JSON.parse(await readFile(await file.path(),'utf8'));
+  }
+  await page.locator('[data-tool="road"]').click();
+  await clickWorld(.3,.43);
+  await clickWorld(.52,.35);
+  await clickWorld(.7,.55);
+  await page.keyboard.press('Enter');
+  let world=await exportWorld();
+  assert.equal(world.format,'gdt.racing-world');
+  assert.equal(world.version,2);
+  assert.equal(world.roads.length,1);
+  assert.equal(world.roads[0].points.length,3);
+  assert.equal(world.roads[0].smooth,true);
+  assert.equal(world.tileSize,undefined,'New world must not be tile-based');
+  await page.locator('[data-tool="terrain"]').click();
+  await page.locator('#biome').selectOption('forest');
+  await clickWorld(.32,.37);await clickWorld(.47,.35);await clickWorld(.47,.49);await clickWorld(.32,.50);
+  await page.keyboard.press('Enter');
+  world=await exportWorld();
+  assert.equal(world.regions.length,1);
+  assert.equal(world.regions[0].biome,'forest');
+  await page.locator('#entity-list .entity-row').filter({hasText:'Forest region'}).click();
+  await page.locator('#scatter-count').selectOption('20');
+  await page.locator('#scatter').click();
+  world=await exportWorld();
+  assert.ok(world.props.length>0,'Scattering must create freeform world-space props');
+  // Custom sprites are self-contained in exported world JSON and Godot packages.
+  const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC','base64');
+  await page.locator('#import-sprite').setInputFiles({name:'garage.png',mimeType:'image/png',buffer:png});
+  await page.waitForFunction(() => document.querySelectorAll('#prop-asset option').length === 2, {timeout:10000});
+  assert.equal(await page.locator('#prop-asset option').count(),2);
+  await page.locator('[data-tool="prop"]').click();
+  await page.locator('#prop-type').selectOption('garage');
+  await clickWorld(.64,.61);
+  world=await exportWorld();
+  assert.equal(world.assets.length,1,'Imported artwork must be embedded');
+  assert.equal(world.props.at(-1).assetId,world.assets[0].id,'Prop must reference selected artwork');
+  await page.locator('[data-tool="marker"]').click();
+  await page.locator('#marker-type').selectOption('race_start');
+  await clickWorld(.58,.63);
+  assert.equal((await exportWorld()).markers.length,1);
+  await page.locator('#undo-world').click();
+  assert.equal((await exportWorld()).markers.length,0,'World history must undo marker placement');
+  await page.locator('#redo-world').click();
+  assert.equal((await exportWorld()).markers.length,1);
+  const worldZipPromise=page.waitForEvent('download');
+  await page.locator('#export-godot').click();
+  const worldZip=await worldZipPromise;
+  assert.match(worldZip.suggestedFilename(),/coastal-smoke-godot4\.zip/);
+  const zipData=await readFile(await worldZip.path());
+  assert.ok(zipData.includes(Buffer.from('runtime/world_loader.gd')));
+  assert.ok(zipData.includes(Buffer.from('navigation/coastal-smoke.roads.json')));
   assert.deepEqual(errors,[], 'Unexpected browser JavaScript errors at viewport '+viewport.width);
   await page.close();
  }
