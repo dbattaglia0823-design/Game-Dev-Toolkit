@@ -206,7 +206,7 @@ export function scatterVegetation(doc,regionId,count=50,type='auto'){
   if(!propType)throw new TypeError('Cannot scatter vegetation on open water');
   if(doc.props.length+count>LIM.props)throw new RangeError('Too many props');
   const seed=stringSeed(region.id+'-'+region.biome+'-'+doc.world.seed+'-'+doc.props.length);
-  const points=scatterPoints(region.points,count*2,seed,p=>!roadAt(doc,p)).slice(0,count);
+  const points=scatterPoints(region.points,count*6,seed,p=>!roadAt(doc,p));
   const newProps=[],occupied=new Set([...doc.props].map(p=>p.id));
   let n=doc.props.length+1;
   for(const p of points){
