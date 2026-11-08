@@ -39,6 +39,18 @@ Menu controller emits validated transitions; actual games must connect pause and
 
 Builder exports validated JSON layouts, not executable games or Godot scenes. See `web/builder/README.md`.
 
+## Top-down level map editor
+
+| Path | Runtime | Purpose | Validation |
+|---|---|---|---|
+| `web/map-builder/model.js` | Web / Node ES module | Versioned tile map, painting, collision, markers and import validation | Node unit tests |
+| `web/map-builder/starter-tiles.js` | Browser Canvas | Generated original 32-tile starter atlas | Browser smoke |
+| `web/map-builder/export.js` | Web / Node ES module | Portable JSON data and Godot ZIP packaging | Node unit tests |
+| `web/map-builder/editor.js` | Browser Canvas | Painting tools, pan/zoom, history, palette and inspector | Desktop/mobile browser smoke |
+| `godot/map-kit/map_loader.gd` | Godot 4 | Runtime textured map renderer, static collision and marker queries | Target-game integration required |
+
+See `web/map-builder/README.md` and `godot/map-kit/README.md`. The map schema is independent of the version 2 functional UI layout contract and of game saves.
+
 ## UI Studio v2 modules
 
 - `web/builder/studio.js`: editor history, premade asset library, additional screen presets, layer ordering and movement helpers (unit-tested).

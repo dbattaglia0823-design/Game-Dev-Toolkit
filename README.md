@@ -10,6 +10,10 @@ Built-in functional presets: main menu, pause menu, inventory, upgrades, shop, s
 
 The previous visual editor remains available as [Legacy Visual Studio](web/builder/legacy-studio.html) for old version 1 layout JSON files. Existing visual-only layouts are not silently converted into action-bearing templates.
 
+## 2D Top-Down Map Builder
+
+Use the [2D Map Builder](web/map-builder/index.html) to paint tile-based worlds for top-down games. It includes a starter pixel-art atlas, custom sprite-sheet import, ordered tile layers, collision painting, gameplay markers, undo/redo, zoom/pan, local saves and portable JSON/PNG/Godot 4 ZIP export. Maps are distinct from functional UI layouts and game saves. See the [map editor guide](web/map-builder/README.md) and [Godot map loader](godot/map-kit/README.md).
+
 ## Phase 1: Integration validation
 
 Open the [Integration Validator](web/validator/index.html) to check exported layouts against schema rules, action-handler mappings, sample data bindings, off-canvas controls and accessible target sizes. The report distinguishes structural validity from actual target-game readiness.
