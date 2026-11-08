@@ -101,17 +101,52 @@ export function segmentIntersection(a,b,c,d){
   if(t<0||t>1||u<0||u>1)return null;
   return {x:a.x+rx*t,y:a.y+ry*t};
 }
+/** Spatially indexed road intersections. In large open-world maps, comparing every
+ * sampled segment against every other sampled segment is prohibitively expensive.
+ * Only previously indexed roads are checked; nearby crossing points for the same
+ * road pair are de-duplicated within 8 world units. Separate road pairs retain
+ * distinct navigation connections even at shared junctions.
+ */
 export function roadIntersections(roads) {
-  const intersections=[];
+  const intersections=[],grid=new Map(),perPair=new Map(),size=120;
+  const bucketKey=(x,y)=>x+','+y;
+  const cells=({minX,minY,maxX,maxY})=>{
+    const out=[];
+    for(let x=Math.floor(minX/size);x<=Math.floor(maxX/size);x++)
+      for(let y=Math.floor(minY/size);y<=Math.floor(maxY/size);y++)
+        out.push(bucketKey(x,y));
+    return out;
+  };
   for(let i=0;i<roads.length;i++){
-    const a=sampleRoad(roads[i].points,roads[i].smooth,18);
-    for(let j=i+1;j<roads.length;j++){
-      const b=sampleRoad(roads[j].points,roads[j].smooth,18);
-      for(let x=1;x<a.length;x++)for(let y=1;y<b.length;y++){
-        const p=segmentIntersection(a[x-1],a[x],b[y-1],b[y]);
-        if(p && !intersections.some(old=>distance(old,p)<8)){
-          intersections.push({...p, roads:[roads[i].id,roads[j].id], width:Math.max(roads[i].width,roads[j].width),surface:roads[j].surface});
+    const points=sampleRoad(roads[i].points,roads[i].smooth,18),newSegments=[];
+    for(let j=1;j<points.length;j++){
+      const a=points[j-1],b=points[j],segment={
+        a,b,road:i,minX:Math.min(a.x,b.x),maxX:Math.max(a.x,b.x),
+        minY:Math.min(a.y,b.y),maxY:Math.max(a.y,b.y)
+      };
+      const visited=new Set();
+      for(const key of cells(segment)){
+        for(const other of grid.get(key)||[]){
+          if(visited.has(other))continue;
+          visited.add(other);
+          if(other.maxX<segment.minX||other.minX>segment.maxX||
+            other.maxY<segment.minY||other.minY>segment.maxY)continue;
+          const crossing=segmentIntersection(other.a,other.b,a,b);
+          if(!crossing)continue;
+          const pair=other.road+':'+i,near=perPair.get(pair)||[];
+          if(near.some(old=>distance(old,crossing)<8))continue;
+          near.push(crossing);perPair.set(pair,near);
+          intersections.push({...crossing,roads:[roads[other.road].id,roads[i].id],
+            width:Math.max(roads[other.road].width,roads[i].width),surface:roads[i].surface});
         }
+      }
+      newSegments.push(segment);
+    }
+    // Index only after finishing this road, so bends never connect to themselves.
+    for(const segment of newSegments){
+      for(const key of cells(segment)){
+        if(!grid.has(key))grid.set(key,[]);
+        grid.get(key).push(segment);
       }
     }
   }
