@@ -156,6 +156,41 @@ try{
   await page.locator('#preview').click();
   await page.locator('[data-node-id="equip"]').click();
   assert.match(await page.locator('#event-output').innerText(),/inventory.equip/);
+  // Top-down map builder: edit, undo/redo, collision, markers and portable export.
+  await page.goto(origin+'/map-builder/index.html');
+  await page.locator('#new-map').click();
+  await page.locator('#new-name').fill('Smoke room');
+  await page.locator('#new-width').fill('8');
+  await page.locator('#new-height').fill('8');
+  await page.locator('#confirm-new').click();
+  assert.equal(await page.locator('.tile-choice').count(),32);
+  assert.equal(await page.locator('.layer-row').count(),3);
+  await page.locator('.tile-choice').nth(3).click();
+  const stageBox=await page.locator('#map-canvas').boundingBox();
+  await page.mouse.click(stageBox.x+stageBox.width/2,stageBox.y+stageBox.height/2);
+  async function getMapExport(){
+    const next=page.waitForEvent('download');
+    await page.locator('#export-json').click();
+    const file=await next;
+    return JSON.parse(await readFile(await file.path(),'utf8'));
+  }
+  const painted=await getMapExport();
+  assert.ok(painted.layers[0].tiles.some(t=>t?.index===3),'Brush must paint selected tile');
+  await page.locator('#undo-map').click();
+  assert.ok(!(await getMapExport()).layers[0].tiles.some(Boolean),'Undo must restore empty layer');
+  await page.locator('#redo-map').click();
+  assert.ok((await getMapExport()).layers[0].tiles.some(Boolean),'Redo must restore stroke');
+  await page.locator('[data-tool="block"]').click();
+  await page.mouse.click(stageBox.x+stageBox.width/2,stageBox.y+stageBox.height/2);
+  assert.ok((await getMapExport()).collision.some(Boolean),'Collision paint must set blocked cells');
+  await page.locator('[data-tool="object"]').click();
+  await page.mouse.click(stageBox.x+stageBox.width/2+40,stageBox.y+stageBox.height/2);
+  assert.equal((await getMapExport()).objects.length,1,'Marker placement must persist');
+  const zipDownload=page.waitForEvent('download');
+  await page.locator('#export-godot').click();
+  const mapZip=await zipDownload;
+  assert.match(mapZip.suggestedFilename(),/smoke-room-godot4\.zip/);
+  assert.ok((await readFile(await mapZip.path())).includes(Buffer.from('runtime/map_loader.gd')));
   assert.deepEqual(errors,[], 'Unexpected browser JavaScript errors at viewport '+viewport.width);
   await page.close();
  }
