@@ -232,3 +232,63 @@ test('drag scenery brush uses world-space radius, spacing, road/water avoidance 
   assert.throws(()=>paintSceneryBrush(doc,{x:50,y:50},{...brush,radius:-2}),/Brush radius/);
   assert.throws(()=>paintSceneryBrush(doc,{x:50,y:50},{...brush,count:100}),/Brush density/);
 });
+
+
+test('Atlas Coast master world is a valid large freeform world with integrated districts, venues and classed dealerships',async()=>{
+  const raw=await readFile(new URL('../map-builder/atlas-coast.world.json',import.meta.url),'utf8');
+  const mega=parseWorld(raw);
+  assert.equal(mega.world.width,22000);
+  assert.equal(mega.world.height,18000);
+  assert.equal(mega.format,'gdt.racing-world');
+  assert.equal(mega.roads.length,132);
+  assert.equal(mega.regions.length,32);
+  assert.ok(mega.props.length>=1900);
+  assert.ok(mega.markers.length>=130);
+  const biomes=new Set(mega.regions.map(r=>r.biome));
+  for(const biome of ['city','forest','mountain','rock','beach','ocean','lake','farmland'])
+    assert.ok(biomes.has(biome),'Missing '+biome+' biome');
+  const roads=mega.roads;
+  assert.ok(roads.some(r=>r.roadClass==='highway'&&r.lanes>=4));
+  assert.ok(roads.some(r=>r.roadClass==='track'&&r.surface==='dirt'));
+  assert.ok(roads.some(r=>r.roadClass==='track'&&r.surface==='track'));
+  assert.ok(roads.some(r=>r.roadClass==='mountain'));
+  const markers=mega.markers;
+  const byType=type=>markers.filter(m=>m.type===type);
+  assert.ok(byType('dealership').length>=10);
+  assert.ok(byType('garage').length>=15);
+  assert.ok(byType('fuel').length>=15);
+  assert.equal(byType('race_start').length,7);
+  assert.ok(byType('fast_travel').length>=8);
+  assert.ok(byType('player_spawn').length>=1);
+  const supportedClasses=new Set(byType('dealership').flatMap(d=>d.properties.classes));
+  assert.deepEqual([...supportedClasses].sort(),['A','B','C','D','S']);
+  for(const race of byType('race_start'))
+    assert.ok(roads.some(r=>r.id===race.properties.roadId),'Race start '+race.name+' must reference a real road');
+  for(const entity of [...mega.props,...mega.markers])
+    assert.ok(entity.x>=0&&entity.x<=mega.world.width&&entity.y>=0&&entity.y<=mega.world.height);
+  assert.deepEqual(parseWorld(serializeWorld(mega)),mega);
+  assert.ok(!('tiles' in mega)&&!('tileSize' in mega),'Master map must remain freeform');
+});
+test('Atlas Coast sampled road network and Godot ZIP remain exportable with spatial junction indexing',async()=>{
+  const world=parseWorld(await readFile(new URL('../map-builder/atlas-coast.world.json',import.meta.url),'utf8'));
+  const graph=buildRoadNetwork(world);
+  assert.equal(graph.roads.length,world.roads.length);
+  assert.ok(graph.connections.length>70,'Connected highway and city streets should yield junctions');
+  assert.equal(graph.verifiedNavigation,false);
+  assert.ok(graph.roads.find(r=>r.name.includes('Meridian Cross-State')).centerline.length>30);
+  const source=await readFile(new URL('../map-builder/world_loader.gd',import.meta.url),'utf8');
+  const pkg=buildWorldZip(world,source);
+  assert.ok(pkg.bytes.length>world.roads.length);
+  assert.equal(pkg.manifest.gameplayIntegrated,false);
+  assert.equal(parseWorld(pkg.files.get('worlds/atlas-coast-grand-touring-open-world.world.json')).roads.length,132);
+});
+test('separate intersecting road pairs retain their own junction references',()=>{
+  const base=createWorld({width:1200,height:1200});
+  const standard={roadClass:'city',surface:'asphalt',width:35,lanes:2,shoulder:4,smooth:false,markings:true};
+  let doc=createEntity(base,'roads',{...standard,name:'East West',points:coords([100,500],[900,500])});
+  doc=createEntity(doc,'roads',{...standard,name:'North South',points:coords([500,100],[500,900])});
+  doc=createEntity(doc,'roads',{...standard,name:'Diagonal',points:coords([100,100],[900,900])});
+  const hit=roadIntersections(doc.roads);
+  assert.equal(hit.length,3,'All three intersecting road pairs need navigation hints');
+  assert.equal(new Set(hit.map(h=>h.roads.join(','))).size,3);
+});
