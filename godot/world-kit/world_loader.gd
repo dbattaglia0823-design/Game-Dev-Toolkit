@@ -214,7 +214,6 @@ func _draw_road(road: Dictionary, lines: bool) -> void:
     var shoulder: float = float(road.get("shoulder",5))
     var surface: String = str(road.get("surface","asphalt"))
     if not lines:
-        _line(path,width + shoulder * 2.0 + 7.0,Color(0.1,0.16,0.15,0.36))
         _line(path,width + shoulder * 2.0,Color("#a69e8c"))
         _line(path,width + 3.0,Color("#22282b"))
         _line(path,width,ROAD_COLORS.get(surface,Color("#3d4550")))
@@ -262,7 +261,6 @@ func _draw_prop(entry: Dictionary) -> void:
         draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
         return
     if kind in ["oak","pine","palm","bush"]:
-        draw_circle(Vector2(8,10),23,Color(0.16,0.25,0.19,0.4))
         var color := Color("#4f915a")
         if kind == "pine":
             color = Color("#326a4d")
@@ -280,7 +278,6 @@ func _draw_prop(entry: Dictionary) -> void:
             dim = Vector2(110,75)
         elif kind == "parking":
             dim = Vector2(135,100)
-        draw_rect(Rect2(-dim / 2.0 + Vector2(8,11),dim),Color(0.12,0.2,0.19,0.55))
         draw_rect(Rect2(-dim / 2.0,dim),Color("#cac7b3"))
         draw_rect(Rect2(-dim / 2.0 + Vector2(5,5),dim - Vector2(10,10)),
             Color("#ab6f59") if kind == "house" else Color("#86969a"))
