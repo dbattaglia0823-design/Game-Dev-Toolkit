@@ -497,7 +497,12 @@ document.addEventListener('keydown',event=>{
   if(event.code==='Space'){event.preventDefault();panSpace=true;return;}
   if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();event.shiftKey?redo():undo();return;}
   if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y'){event.preventDefault();redo();return;}
+  if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='d'&&selection){
+    event.preventDefault();duplicateSelected();return;
+  }
   if(event.ctrlKey||event.metaKey||event.altKey)return;
+  if(event.key==='Escape'&&gesture?.mode==='spray'){finishSpray(true);return;}
+  if(event.key==='Escape'&&pointInsertMode){pointInsertMode=null;refreshInspector();requestRender();status('Point insertion canceled.');return;}
   if(event.key==='Escape'&&draft){cancelDraft();return;}
   if(event.key==='Enter'&&draft){event.preventDefault();finishDraft();return;}
   if(event.key==='Delete'&&selection){event.preventDefault();deleteSelected();return;}
@@ -515,6 +520,54 @@ $('undo-world').addEventListener('click',undo);$('redo-world').addEventListener(
 $('zoom-in').addEventListener('click',()=>setZoom(zoom*1.3));
 $('zoom-out').addEventListener('click',()=>setZoom(zoom/1.3));
 $('fit').addEventListener('click',fit);
+for(const [id,mode] of [['insert-road-point','between'],['extend-road-start','start'],['extend-road-end','end']])
+  $(id).addEventListener('click',()=>choosePointInsert(mode));
+for(const [id,axis] of [['inspect-point-x','x'],['inspect-point-y','y']]){
+  $(id).addEventListener('change',event=>{
+    const found=selectedShape();if(!found||selection.point<0)return;
+    const numeric=Number(event.target.value);
+    if(!Number.isFinite(numeric)||numeric<0||numeric>(axis==='x'?doc.world.width:doc.world.height)){
+      errorMessage(new RangeError('Point coordinate is outside the world'));refreshInspector();return;
+    }
+    const original=found.item.points[selection.point];
+    if(!change(d=>moveControlPoint(d,found.item.id,selection.point,{...original,[axis]:numeric}),
+      'Changed point '+(selection.point+1)+' '+axis.toUpperCase()+'.'))refreshInspector();
+  });
+}
+function duplicateSelected(){
+  if(!selection)return;
+  try{
+    const previous=doc;
+    const copy=duplicateEntity(doc,selection.id);
+    doc=copy.doc;pointInsertMode=null;
+    makeSnapshot(previous,'Duplicated selected object.');
+    setSelection(copy.id);
+  }catch(e){errorMessage(e);}
+}
+$('duplicate-entity').addEventListener('click',duplicateSelected);
+for(const button of document.querySelectorAll('[data-nudge]')){
+  button.addEventListener('click',()=>{
+    if(!selection)return;
+    const step=Number($('nudge-step').value);
+    if(!Number.isFinite(step)||step<1||step>500){status('Move step must be 1–500.');return;}
+    const [x,y]=button.dataset.nudge.split(',').map(Number);
+    change(d=>translateEntity(d,selection.id,x*step,y*step),'Moved selected object.');
+  });
+}
+for(const [id,changeBy] of [['rotate-prop-left',-15],['rotate-prop-right',15]]){
+  $(id).addEventListener('click',()=>{
+    const found=selection?getEntity(doc,selection.id):null;if(found?.type!=='props')return;
+    const next=((found.item.rotation+changeBy+360)%720)-360;
+    change(d=>updateEntity(d,selection.id,{rotation:next}),'Rotated scenery.');
+  });
+}
+for(const [id,changeBy] of [['scale-prop-down',-.1],['scale-prop-up',.1]]){
+  $(id).addEventListener('click',()=>{
+    const found=selection?getEntity(doc,selection.id):null;if(found?.type!=='props')return;
+    const next=Math.round(clamp(found.item.scale+changeBy,.25,5)*100)/100;
+    change(d=>updateEntity(d,selection.id,{scale:next}),'Resized scenery.');
+  });
+}
 function deleteSelected(){
   if(!selection)return;
   const found=getEntity(doc,selection.id);
@@ -533,6 +586,17 @@ $('remove-point').addEventListener('click',()=>{
 });
 $('move-forward').addEventListener('click',()=>{if(selection)change(d=>reorderEntity(d,selection.id,1),'Changed draw order.');});
 $('move-backward').addEventListener('click',()=>{if(selection)change(d=>reorderEntity(d,selection.id,-1),'Changed draw order.');});
+$('scenery-erase').addEventListener('change',event=>{
+  if(event.target.checked)$('scenery-paint').checked=true;
+  if(event.target.checked)setTool('prop');
+  requestRender();
+});
+$('scenery-paint').addEventListener('change',event=>{
+  if(!event.target.checked)$('scenery-erase').checked=false;
+  requestRender();
+});
+for(const id of ['brush-radius','brush-spacing','brush-density','brush-variation','brush-avoid-roads','brush-avoid-water'])
+  $(id).addEventListener('input',requestRender);
 $('scatter').addEventListener('click',()=>{
   const id=selection?.id,region=doc.regions.find(r=>r.id===id);
   if(!region){status('Select a terrain region before scattering scenery.');return;}
