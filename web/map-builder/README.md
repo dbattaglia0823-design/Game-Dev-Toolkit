@@ -4,6 +4,8 @@ Open [World Forge](index.html) from the Toolkit GitHub Pages homepage. This is a
 
 The visual direction uses an original illustrated top-down style. WORKS: Motorsport Factory is a general perspective and legibility reference, not an asset source. No copyrighted assets or game data were reused.
 
+**Shadow-free visual style:** World Forge renders built-in scenery, roads, rocks, and buildings without offset cast shadows. Editor panels and controls also omit CSS box/text shadows. The Godot world loader mirrors this flat styling. Custom imported PNG/WebP artwork is displayed as supplied; any shadows baked into those images must be removed from the source artwork.
+
 ## Features
 
 - **Spline road drawing:** Click centerline points, finish the road, then select and drag its handles to create smooth curves. City roads, highways, country lanes, mountain passes, circuits and service roads, with asphalt, racing asphalt, concrete, dirt and gravel. Set continuous world-unit road width, 1–6 lanes, shoulders and lane markings. Join road endpoints by clicking near existing endpoints.
