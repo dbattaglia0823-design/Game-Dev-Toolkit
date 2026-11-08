@@ -110,7 +110,7 @@ export function roadIntersections(roads) {
       for(let x=1;x<a.length;x++)for(let y=1;y<b.length;y++){
         const p=segmentIntersection(a[x-1],a[x],b[y-1],b[y]);
         if(p && !intersections.some(old=>distance(old,p)<8)){
-          intersections.push({...p, width:Math.max(roads[i].width,roads[j].width),surface:roads[j].surface});
+          intersections.push({...p, roads:[roads[i].id,roads[j].id], width:Math.max(roads[i].width,roads[j].width),surface:roads[j].surface});
         }
       }
     }
