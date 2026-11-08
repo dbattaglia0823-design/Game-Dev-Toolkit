@@ -645,6 +645,35 @@ $('scenery-paint').addEventListener('change',event=>{
 });
 for(const id of ['brush-radius','brush-spacing','brush-density','brush-variation','brush-avoid-roads','brush-avoid-water'])
   $(id).addEventListener('input',requestRender);
+$('snap-selected-roadside').addEventListener('click',()=>{
+  const found=selection?getEntity(doc,selection.id):null;
+  if(!found||!['props','markers'].includes(found.type))
+    return status('Select a building, scenery object or service marker first.');
+  try{
+    if(found.type==='markers'&&!['garage','dealership','fuel','mission','fast_travel','player_spawn'].includes(found.item.type))
+      return status('Race starts, checkpoints, finishes and traffic spawns intentionally remain on their road paths.');
+    const before=doc;
+    if(found.type==='props'){
+      const placed=placeBesideRoad(doc,found.item,{snap:true,align:true,maxSnapDistance:1500});
+      doc=updateEntity(doc,selection.id,{x:placed.x,y:placed.y,rotation:placed.rotation});
+    }else{
+      const placed=placeSiteMarker(doc,found.item);
+      doc=updateEntity(doc,selection.id,{x:placed.x,y:placed.y,rotation:placed.rotation});
+    }
+    if(before!==doc)makeSnapshot(before,'Aligned selected object to local road curve and cleared the shoulder.');
+    $('roadside-status').textContent='Selected object checked against nearby roads.';
+  }catch(e){errorMessage(e);}
+});
+$('repair-roadside').addEventListener('click',()=>{
+  const result=repairRoadsideObjects(doc,{alignAll:true});
+  if(result.doc!==doc){
+    const before=doc;doc=result.doc;
+    makeSnapshot(before,'Aligned '+(result.moved+result.rotated+result.adjustedMarkers)+
+      ' objects. Road shoulders are clear.');
+  }
+  $('roadside-status').textContent='Moved '+result.moved+' scenery, rotated '+result.rotated+
+    ', adjusted '+result.adjustedMarkers+' site markers'+(result.failed?'; '+result.failed+' need manual relocation.':'.');
+});
 $('scatter').addEventListener('click',()=>{
   const id=selection?.id,region=doc.regions.find(r=>r.id===id);
   if(!region){status('Select a terrain region before scattering scenery.');return;}
