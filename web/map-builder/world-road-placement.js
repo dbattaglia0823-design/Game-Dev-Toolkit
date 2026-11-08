@@ -133,7 +133,7 @@ export function placeBesideRoad(doc,input,{snap=true,align=true,maxSnapDistance=
   let best=null;
   const candidates=[0,1,-1,2,-2,3,-3];
   // Prioritize the requested side; alternate if it is outside the map or blocked.
-  for(const side of [primarySide,-primarySide]){
+  search: for(const side of [primarySide,-primarySide]){
     for(const along of candidates){
       for(const extra of [0,20,50,95,150,230]){
         const p={
@@ -145,7 +145,7 @@ export function placeBesideRoad(doc,input,{snap=true,align=true,maxSnapDistance=
         const penalty=side===primarySide?0:45;
         const score=dist+penalty;
         if(!best||score<best.score)best={...p,side,score};
-        if(along===0&&extra===0&&side===primarySide)break;
+        if(along===0&&extra===0&&side===primarySide)break search;
       }
     }
   }
