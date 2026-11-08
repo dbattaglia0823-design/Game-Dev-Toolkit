@@ -473,7 +473,7 @@ $('export-png').addEventListener('click',()=>{
 $('export-godot').addEventListener('click',async()=>{
   const button=$('export-godot');button.disabled=true;
   try {
-    const response=await fetch('../../godot/map-kit/map_loader.gd');
+    const response=await fetch('./map_loader.gd');
     if(!response.ok)throw new Error('Could not load Godot runtime file; serve the toolkit from a web server.');
     const adapter=await response.text();
     const result=buildGodotZip(doc,createStarterAtlas(doc.tileSize).toDataURL('image/png'),adapter);
