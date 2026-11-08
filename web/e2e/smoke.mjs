@@ -230,13 +230,8 @@ try{
     await page.mouse.click(bounds.x+bounds.width*x,bounds.y+bounds.height*y);
   }
   async function exportWorld() {
-    const result=page.waitForEvent('download',{timeout:6000});
-    await page.locator('#export-world').click();
-    const file=await result.catch(async err=>{
-      throw new Error('World JSON export failed: '+await page.locator('#status').innerText()+
-        '; page errors: '+JSON.stringify(errors)+'; '+err.message);
-    });
-    return JSON.parse(await readFile(await file.path(),'utf8'));
+    // Read a detached copy of editor state. Repeated physical downloads can be throttled by Chromium.
+    return await page.evaluate(()=>window.GDTWorldForge.getSnapshot());
   }
   await page.locator('[data-tool="road"]').click();
   await clickWorld(.3,.43);
@@ -250,6 +245,12 @@ try{
   assert.equal(world.roads[0].points.length,3);
   assert.equal(world.roads[0].smooth,true);
   assert.equal(world.tileSize,undefined,'New world must not be tile-based');
+  // One actual browser download still confirms the portable editable JSON output works.
+  const jsonExportPromise=page.waitForEvent('download');
+  await page.locator('#export-world').click();
+  const worldJsonDownload=await jsonExportPromise;
+  assert.match(worldJsonDownload.suggestedFilename(),/coastal-smoke.world.json/);
+  assert.deepEqual(JSON.parse(await readFile(await worldJsonDownload.path(),'utf8')),world);
   // Add points to a *previously placed* curved road rather than drawing a new road.
   await page.locator('[data-tool="select"]').click();
   await page.locator('#entity-list .entity-row').filter({hasText:'City road'}).click();
