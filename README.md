@@ -2,6 +2,10 @@
 
 Reusable foundations for Godot 4 and browser games, including a function-first UI layout system, runtime adapters, a visual component showcase, tested web utilities and a Godot demonstration. The toolkit is not a full game engine.
 
+## Open the toolkit
+
+Visit the [GitHub Pages Tool Hub](index.html) to launch every browser-based builder, exporter, validator and demonstration from one main menu. The homepage includes quick access to the 2D Map Builder and Functional UI Builder, category navigation and tool search. Pages must publish from the repository root so `index.html` is the landing page; browser-saved work stays local unless exported.
+
 ## Functional UI Builder (recommended)
 
 Use the [Functional UI Builder](web/builder/index.html) to design **control placement, semantics, actions and data bindings** without dictating artwork or game-specific mechanics. Export a version 2 `*.layout.json` plus `*.contract.json`, then give both to Codex for the target game.
