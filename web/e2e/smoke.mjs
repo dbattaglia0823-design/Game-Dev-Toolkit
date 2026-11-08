@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {readFile} from 'node:fs/promises';
+import {sampleRoad} from '../map-builder/world-geometry.js';
 
 const origin=process.env.GDT_TEST_ORIGIN || 'http://127.0.0.1:8765';
 const browser=await chromium.launch({headless:true});
@@ -229,10 +230,8 @@ try{
     await page.mouse.click(bounds.x+bounds.width*x,bounds.y+bounds.height*y);
   }
   async function exportWorld() {
-    const result=page.waitForEvent('download');
-    await page.locator('#export-world').click();
-    const file=await result;
-    return JSON.parse(await readFile(await file.path(),'utf8'));
+    // Read a detached copy of editor state. Repeated physical downloads can be throttled by Chromium.
+    return await page.evaluate(()=>window.GDTWorldForge.getSnapshot());
   }
   await page.locator('[data-tool="road"]').click();
   await clickWorld(.3,.43);
@@ -246,6 +245,51 @@ try{
   assert.equal(world.roads[0].points.length,3);
   assert.equal(world.roads[0].smooth,true);
   assert.equal(world.tileSize,undefined,'New world must not be tile-based');
+  // One actual browser download still confirms the portable editable JSON output works.
+  const jsonExportPromise=page.waitForEvent('download');
+  await page.locator('#export-world').click();
+  const worldJsonDownload=await jsonExportPromise;
+  assert.match(worldJsonDownload.suggestedFilename(),/coastal-smoke.world.json/);
+  assert.deepEqual(JSON.parse(await readFile(await worldJsonDownload.path(),'utf8')),world);
+  // Add points to a *previously placed* curved road rather than drawing a new road.
+  await page.locator('[data-tool="select"]').click();
+  await page.locator('#entity-list .entity-row').filter({hasText:'City road'}).click();
+  await page.locator('#fit').click();
+  await page.locator('#insert-road-point').click();
+  assert.equal(await page.locator('#insert-road-point').getAttribute('aria-pressed'),'true');
+  await clickWorld(.42,.39);
+  world=await exportWorld();
+  assert.equal(world.roads[0].points.length,4,'Inspector Insert button must add road points');
+  await page.locator('#extend-road-end').click();
+  await clickWorld(.79,.65);
+  world=await exportWorld();
+  assert.equal(world.roads[0].points.length,5,'Extend road end must append a control point');
+  assert.equal(await page.locator('#point-coordinate-fields').isVisible(),true);
+  const editedPointX=Number((await page.locator('#inspect-point-x').inputValue()));
+  await page.locator('#inspect-point-x').fill(String(editedPointX+3));
+  await page.locator('#inspect-point-x').dispatchEvent('change');
+  world=await exportWorld();
+  assert.equal(world.roads[0].points.at(-1).x,editedPointX+3,'Numeric point coordinates must persist');
+  await page.locator('#duplicate-entity').click();
+  assert.equal((await exportWorld()).roads.length,2,'Selected road can be duplicated');
+  await page.locator('#undo-world').click();
+  assert.equal((await exportWorld()).roads.length,1,'One undo restores original road');
+  await page.locator('#entity-list .entity-row').filter({hasText:'City road'}).click();
+  await page.locator('#fit').click();
+  // Shift-click the actual sampled road centerline (not an approximate pixel location).
+  world=await exportWorld();
+  const onRoad=sampleRoad(world.roads[0].points,world.roads[0].smooth,9);
+  const insertAt=onRoad[Math.floor(onRoad.length*.66)];
+  await page.locator('#world-canvas').scrollIntoViewIfNeeded();
+  const roadBox=await page.locator('#world-canvas').boundingBox();
+  const fitted=await page.locator('#viewport').evaluate(el=>({width:el.clientWidth,height:el.clientHeight}));
+  const roadZoom=Math.min((fitted.width-36)/world.world.width,(fitted.height-36)/world.world.height);
+  const px=roadBox.x+(fitted.width-world.world.width*roadZoom)/2+insertAt.x*roadZoom;
+  const py=roadBox.y+(fitted.height-world.world.height*roadZoom)/2+insertAt.y*roadZoom;
+  await page.keyboard.down('Shift');
+  await page.mouse.click(px,py);
+  await page.keyboard.up('Shift');
+  assert.equal((await exportWorld()).roads[0].points.length,6,'Shift-click inserts road point');
   await page.locator('[data-tool="terrain"]').click();
   await page.locator('#biome').selectOption('forest');
   await clickWorld(.32,.37);await clickWorld(.47,.35);await clickWorld(.47,.49);await clickWorld(.32,.50);
@@ -269,6 +313,52 @@ try{
   world=await exportWorld();
   assert.equal(world.assets.length,1,'Imported artwork must be embedded');
   assert.equal(world.props.at(-1).assetId,world.assets[0].id,'Prop must reference selected artwork');
+  // Existing scenery can be duplicated, moved, resized and rotated.
+  await page.locator('[data-tool="select"]').click();
+  await page.locator('#entity-list .entity-row').filter({hasText:'garage'}).last().click();
+  await page.locator('#duplicate-entity').click();
+  assert.equal((await exportWorld()).props.length,world.props.length+1,'Duplicate must preserve existing scenery');
+  const originalCloneX=(await exportWorld()).props.at(-1).x;
+  await page.locator('#nudge-step').fill('20');
+  await page.locator('[data-nudge="1,0"]').click();
+  assert.equal((await exportWorld()).props.at(-1).x,originalCloneX+20);
+  await page.locator('#rotate-prop-right').click();
+  assert.equal((await exportWorld()).props.at(-1).rotation,15);
+  await page.locator('#scale-prop-up').click();
+  assert.equal((await exportWorld()).props.at(-1).scale,1.1);
+  // Hold the left mouse button down to continuously spray scenery; one stroke, one history entry.
+  await page.locator('#scenery-paint').check();
+  await page.locator('#brush-radius').fill('70');
+  await page.locator('#brush-spacing').fill('24');
+  await page.locator('#brush-density').selectOption('6');
+  await page.locator('[data-tool="prop"]').click();
+  await page.locator('#fit').click();
+  const beforeBrush=(await exportWorld()).props.length;
+  await page.locator('#world-canvas').scrollIntoViewIfNeeded();
+  let brushBox=await page.locator('#world-canvas').boundingBox();
+  const startBrush={x:brushBox.x+brushBox.width*.66,y:brushBox.y+brushBox.height*.68};
+  await page.mouse.move(startBrush.x,startBrush.y);
+  await page.mouse.down();
+  await page.waitForTimeout(360);
+  await page.mouse.move(startBrush.x+30,startBrush.y+28,{steps:7});
+  await page.waitForTimeout(180);
+  await page.mouse.up();
+  const afterBrush=(await exportWorld()).props.length;
+  assert.ok(afterBrush>beforeBrush,'Holding the pointer should scatter multiple scenery objects');
+  await page.locator('#undo-world').click();
+  assert.equal((await exportWorld()).props.length,beforeBrush,'One undo reverses the whole scenery stroke');
+  await page.locator('#redo-world').click();
+  assert.equal((await exportWorld()).props.length,afterBrush);
+  await page.locator('#scenery-erase').check();
+  await page.locator('#world-canvas').scrollIntoViewIfNeeded();
+  brushBox=await page.locator('#world-canvas').boundingBox();
+  await page.mouse.move(brushBox.x+brushBox.width*.66,brushBox.y+brushBox.height*.68);
+  await page.mouse.down();
+  await page.waitForTimeout(180);
+  await page.mouse.up();
+  assert.ok((await exportWorld()).props.length<afterBrush,'Brush eraser removes placed scenery');
+  await page.locator('#scenery-erase').uncheck();
+  await page.locator('#scenery-paint').uncheck();
   await page.locator('[data-tool="marker"]').click();
   await page.locator('#marker-type').selectOption('race_start');
   await clickWorld(.58,.63);

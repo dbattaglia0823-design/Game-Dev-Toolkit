@@ -134,3 +134,22 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 
 .map-heading #world-title{width:min(28vw,235px);min-width:110px;color:#e9eff7;font-weight:750;font-size:13px;background:transparent;border:1px solid transparent;padding:3px 5px;border-radius:6px}
 .map-heading #world-title:hover,.map-heading #world-title:focus{border-color:#ffffff4c;background:#172536}
+
+/* Detail editing and continuous scenery brush UI. */
+.world-page .scenery-brush-controls{padding-top:16px;border-top:1px solid #ffffff1a;margin-top:17px}
+.world-page .scenery-brush-controls h3{font-size:12px;color:#edb782;margin:0 0 9px}
+.world-page .scenery-brush-controls .check{margin:9px 0}
+.world-page .point-editor{margin:14px 0 12px;padding:11px;background:#0e1c2b;border:1px solid #ffffff20;border-radius:10px}
+.world-page .point-editor-title{display:block;margin-bottom:5px;color:#ffd1a1;font-size:12px}
+.world-page .point-editor .inspector-actions{gap:5px}
+.world-page .point-editor .inspector-actions button{font-size:10px;min-width:70px;white-space:normal}
+.world-page .is-active,.world-page .gdt-btn[aria-pressed="true"]{background:#74502b!important;border-color:#f0ad6d!important;color:#fff0d5!important}
+.world-page #insert-hint{min-height:25px;margin:8px 0 0}
+.world-page .transform-editor{padding-top:12px;border-top:1px solid #ffffff1a;margin-top:13px}
+.world-page .nudge-buttons{display:flex;flex-wrap:wrap;gap:5px}
+.world-page .nudge-buttons .gdt-btn{flex:1;min-width:37px;font-size:16px}
+.world-page #prop-transform-buttons{margin-top:8px}
+.world-page #prop-transform-buttons .gdt-btn{font-size:10px;min-width:0}
+.world-page .compact-tip{margin-top:10px;padding-top:0;border:0}
+.world-page #point-coordinate-fields{padding:8px;border:1px solid #4d687a66;background:#102232;border-radius:9px}
+.world-page #point-help{font-size:10px}

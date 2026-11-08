@@ -3,6 +3,10 @@ import {
   createEntity,addSpriteAsset,updateEntity,removeEntity,reorderEntity,moveControlPoint,insertControlPoint,
   deleteControlPoint,scatterVegetation
 } from './world-model.js';
+import {
+  roadInsertCandidate,regionInsertCandidate,insertShapePoint,translateEntity,duplicateEntity,
+  paintSceneryBrush,eraseSceneryBrush
+} from './world-edit-tools.js';
 import {distance,clamp,nearestOnPath,pointInPolygon,regionAt,sampleRoad} from './world-geometry.js';
 import {drawWorld,drawEditorOverlay} from './world-renderer.js';
 import {buildWorldZip,worldSlug} from './world-export.js';
@@ -11,7 +15,7 @@ const $=id=>document.getElementById(id);
 const viewport=$('viewport'),canvas=$('world-canvas'),ctx=canvas.getContext('2d');
 const mini=$('minimap'),miniCtx=mini.getContext('2d');
 const AUTO='gdt.world-forge.autosave.v2',SAVE='gdt.world-forge.manual.v2';
-let doc=demoWorld(),tool='select',selection=null,draft=null,gesture=null,hover=null;
+let doc=demoWorld(),tool='select',selection=null,draft=null,gesture=null,hover=null,pointInsertMode=null;
 let zoom=.25,offsetX=0,offsetY=0,panSpace=false,dirty=false,frame=0,autosaveTimer=0;
 let undoStack=[],redoStack=[];
 const minZoom=.045,maxZoom=5;
@@ -47,7 +51,11 @@ function render(){
   const bounds={minX:Math.max(0,-offsetX/zoom),minY:Math.max(0,-offsetY/zoom),
     maxX:Math.min(doc.world.width,(w-offsetX)/zoom),maxY:Math.min(doc.world.height,(h-offsetY)/zoom)};
   drawWorld(ctx,doc,{...currentDisplay(),bounds,quality:zoom<.08?0:1});
-  drawEditorOverlay(ctx,doc,{selection,hover:draft?hover:null,draft,zoom,showBoundaries:$('show-boundaries').checked});
+  drawEditorOverlay(ctx,doc,{selection,hover:draft?hover:null,draft,zoom,
+    insertMode:pointInsertMode,insertHover:tool==='select'?hover:null,
+    brushPreview:tool==='prop'&&($('scenery-paint').checked||$('scenery-erase').checked)&&hover
+      ?{position:hover,radius:Number($('brush-radius').value),erase:$('scenery-erase').checked}:null,
+    showBoundaries:$('show-boundaries').checked});
   ctx.restore();
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.strokeStyle='#f5c29699';ctx.lineWidth=1;ctx.strokeRect(offsetX+.5,offsetY+.5,doc.world.width*zoom,doc.world.height*zoom);
@@ -121,23 +129,50 @@ function afterHistory(message){
 function setTool(next){
   if(!['select','road','terrain','prop','marker','pan'].includes(next))return;
   if(draft)cancelDraft(false);
+  if(gesture?.mode==='spray')finishSpray(false);
+  if(next!=='select')pointInsertMode=null;
   tool=next;
   document.querySelectorAll('[data-tool]').forEach(button=>{
     const on=button.dataset.tool===next;button.classList.toggle('active',on);button.setAttribute('aria-pressed',String(on));
   });
   status({
-    select:'Select a road or shape. Drag its control points to refine curves and coastlines.',
+    select:'Select a road to insert points, drag its control handles, or Alt-drag the entire shape.',
     road:'Click to add road control points. Double-click or Enter to finish; road endpoints snap near existing roads.',
     terrain:'Click around a terrain area. Double-click or Enter to close the polygon.',
-    prop:'Click to place the chosen tree, building or scenery asset.',
+    prop:'Click for a single prop, or enable hold-and-drag to paint or erase scenery.',
     marker:'Click to place a gameplay marker.',
     pan:'Drag to move around the open world.'
   }[next]);
   requestRender();
 }
 function setSelection(id,point=-1){
+  if(id!==selection?.id)pointInsertMode=null;
   selection=id?{id,point}:null;
   refreshHeader();refreshInspector();refreshEntities();requestRender();
+}
+function selectedShape(){
+  const found=selection?getEntity(doc,selection.id):null;
+  return found&&(found.type==='roads'||found.type==='regions')?found:null;
+}
+function choosePointInsert(mode){
+  const found=selectedShape();
+  if(!found){status('Select an existing road or terrain region first.');return;}
+  if(mode!=='between'&&found.type!=='roads')return;
+  pointInsertMode=pointInsertMode?.id===selection.id&&pointInsertMode?.mode===mode?null:{id:selection.id,mode};
+  refreshInspector();requestRender();
+  status(pointInsertMode
+    ?mode==='between'?'Click directly on the selected curve to insert a point.':'Click anywhere in the world to extend this end of the selected road.'
+    :'Point insertion canceled.');
+}
+function insertSelectedPoint(p,mode='between'){
+  const found=selectedShape();if(!found)return false;
+  const threshold=clamp(14/zoom,17,75);
+  try{
+    const result=insertShapePoint(doc,found.item.id,worldPoint(p.x,p.y),{mode,maxDistance:threshold});
+    const before=doc;doc=result.doc;pointInsertMode=null;makeSnapshot(before,'Added control point '+(result.index+1)+'. Drag it to reshape the '+(found.type==='roads'?'road':'coastline')+'.');
+    setSelection(found.item.id,result.index);
+    return true;
+  }catch(e){errorMessage(e);return false;}
 }
 function hitTest(p){
   const radius=clamp(12/zoom,9,48);
@@ -177,7 +212,22 @@ function refreshInspector(){
   $('point-help').hidden=!(type==='roads'||type==='regions');
   $('remove-point').hidden=!(type==='roads'||type==='regions');
   $('remove-point').disabled=selection.point<0;
+  const shape=type==='roads'||type==='regions';
+  $('point-coordinate-fields').hidden=!shape||selection.point<0;
+  if(shape&&selection.point>=0){
+    $('inspect-point-x').value=found.item.points[selection.point].x;
+    $('inspect-point-y').value=found.item.points[selection.point].y;
+  }
+  $('prop-transform-buttons').hidden=type!=='props';
   if(type==='roads'){
+    $('road-point-count').textContent=item.points.length+' road points'+(selection.point>=0?' · editing point '+(selection.point+1):'');
+    for(const [id,mode] of [['insert-road-point','between'],['extend-road-start','start'],['extend-road-end','end']]){
+      const button=$(id);const active=pointInsertMode?.id===item.id&&pointInsertMode.mode===mode;
+      button.setAttribute('aria-pressed',String(active));button.classList.toggle('is-active',active);
+    }
+    $('insert-hint').textContent=pointInsertMode?.id===item.id
+      ?(pointInsertMode.mode==='between'?'Click the selected road line to insert a control point.':'Click a new endpoint to extend the road.')
+      :'Insert points on the curve, or extend either endpoint. Shift-click a selected road to insert directly.';
     $('inspect-road-class').value=item.roadClass;$('inspect-road-surface').value=item.surface;
     $('inspect-road-width').value=item.width;$('inspect-road-lanes').value=item.lanes;
     $('inspect-road-shoulder').value=item.shoulder;$('inspect-road-smooth').checked=item.smooth;
@@ -234,7 +284,8 @@ function refreshSpriteLists(){
 function refreshUI(){refreshSpriteLists();refreshHeader();refreshInspector();refreshEntities();requestRender();}
 function startWorld(world,message){
   clearTimeout(autosaveTimer);
-  doc=normalizeWorld(world);selection=null;draft=null;gesture=null;
+  if(gesture?.mode==='spray')clearInterval(gesture.timer);
+  doc=normalizeWorld(world);selection=null;pointInsertMode=null;draft=null;gesture=null;
   undoStack=[];redoStack=[];dirty=false;
   refreshUI();fit();status(message);
   try{localStorage.setItem(AUTO,serializeWorld(doc));}
@@ -274,6 +325,60 @@ function addDraftPoint(p,detail){
   refreshHeader();requestRender();
   status(draft.points.length+' control points · Enter to finish · Esc to cancel');
 }
+/** Paint or erase with continuous sampling while the pointer is held.
+ * A full press/drag is committed once on pointerup, not on each spray tick.
+ */
+function brushSettings(){
+  return {type:$('prop-type').value,assetId:$('prop-asset').value,
+    radius:Number($('brush-radius').value),spacing:Number($('brush-spacing').value),
+    count:Number($('brush-density').value),variation:$('brush-variation').checked,
+    avoidRoads:$('brush-avoid-roads').checked,avoidWater:$('brush-avoid-water').checked};
+}
+function sprayAt(position){
+  if(gesture?.mode!=='spray'||!position)return;
+  const before=doc,settings=brushSettings();
+  try{
+    doc=gesture.erase?eraseSceneryBrush(doc,position,settings.radius):paintSceneryBrush(doc,position,settings);
+    if(doc!==before){gesture.changed=true;gesture.lastCount=doc.props.length;requestRender();}
+    if(doc.props.length>=4000&&!gesture.erase)status('Scenery limit reached (4,000 objects).');
+  }catch(e){errorMessage(e);finishSpray(true);}
+}
+function beginSpray(event,p){
+  const settings=brushSettings();
+  if(!Number.isFinite(settings.radius)||settings.radius<8||settings.radius>250||
+     !Number.isFinite(settings.spacing)||settings.spacing<5||settings.spacing>200){
+    status('Brush radius must be 8–250 and spacing must be 5–200.');return;
+  }
+  gesture={mode:'spray',before:doc,last:worldPoint(p.x,p.y),erase:$('scenery-erase').checked,changed:false,
+    lastCount:doc.props.length,pointerId:event.pointerId,timer:null};
+  canvas.setPointerCapture(event.pointerId);
+  sprayAt(gesture.last);
+  if(gesture?.mode!=='spray')return;
+  gesture.timer=setInterval(()=>{if(gesture?.mode==='spray')sprayAt(gesture.last);},110);
+  status(gesture.erase?'Hold and drag to remove scenery.':'Hold and drag to scatter scenery.');
+}
+function continueSpray(p){
+  if(gesture?.mode!=='spray')return;
+  if(p.x<0||p.y<0||p.x>doc.world.width||p.y>doc.world.height){
+    gesture.last=null;return;
+  }
+  const to=worldPoint(p.x,p.y);
+  const from=gesture.last;
+  const radius=Number($('brush-radius').value);
+  if(from){
+    const steps=Math.min(35,Math.ceil(distance(from,to)/Math.max(8,radius*.65)));
+    for(let i=1;i<=steps;i++)sprayAt({x:from.x+(to.x-from.x)*i/steps,y:from.y+(to.y-from.y)*i/steps});
+  }else sprayAt(to);
+  if(gesture?.mode==='spray')gesture.last=to;
+}
+function finishSpray(cancel=false){
+  if(gesture?.mode!=='spray')return;
+  const current=gesture;clearInterval(current.timer);gesture=null;
+  if(cancel){doc=current.before;refreshUI();status('Scenery stroke canceled.');return;}
+  if(current.changed){
+    makeSnapshot(current.before,(current.erase?'Erased ':'Painted ')+Math.abs(doc.props.length-current.before.props.length)+' scenery objects. One undo step.');
+  }else{requestRender();status('No scenery changed. Try a smaller spacing or different location.');}
+}
 canvas.addEventListener('contextmenu',event=>{event.preventDefault();if(draft)finishDraft();});
 canvas.addEventListener('pointerdown',event=>{
   if(![0,1,2].includes(event.button))return;
@@ -287,6 +392,7 @@ canvas.addEventListener('pointerdown',event=>{
   canvas.focus({preventScroll:true});
   if(tool==='road'||tool==='terrain'){addDraftPoint(p,event.detail);return;}
   if(tool==='prop'){
+    if($('scenery-paint').checked||$('scenery-erase').checked){beginSpray(event,p);return;}
     const type=$('prop-type').value;
     change(d=>createEntity(d,'props',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,scale:1,rotation:0,assetId:$('prop-asset').value}),'Placed '+type.replace(/_/g,' ')+'.');
     setSelection(doc.props.at(-1)?.id);return;
@@ -297,15 +403,28 @@ canvas.addEventListener('pointerdown',event=>{
     setSelection(doc.markers.at(-1)?.id);return;
   }
   if(tool==='select'){
+    const current=selectedShape();
+    if(pointInsertMode?.id===selection?.id&&current){
+      insertSelectedPoint(p,pointInsertMode.mode);return;
+    }
+    if(event.shiftKey&&current){
+      insertSelectedPoint(p,'between');return;
+    }
+    if(event.altKey&&current){
+      const hit=hitTest(p);
+      if(hit?.id===selection.id){
+        gesture={mode:'shape',before:doc,id:selection.id,start:p};
+        canvas.setPointerCapture(event.pointerId);
+        return;
+      }
+    }
     // Double-click an existing road/poly edge to insert a new handle.
     if(event.detail>=2 && selection){
       const found=getEntity(doc,selection.id);
       if(found&&['roads','regions'].includes(found.type)){
-        const path=found.item.points,nearest=nearestOnPath(p,found.type==='regions'?[...path,path[0]]:path);
-        if(nearest.distance<Math.max(24,22/zoom)){
-          const index=nearest.segment+1;
-          change(d=>insertControlPoint(d,found.item.id,index,worldPoint(p.x,p.y)),'New control point added.');
-          setSelection(found.item.id,index);return;
+        const near=found.type==='roads'?roadInsertCandidate(found.item,p):regionInsertCandidate(found.item,p);
+        if(near?.distance<clamp(14/zoom,17,75)){
+          insertSelectedPoint(p,'between');return;
         }
       }
     }
@@ -327,9 +446,13 @@ canvas.addEventListener('pointermove',event=>{
   hover=(p.x>=0&&p.y>=0&&p.x<=doc.world.width&&p.y<=doc.world.height)?worldPoint(p.x,p.y):null;
   $('coordinates').textContent=hover?'x '+Math.round(hover.x)+' / y '+Math.round(hover.y):'Outside world';
   if(gesture){
-    if(gesture.mode==='pan'){offsetX=gesture.startX+p.sx-gesture.sx;offsetY=gesture.startY+p.sy-gesture.sy;}
+    if(gesture.mode==='spray'){continueSpray(p);}
+    else if(gesture.mode==='pan'){offsetX=gesture.startX+p.sx-gesture.sx;offsetY=gesture.startY+p.sy-gesture.sy;}
     else if(gesture.mode==='control'){
       try{doc=moveControlPoint(doc,gesture.id,gesture.index,worldPoint(p.x,p.y));}
+      catch(e){errorMessage(e);}
+    }else if(gesture.mode==='shape'){
+      try{doc=translateEntity(gesture.before,gesture.id,p.x-gesture.start.x,p.y-gesture.start.y);}
       catch(e){errorMessage(e);}
     }else if(gesture.mode==='entity'){
       try{
@@ -342,9 +465,16 @@ canvas.addEventListener('pointermove',event=>{
 });
 function pointerEnd(event,wasCancelled=false){
   if(!gesture)return;
+  if(gesture.mode==='spray'){
+    const pointerId=gesture.pointerId;
+    finishSpray(wasCancelled);
+    if(canvas.hasPointerCapture(pointerId))canvas.releasePointerCapture(pointerId);
+    return;
+  }
   const current=gesture;gesture=null;
   if(wasCancelled && current.before){doc=current.before;refreshUI();}
-  else if(current.before && current.before!==doc)makeSnapshot(current.before,'Moved '+(current.mode==='control'?'control point':'object')+'.');
+  else if(current.before && current.before!==doc)makeSnapshot(current.before,
+    'Moved '+(current.mode==='control'?'control point':current.mode==='shape'?'entire shape':'object')+'.');
   else requestRender();
   if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
 }
@@ -367,7 +497,12 @@ document.addEventListener('keydown',event=>{
   if(event.code==='Space'){event.preventDefault();panSpace=true;return;}
   if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();event.shiftKey?redo():undo();return;}
   if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y'){event.preventDefault();redo();return;}
+  if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='d'&&selection){
+    event.preventDefault();duplicateSelected();return;
+  }
   if(event.ctrlKey||event.metaKey||event.altKey)return;
+  if(event.key==='Escape'&&gesture?.mode==='spray'){finishSpray(true);return;}
+  if(event.key==='Escape'&&pointInsertMode){pointInsertMode=null;refreshInspector();requestRender();status('Point insertion canceled.');return;}
   if(event.key==='Escape'&&draft){cancelDraft();return;}
   if(event.key==='Enter'&&draft){event.preventDefault();finishDraft();return;}
   if(event.key==='Delete'&&selection){event.preventDefault();deleteSelected();return;}
@@ -378,13 +513,61 @@ document.addEventListener('keydown',event=>{
   if(next){event.preventDefault();setTool(next);}
 });
 document.addEventListener('keyup',event=>{if(event.code==='Space')panSpace=false;});
-window.addEventListener('blur',()=>{panSpace=false;});
+window.addEventListener('blur',()=>{panSpace=false;if(gesture?.mode==='spray')finishSpray();});
 document.querySelectorAll('[data-tool]').forEach(button=>button.addEventListener('click',()=>setTool(button.dataset.tool)));
 $('finish-shape').addEventListener('click',finishDraft);$('cancel-shape').addEventListener('click',()=>cancelDraft());
 $('undo-world').addEventListener('click',undo);$('redo-world').addEventListener('click',redo);
 $('zoom-in').addEventListener('click',()=>setZoom(zoom*1.3));
 $('zoom-out').addEventListener('click',()=>setZoom(zoom/1.3));
 $('fit').addEventListener('click',fit);
+for(const [id,mode] of [['insert-road-point','between'],['extend-road-start','start'],['extend-road-end','end']])
+  $(id).addEventListener('click',()=>choosePointInsert(mode));
+for(const [id,axis] of [['inspect-point-x','x'],['inspect-point-y','y']]){
+  $(id).addEventListener('change',event=>{
+    const found=selectedShape();if(!found||selection.point<0)return;
+    const numeric=Number(event.target.value);
+    if(!Number.isFinite(numeric)||numeric<0||numeric>(axis==='x'?doc.world.width:doc.world.height)){
+      errorMessage(new RangeError('Point coordinate is outside the world'));refreshInspector();return;
+    }
+    const original=found.item.points[selection.point];
+    if(!change(d=>moveControlPoint(d,found.item.id,selection.point,{...original,[axis]:numeric}),
+      'Changed point '+(selection.point+1)+' '+axis.toUpperCase()+'.'))refreshInspector();
+  });
+}
+function duplicateSelected(){
+  if(!selection)return;
+  try{
+    const previous=doc;
+    const copy=duplicateEntity(doc,selection.id);
+    doc=copy.doc;pointInsertMode=null;
+    makeSnapshot(previous,'Duplicated selected object.');
+    setSelection(copy.id);
+  }catch(e){errorMessage(e);}
+}
+$('duplicate-entity').addEventListener('click',duplicateSelected);
+for(const button of document.querySelectorAll('[data-nudge]')){
+  button.addEventListener('click',()=>{
+    if(!selection)return;
+    const step=Number($('nudge-step').value);
+    if(!Number.isFinite(step)||step<1||step>500){status('Move step must be 1–500.');return;}
+    const [x,y]=button.dataset.nudge.split(',').map(Number);
+    change(d=>translateEntity(d,selection.id,x*step,y*step),'Moved selected object.');
+  });
+}
+for(const [id,changeBy] of [['rotate-prop-left',-15],['rotate-prop-right',15]]){
+  $(id).addEventListener('click',()=>{
+    const found=selection?getEntity(doc,selection.id):null;if(found?.type!=='props')return;
+    const next=(((found.item.rotation+changeBy+180)%360+360)%360)-180;
+    change(d=>updateEntity(d,selection.id,{rotation:next}),'Rotated scenery.');
+  });
+}
+for(const [id,changeBy] of [['scale-prop-down',-.1],['scale-prop-up',.1]]){
+  $(id).addEventListener('click',()=>{
+    const found=selection?getEntity(doc,selection.id):null;if(found?.type!=='props')return;
+    const next=Math.round(clamp(found.item.scale+changeBy,.25,5)*100)/100;
+    change(d=>updateEntity(d,selection.id,{scale:next}),'Resized scenery.');
+  });
+}
 function deleteSelected(){
   if(!selection)return;
   const found=getEntity(doc,selection.id);
@@ -403,6 +586,17 @@ $('remove-point').addEventListener('click',()=>{
 });
 $('move-forward').addEventListener('click',()=>{if(selection)change(d=>reorderEntity(d,selection.id,1),'Changed draw order.');});
 $('move-backward').addEventListener('click',()=>{if(selection)change(d=>reorderEntity(d,selection.id,-1),'Changed draw order.');});
+$('scenery-erase').addEventListener('change',event=>{
+  if(event.target.checked)$('scenery-paint').checked=true;
+  if(event.target.checked)setTool('prop');
+  requestRender();
+});
+$('scenery-paint').addEventListener('change',event=>{
+  if(!event.target.checked)$('scenery-erase').checked=false;
+  requestRender();
+});
+for(const id of ['brush-radius','brush-spacing','brush-density','brush-variation','brush-avoid-roads','brush-avoid-water'])
+  $(id).addEventListener('input',requestRender);
 $('scatter').addEventListener('click',()=>{
   const id=selection?.id,region=doc.regions.find(r=>r.id===id);
   if(!region){status('Select a terrain region before scattering scenery.');return;}
@@ -532,5 +726,7 @@ $('import-sprite').addEventListener('change',async event=>{
 const resize=new ResizeObserver(requestRender);resize.observe(viewport);
 window.addEventListener('resize',requestRender);
 try{const stored=localStorage.getItem(AUTO);if(stored)doc=parseWorld(stored);}catch{}
+// Read-only integration/testing API. Callers cannot mutate editor state through this snapshot.
+window.GDTWorldForge=Object.freeze({getSnapshot:()=>structuredClone(doc)});
 refreshUI();
 requestAnimationFrame(()=>{fit();status('Freeform world loaded. Select a road or draw one with Road (R).');});

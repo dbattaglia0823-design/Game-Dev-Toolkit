@@ -55,6 +55,7 @@
       <div class="field"><label for="road-shoulder">Shoulder width</label><input id="road-shoulder" type="range" min="0" max="16" value="5"><output id="shoulder-label">5 m</output></div>
       <label class="check"><input id="road-smooth" type="checkbox" checked> Smooth Bézier-style curves</label>
       <label class="check"><input id="road-markings" type="checkbox" checked> Lane lines / road edges</label>
+      <p class="sidebar-tip compact-tip">Select an existing road to add or extend its control points from the Inspector. Shift-click the selected road to insert a point immediately.</p>
     </div>
     <div class="settings-group">
       <h3>Terrain & biomes</h3>
@@ -91,6 +92,21 @@
         <input id="import-sprite" type="file" accept="image/png,image/webp" hidden>
       </label>
       <p class="asset-hint">Replace the built-in scenery artwork with your own top-down sprites. Imported images travel with the world file.</p>
+      <div class="scenery-brush-controls" aria-labelledby="brush-title">
+        <h3 id="brush-title">Scenery painting</h3>
+        <label class="check"><input id="scenery-paint" type="checkbox"> Hold and drag to scatter</label>
+        <label class="check"><input id="scenery-erase" type="checkbox"> Erase scenery with brush</label>
+        <div class="double-fields">
+          <div class="field"><label for="brush-radius">Brush radius (world units)</label><input id="brush-radius" type="number" min="8" max="250" value="70"></div>
+          <div class="field"><label for="brush-spacing">Object spacing</label><input id="brush-spacing" type="number" min="5" max="200" value="30"></div>
+        </div>
+        <div class="field"><label for="brush-density">Scenery per spray interval</label>
+          <select id="brush-density"><option value="1">Sparse · 1</option><option value="3" selected>Medium · 3</option><option value="6">Dense · 6</option><option value="10">Very dense · 10</option></select></div>
+        <label class="check"><input id="brush-variation" type="checkbox" checked> Random size and rotation</label>
+        <label class="check"><input id="brush-avoid-roads" type="checkbox" checked> Keep roads clear</label>
+        <label class="check"><input id="brush-avoid-water" type="checkbox" checked> Avoid water</label>
+        <p class="asset-hint">Choose Scenery (P), enable hold-and-drag, then hold the left mouse button to scatter continuously—even without moving. One stroke is one undo step.</p>
+      </div>
       <div class="field"><label for="marker-type">Gameplay marker</label><select id="marker-type">
         <option value="player_spawn">Player spawn</option><option value="race_start">Race start</option><option value="checkpoint">Checkpoint</option>
         <option value="finish">Race finish</option><option value="garage">Garage</option><option value="dealership">Dealership</option>
@@ -113,7 +129,7 @@
     </div>
     <div id="viewport" class="viewport">
       <canvas id="world-canvas" tabindex="0" aria-label="Freeform world canvas. Click to draw roads, regions and place scenery."></canvas>
-      <span class="canvas-help">Wheel to zoom · Space or middle-drag to pan · Enter finishes a shape</span>
+      <span class="canvas-help">Wheel zoom · Space/middle-drag pan · Shift-click road to add point · Alt-drag shape to move</span>
       <div class="view-tools">
         <button id="zoom-out" aria-label="Zoom out">−</button><span id="zoom-value">100%</span><button id="zoom-in" aria-label="Zoom in">+</button>
         <button id="fit" aria-label="Fit world to viewport" title="Fit entire world">Fit</button>
@@ -142,6 +158,16 @@
         <div class="field"><label for="inspect-road-shoulder">Shoulder</label><input id="inspect-road-shoulder" type="number" min="0" max="16"></div>
         <label class="check"><input id="inspect-road-smooth" type="checkbox"> Smooth curves</label>
         <label class="check"><input id="inspect-road-markings" type="checkbox"> Road markings</label>
+        <div class="point-editor">
+          <strong class="point-editor-title">Road geometry</strong>
+          <p class="muted-copy" id="road-point-count">Select a road to edit its control points.</p>
+          <div class="inspector-actions">
+            <button id="insert-road-point" class="gdt-btn" type="button">+ Insert on curve</button>
+            <button id="extend-road-start" class="gdt-btn" type="button">Extend start</button>
+            <button id="extend-road-end" class="gdt-btn" type="button">Extend end</button>
+          </div>
+          <p class="muted-copy" id="insert-hint">Select Insert, then click the existing curve. Shift-click also inserts a point.</p>
+        </div>
       </div>
       <div id="inspect-region" hidden>
         <div class="field"><label for="inspect-biome">Biome</label><select id="inspect-biome"><option value="grass">Grassland</option><option value="forest">Forest</option><option value="mountain">Mountain</option><option value="rock">Rock</option><option value="beach">Beach</option><option value="ocean">Ocean</option><option value="lake">Lake</option><option value="city">City</option><option value="desert">Desert</option><option value="farmland">Farmland</option></select></div>
@@ -164,11 +190,31 @@
         <div class="field"><label for="inspect-properties">Game properties (JSON)</label><textarea id="inspect-properties" rows="5" spellcheck="false"></textarea></div>
       </div>
       <div id="position-fields" class="double-fields" hidden><div class="field"><label for="inspect-x">X</label><input id="inspect-x" type="number"></div><div class="field"><label for="inspect-y">Y</label><input id="inspect-y" type="number"></div></div>
-      <p id="point-help" class="muted-copy" hidden>Double-click a segment to insert a point. Select a handle and use “Remove point” below.</p>
+      <div id="point-coordinate-fields" class="double-fields" hidden>
+        <div class="field"><label for="inspect-point-x">Point X</label><input id="inspect-point-x" type="number" step="0.1"></div>
+        <div class="field"><label for="inspect-point-y">Point Y</label><input id="inspect-point-y" type="number" step="0.1"></div>
+      </div>
+      <p id="point-help" class="muted-copy" hidden>Click a handle to edit its coordinates. Double-click or Shift-click near a line to add a point. Alt-drag the shape to reposition it.</p>
       <div class="inspector-actions">
         <button id="remove-point" class="gdt-btn" hidden>Remove point</button>
+        <button id="duplicate-entity" class="gdt-btn" type="button">Duplicate</button>
         <button id="move-forward" class="gdt-btn">Bring forward</button>
         <button id="move-backward" class="gdt-btn">Send backward</button>
+      </div>
+      <div class="transform-editor">
+        <div class="field"><label for="nudge-step">Move step (world units)</label><input id="nudge-step" type="number" min="1" max="500" value="20"></div>
+        <div class="nudge-buttons" aria-label="Move selected entity">
+          <button class="gdt-btn" data-nudge="0,-1" type="button">↑</button>
+          <button class="gdt-btn" data-nudge="-1,0" type="button">←</button>
+          <button class="gdt-btn" data-nudge="0,1" type="button">↓</button>
+          <button class="gdt-btn" data-nudge="1,0" type="button">→</button>
+        </div>
+        <div id="prop-transform-buttons" class="inspector-actions" hidden>
+          <button id="rotate-prop-left" class="gdt-btn" type="button">Rotate −15°</button>
+          <button id="rotate-prop-right" class="gdt-btn" type="button">Rotate +15°</button>
+          <button id="scale-prop-down" class="gdt-btn" type="button">Scale −</button>
+          <button id="scale-prop-up" class="gdt-btn" type="button">Scale +</button>
+        </div>
       </div>
     </section>
     <div class="panel-head section-divider"><h2>Entities</h2><span id="entities-count" class="micro-tag">—</span></div>

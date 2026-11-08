@@ -1,5 +1,6 @@
 import {boundsOf,clamp,pointInPolygon,roadIntersections,sampleRoad,scatterPoints,stringSeed,seeded} from './world-geometry.js';
 import {getEntity} from './world-model.js';
+import {roadInsertCandidate,regionInsertCandidate} from './world-edit-tools.js';
 
 /** Original illustrated vector preview. The map data contains geometry, not artwork copies. */
 export const BIOME_COLORS={
@@ -260,7 +261,10 @@ export function drawWorld(ctx,doc,options={}){
   ctx.restore();
 }
 /** Overlays are editor-only; exports intentionally omit editor node handles. */
-export function drawEditorOverlay(ctx,doc,{selection=null,draft=null,zoom=1,hover=null,showBoundaries=true}={}){
+export function drawEditorOverlay(ctx,doc,{
+  selection=null,draft=null,zoom=1,hover=null,insertMode=null,insertHover=null,
+  brushPreview=null,showBoundaries=true
+}={}){
   const radius=clamp(7/zoom,5,35);
   if(showBoundaries){
     for(const region of doc.regions){
@@ -280,13 +284,56 @@ export function drawEditorOverlay(ctx,doc,{selection=null,draft=null,zoom=1,hove
         ctx.strokeStyle='#ffc987';ctx.lineWidth=2/zoom;ctx.stroke();
       }
       if(type==='roads'||type==='regions'){
+        // Visible insertion affordances at the center of each editable span.
+        if(type==='roads'){
+          const sampled=sampleRoad(item.points,item.smooth,9);
+          let cursor=0;
+          for(let i=0;i<item.points.length-1;i++){
+            const length=Math.hypot(item.points[i+1].x-item.points[i].x,item.points[i+1].y-item.points[i].y);
+            const steps=item.smooth&&item.points.length>2?clamp(Math.ceil(length/9),2,80):1;
+            const midpoint=sampled[cursor+Math.ceil(steps/2)];
+            cursor+=steps;
+            if(!midpoint)continue;
+            const small=clamp(4/zoom,3,18);
+            ctx.beginPath();ctx.arc(midpoint.x,midpoint.y,small*1.65,0,Math.PI*2);
+            ctx.fillStyle='#213d45bb';ctx.fill();ctx.strokeStyle='#9fd8cc';ctx.lineWidth=1.6/zoom;ctx.stroke();
+            ctx.beginPath();ctx.moveTo(midpoint.x-small,midpoint.y);ctx.lineTo(midpoint.x+small,midpoint.y);
+            ctx.moveTo(midpoint.x,midpoint.y-small);ctx.lineTo(midpoint.x,midpoint.y+small);
+            ctx.strokeStyle='#e6ffee';ctx.lineWidth=1.4/zoom;ctx.stroke();
+          }
+        }
         item.points.forEach((p,i)=>{
           circle(ctx,p.x,p.y,radius+1/zoom,i===selection.point?'#ffe6bd':'#263c46');
           ctx.beginPath();ctx.arc(p.x,p.y,radius+1/zoom,0,Math.PI*2);ctx.lineWidth=2/zoom;
           ctx.strokeStyle='#ffe1af';ctx.stroke();
         });
       }
+      if(insertHover && (type==='roads'||type==='regions') &&
+         insertMode?.id===item.id){
+        const point=insertMode.mode==='between'
+          ?(type==='roads'?roadInsertCandidate(item,insertHover):regionInsertCandidate(item,insertHover))
+          :{x:insertHover.x,y:insertHover.y,distance:0};
+        const show=point && (insertMode.mode!=='between'||point.distance<clamp(14/zoom,17,75));
+        if(show){
+          circle(ctx,point.x,point.y,clamp(9/zoom,7,43),'#bff7e7');
+          ctx.beginPath();ctx.arc(point.x,point.y,clamp(9/zoom,7,43),0,Math.PI*2);
+          ctx.lineWidth=2/zoom;ctx.strokeStyle='#1c4141';ctx.stroke();
+          ctx.beginPath();const size=clamp(5/zoom,4,21);
+          ctx.moveTo(point.x-size,point.y);ctx.lineTo(point.x+size,point.y);
+          ctx.moveTo(point.x,point.y-size);ctx.lineTo(point.x,point.y+size);
+          ctx.lineWidth=2.4/zoom;ctx.strokeStyle='#173932';ctx.stroke();
+        }
+      }
     }
+  }
+  if(brushPreview?.position && Number.isFinite(brushPreview.radius)){
+    ctx.beginPath();ctx.arc(brushPreview.position.x,brushPreview.position.y,brushPreview.radius,0,Math.PI*2);
+    ctx.fillStyle=brushPreview.erase?'#ed69531f':'#82d3a51b';ctx.fill();
+    ctx.strokeStyle=brushPreview.erase?'#f29986':'#c1ffd4';
+    ctx.lineWidth=Math.max(1.5/zoom,.8);
+    ctx.setLineDash([Math.max(4/zoom,3),Math.max(3/zoom,2)]);ctx.stroke();ctx.setLineDash([]);
+    circle(ctx,brushPreview.position.x,brushPreview.position.y,clamp(3/zoom,2,16),
+      brushPreview.erase?'#f29a86':'#d5ffe0');
   }
   if(draft?.points?.length){
     const pts=hover?[...draft.points,hover]:draft.points;
