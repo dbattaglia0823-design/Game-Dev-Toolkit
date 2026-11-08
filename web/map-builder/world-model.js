@@ -210,6 +210,7 @@ export function scatterVegetation(doc,regionId,count=50,type='auto'){
   const newProps=[],occupied=new Set([...doc.props].map(p=>p.id));
   let n=doc.props.length+1;
   for(const p of points){
+    if(newProps.length>=count)break;
     while(occupied.has('prop-'+n))n++;
     const id='prop-'+n++;occupied.add(id);
     const initial=validEntity({id,name:propType.replace(/_/g,' '),type:propType,x:p.x,y:p.y,
