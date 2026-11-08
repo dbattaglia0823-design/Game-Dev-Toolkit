@@ -3,6 +3,10 @@ import {
   createEntity,addSpriteAsset,updateEntity,removeEntity,reorderEntity,moveControlPoint,insertControlPoint,
   deleteControlPoint,scatterVegetation
 } from './world-model.js';
+import {
+  roadInsertCandidate,regionInsertCandidate,insertShapePoint,translateEntity,duplicateEntity,
+  paintSceneryBrush,eraseSceneryBrush
+} from './world-edit-tools.js';
 import {distance,clamp,nearestOnPath,pointInPolygon,regionAt,sampleRoad} from './world-geometry.js';
 import {drawWorld,drawEditorOverlay} from './world-renderer.js';
 import {buildWorldZip,worldSlug} from './world-export.js';
@@ -11,7 +15,7 @@ const $=id=>document.getElementById(id);
 const viewport=$('viewport'),canvas=$('world-canvas'),ctx=canvas.getContext('2d');
 const mini=$('minimap'),miniCtx=mini.getContext('2d');
 const AUTO='gdt.world-forge.autosave.v2',SAVE='gdt.world-forge.manual.v2';
-let doc=demoWorld(),tool='select',selection=null,draft=null,gesture=null,hover=null;
+let doc=demoWorld(),tool='select',selection=null,draft=null,gesture=null,hover=null,pointInsertMode=null;
 let zoom=.25,offsetX=0,offsetY=0,panSpace=false,dirty=false,frame=0,autosaveTimer=0;
 let undoStack=[],redoStack=[];
 const minZoom=.045,maxZoom=5;
@@ -47,7 +51,11 @@ function render(){
   const bounds={minX:Math.max(0,-offsetX/zoom),minY:Math.max(0,-offsetY/zoom),
     maxX:Math.min(doc.world.width,(w-offsetX)/zoom),maxY:Math.min(doc.world.height,(h-offsetY)/zoom)};
   drawWorld(ctx,doc,{...currentDisplay(),bounds,quality:zoom<.08?0:1});
-  drawEditorOverlay(ctx,doc,{selection,hover:draft?hover:null,draft,zoom,showBoundaries:$('show-boundaries').checked});
+  drawEditorOverlay(ctx,doc,{selection,hover:draft?hover:null,draft,zoom,
+    insertMode:pointInsertMode,insertHover:tool==='select'?hover:null,
+    brushPreview:tool==='prop'&&($('scenery-paint').checked||$('scenery-erase').checked)&&hover
+      ?{position:hover,radius:Number($('brush-radius').value),erase:$('scenery-erase').checked}:null,
+    showBoundaries:$('show-boundaries').checked});
   ctx.restore();
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.strokeStyle='#f5c29699';ctx.lineWidth=1;ctx.strokeRect(offsetX+.5,offsetY+.5,doc.world.width*zoom,doc.world.height*zoom);
@@ -121,23 +129,50 @@ function afterHistory(message){
 function setTool(next){
   if(!['select','road','terrain','prop','marker','pan'].includes(next))return;
   if(draft)cancelDraft(false);
+  if(gesture?.mode==='spray')finishSpray(false);
+  if(next!=='select')pointInsertMode=null;
   tool=next;
   document.querySelectorAll('[data-tool]').forEach(button=>{
     const on=button.dataset.tool===next;button.classList.toggle('active',on);button.setAttribute('aria-pressed',String(on));
   });
   status({
-    select:'Select a road or shape. Drag its control points to refine curves and coastlines.',
+    select:'Select a road to insert points, drag its control handles, or Alt-drag the entire shape.',
     road:'Click to add road control points. Double-click or Enter to finish; road endpoints snap near existing roads.',
     terrain:'Click around a terrain area. Double-click or Enter to close the polygon.',
-    prop:'Click to place the chosen tree, building or scenery asset.',
+    prop:'Click for a single prop, or enable hold-and-drag to paint or erase scenery.',
     marker:'Click to place a gameplay marker.',
     pan:'Drag to move around the open world.'
   }[next]);
   requestRender();
 }
 function setSelection(id,point=-1){
+  if(id!==selection?.id)pointInsertMode=null;
   selection=id?{id,point}:null;
   refreshHeader();refreshInspector();refreshEntities();requestRender();
+}
+function selectedShape(){
+  const found=selection?getEntity(doc,selection.id):null;
+  return found&&(found.type==='roads'||found.type==='regions')?found:null;
+}
+function choosePointInsert(mode){
+  const found=selectedShape();
+  if(!found){status('Select an existing road or terrain region first.');return;}
+  if(mode!=='between'&&found.type!=='roads')return;
+  pointInsertMode=pointInsertMode?.id===selection.id&&pointInsertMode?.mode===mode?null:{id:selection.id,mode};
+  refreshInspector();requestRender();
+  status(pointInsertMode
+    ?mode==='between'?'Click directly on the selected curve to insert a point.':'Click anywhere in the world to extend this end of the selected road.'
+    :'Point insertion canceled.');
+}
+function insertSelectedPoint(p,mode='between'){
+  const found=selectedShape();if(!found)return false;
+  const threshold=clamp(14/zoom,17,75);
+  try{
+    const result=insertShapePoint(doc,found.item.id,worldPoint(p.x,p.y),{mode,maxDistance:threshold});
+    const before=doc;doc=result.doc;pointInsertMode=null;makeSnapshot(before,'Added control point '+(result.index+1)+'. Drag it to reshape the '+(found.type==='roads'?'road':'coastline')+'.');
+    setSelection(found.item.id,result.index);
+    return true;
+  }catch(e){errorMessage(e);return false;}
 }
 function hitTest(p){
   const radius=clamp(12/zoom,9,48);
@@ -177,7 +212,22 @@ function refreshInspector(){
   $('point-help').hidden=!(type==='roads'||type==='regions');
   $('remove-point').hidden=!(type==='roads'||type==='regions');
   $('remove-point').disabled=selection.point<0;
+  const shape=type==='roads'||type==='regions';
+  $('point-coordinate-fields').hidden=!shape||selection.point<0;
+  if(shape&&selection.point>=0){
+    $('inspect-point-x').value=found.item.points[selection.point].x;
+    $('inspect-point-y').value=found.item.points[selection.point].y;
+  }
+  $('prop-transform-buttons').hidden=type!=='props';
   if(type==='roads'){
+    $('road-point-count').textContent=item.points.length+' road points'+(selection.point>=0?' · editing point '+(selection.point+1):'');
+    for(const [id,mode] of [['insert-road-point','between'],['extend-road-start','start'],['extend-road-end','end']]){
+      const button=$(id);const active=pointInsertMode?.id===item.id&&pointInsertMode.mode===mode;
+      button.setAttribute('aria-pressed',String(active));button.classList.toggle('is-active',active);
+    }
+    $('insert-hint').textContent=pointInsertMode?.id===item.id
+      ?(pointInsertMode.mode==='between'?'Click the selected road line to insert a control point.':'Click a new endpoint to extend the road.')
+      :'Insert points on the curve, or extend either endpoint. Shift-click a selected road to insert directly.';
     $('inspect-road-class').value=item.roadClass;$('inspect-road-surface').value=item.surface;
     $('inspect-road-width').value=item.width;$('inspect-road-lanes').value=item.lanes;
     $('inspect-road-shoulder').value=item.shoulder;$('inspect-road-smooth').checked=item.smooth;
@@ -234,7 +284,8 @@ function refreshSpriteLists(){
 function refreshUI(){refreshSpriteLists();refreshHeader();refreshInspector();refreshEntities();requestRender();}
 function startWorld(world,message){
   clearTimeout(autosaveTimer);
-  doc=normalizeWorld(world);selection=null;draft=null;gesture=null;
+  if(gesture?.mode==='spray')clearInterval(gesture.timer);
+  doc=normalizeWorld(world);selection=null;pointInsertMode=null;draft=null;gesture=null;
   undoStack=[];redoStack=[];dirty=false;
   refreshUI();fit();status(message);
   try{localStorage.setItem(AUTO,serializeWorld(doc));}
