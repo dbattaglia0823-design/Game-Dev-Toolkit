@@ -225,7 +225,24 @@ try{
   }));
   assert.deepEqual(shadowStyles,[],'World Forge should have no CSS shadows');
   assert.ok((await page.locator('#object-count').innerText()).includes('9 roads'),'Example world should contain roads');
+  // Large ready-to-edit world: exercise the one-click preset and fit-to-world at mobile width.
+  await page.locator('#load-atlas').click();
+  await page.waitForFunction(()=>window.GDTWorldForge?.getSnapshot()?.world?.width===22000,null,{timeout:30000});
+  const atlas=await page.evaluate(()=>window.GDTWorldForge.getSnapshot());
+  assert.equal(atlas.world.height,18000);
+  assert.equal(atlas.roads.length,132);
+  assert.equal(atlas.regions.length,32);
+  assert.ok(atlas.props.length>=1900);
+  assert.equal(atlas.markers.filter(m=>m.type==='dealership').length,11);
+  assert.equal(atlas.markers.filter(m=>m.type==='race_start').length,7);
+  assert.ok(atlas.roads.some(r=>r.surface==='dirt'&&r.roadClass==='track'));
+  await page.locator('#fit').click();
+  const atlasZoom=parseInt(await page.locator('#zoom-value').innerText(),10);
+  assert.ok(atlasZoom>=0&&atlasZoom<=8,'Large world must fit in tiny mobile and desktop viewports');
+  assert.match(await page.locator('#status').innerText(),/Atlas Coast loaded/);
   await page.locator('#new-world').click();
+  assert.equal(await page.locator('#create-atlas').isVisible(),true);
+  assert.ok((await page.locator('.atlas-preview-link img').getAttribute('src')).includes('atlas-coast-overview.svg'));
   await page.locator('#new-name').fill('Coastal smoke');
   await page.locator('#new-width').fill('1200');
   await page.locator('#new-height').fill('800');
