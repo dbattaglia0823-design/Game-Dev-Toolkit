@@ -18,6 +18,12 @@ The visual direction uses an original illustrated top-down style. WORKS: Motorsp
 
 The included Coastal Ridge example has a city, forests, mountains, lake, sand and ocean, winding road networks, buildings, nature and race markers.
 
+### Large ready-to-edit world: Atlas Coast
+
+The **Atlas Coast · Grand Touring** preset is a much larger 22,000 × 18,000-unit racing region with 132 roads, 32 biome districts, 2,079 scenery/site placeholders and 136 gameplay markers. It includes a major metropolitan city, starter town, seaside towns, highways, mountain/forest routes, dirt and gravel circuits, racing venues, **11 vehicle-class dealerships**, **18 fuel stations**, and **18 garages/paddocks**. Open it using **Atlas Coast map** in the top toolbar, or **New world → Open large world**.
+
+See the [editable Atlas Coast world JSON](atlas-coast.world.json), [large schematic overview](atlas-coast-overview.svg), and [complete sector/game asset plan](ATLAS_COAST_PLAN.md). The map layout is meant to guide production assets; car-specific road widths, collisions, AI, dealer interactions and racing gameplay must be integrated and verified in the target game. On large worlds the minimap hides tiny prop details for performance, and the zoom can fit the whole map on mobile.
+
 ## Draw a road
 
 1. Choose **Draw road (R)**, road class, surface, width, lane count and shoulder.
