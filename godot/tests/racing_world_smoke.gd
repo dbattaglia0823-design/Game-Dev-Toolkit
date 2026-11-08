@@ -28,6 +28,14 @@ func _run() -> void:
         _expect(points.size() > 10, "Curved road must have sampled geometry")
         _expect(points[0] == Vector2(100,130), "Road must start at authored point")
         _expect(points[points.size() - 1] == Vector2(625,250), "Road must end at authored point")
+    var intersections: Array = world.call("get_intersections")
+    _expect(intersections.size() >= 1, "Roadway overlaps should create at-grade intersections automatically")
+    if intersections.size() > 0:
+        var pavement: PackedVector2Array = intersections[0]["polygon"]
+        _expect(pavement.size() >= 3, "Junction must have a drawable pavement polygon")
+        _expect((intersections[0]["roads"] as Array).has("road-1") and
+            (intersections[0]["roads"] as Array).has("road-2"),
+            "Junction must include both intersecting roads")
     var near: Dictionary = world.call("road_near",Vector2(100,130))
     _expect(str(near.get("id","")) == "road-1", "Hit test road at start point")
     _expect(world.call("get_surface_at",Vector2(100,130)) == "asphalt", "Road surface must take precedence")
