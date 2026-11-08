@@ -84,6 +84,13 @@
           <option value="sign">Road sign</option><option value="barrier">Barrier</option><option value="dock">Dock</option><option value="parking">Parking lot</option>
         </optgroup>
       </select></div>
+      <div class="field"><label for="prop-asset">Artwork (optional)</label>
+        <select id="prop-asset"><option value="">Built-in illustrated scenery</option></select>
+      </div>
+      <label class="gdt-btn upload-asset">Import PNG / WebP sprite
+        <input id="import-sprite" type="file" accept="image/png,image/webp" hidden>
+      </label>
+      <p class="asset-hint">Replace the built-in scenery artwork with your own top-down sprites. Imported images travel with the world file.</p>
       <div class="field"><label for="marker-type">Gameplay marker</label><select id="marker-type">
         <option value="player_spawn">Player spawn</option><option value="race_start">Race start</option><option value="checkpoint">Checkpoint</option>
         <option value="finish">Race finish</option><option value="garage">Garage</option><option value="dealership">Dealership</option>
@@ -146,6 +153,7 @@
           <option value="house">House</option><option value="building">Building</option><option value="warehouse">Warehouse</option><option value="garage">Garage</option><option value="gas_station">Fuel station</option>
           <option value="streetlight">Street light</option><option value="sign">Sign</option><option value="barrier">Barrier</option><option value="dock">Dock</option><option value="parking">Parking</option>
         </select></div>
+        <div class="field"><label for="inspect-asset">Artwork override</label><select id="inspect-asset"><option value="">Built-in illustration</option></select></div>
         <div class="double-fields"><div class="field"><label for="inspect-scale">Scale</label><input id="inspect-scale" type="number" step=".1" min=".25" max="5"></div><div class="field"><label for="inspect-rotation">Rotation</label><input id="inspect-rotation" type="number" min="-360" max="360"></div></div>
       </div>
       <div id="inspect-marker" hidden>
