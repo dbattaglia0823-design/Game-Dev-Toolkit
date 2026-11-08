@@ -93,6 +93,16 @@
         <input id="import-sprite" type="file" accept="image/png,image/webp" hidden>
       </label>
       <p class="asset-hint">Replace the built-in scenery artwork with your own top-down sprites. Imported images travel with the world file.</p>
+      <div class="roadside-controls">
+        <h3>Automatic roadside placement</h3>
+        <p>Buildings, lots, and scenery snap beside nearby curved roads—not on the lanes. Frontages follow the local road direction, and road shoulders stay clear.</p>
+        <p>Natural scenery stays in forests when far from roads. Garage, dealer, and fuel markers stay off-road; race starts and checkpoints remain on the roadway.</p>
+        <div class="inspector-actions">
+          <button id="snap-selected-roadside" class="gdt-btn" type="button">Align selected to road</button>
+          <button id="repair-roadside" class="gdt-btn" type="button">Fix all road overlaps</button>
+        </div>
+        <p id="roadside-status" class="asset-hint" role="status">Placement protection is always on for new or moved objects.</p>
+      </div>
       <div class="scenery-brush-controls" aria-labelledby="brush-title">
         <h3 id="brush-title">Scenery painting</h3>
         <label class="check"><input id="scenery-paint" type="checkbox"> Hold and drag to scatter</label>
@@ -175,6 +185,7 @@
         <div class="field"><label for="inspect-elevation">Height metadata (m)</label><input id="inspect-elevation" type="number" min="0" max="2000"></div>
       </div>
       <div id="inspect-prop" hidden>
+        <p class="muted-copy">Roadside objects automatically face the local road curve. Rotation remains adjustable for your custom artwork.</p>
         <div class="field"><label for="inspect-prop-type">Asset type</label><select id="inspect-prop-type">
           <option value="oak">Tree</option><option value="pine">Pine</option><option value="palm">Palm</option><option value="bush">Bush</option><option value="rock">Rock</option><option value="boulder">Boulder</option>
           <option value="house">House</option><option value="building">Building</option><option value="warehouse">Warehouse</option><option value="garage">Garage</option><option value="gas_station">Fuel station</option>
