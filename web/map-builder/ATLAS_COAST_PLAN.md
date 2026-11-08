@@ -38,6 +38,8 @@ The player begins at Westhaven Home Garage, can travel to Avalon for tuning, and
 
 The map includes buildings, parking areas and service-location placeholders next to selected points of interest. Dealership inventory, fuel purchases, car storage, race completion, traffic, and checkpoint activation still need game logic to make those markers interactive.
 
+**Automatically rendered intersections:** World Forge now creates paved junction surfaces wherever crossing road centerlines or overlapping T/endpoint approaches meet, with street markings interrupted through the junction and urban stop bars. Atlas Coast's entire 132-road network participates, with no 50-road visualization limit. Junctions are computed from road geometry and regenerated whenever it changes; the Godot adapter and exported navigation JSON include the connection data. This is an **at-grade assumption** and should be replaced by authored overpasses, ramps, traffic lights, and legal-turn rules for complex freeway interchanges.
+
 ## Asset replacement handoff
 
 1. **Verify world scale with a driveable car.** Road widths and world units are authoring coordinates; calibrate them against the car sprite, camera and road grip. Track and circuit widths are not yet playtested.
