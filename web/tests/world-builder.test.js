@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createWorld,demoWorld,normalizeWorld,parseWorld,serializeWorld,createEntity,
-  updateEntity,removeEntity,getEntity,moveControlPoint,insertControlPoint,deleteControlPoint,
+  addSpriteAsset,updateEntity,removeEntity,getEntity,moveControlPoint,insertControlPoint,deleteControlPoint,
   reorderEntity,scatterVegetation} from '../map-builder/world-model.js';
 import {distance,nearestOnPath,pointInPolygon,polygonArea,roadAt,regionAt,
   sampleRoad,roadIntersections,scatterPoints,seeded} from '../map-builder/world-geometry.js';
@@ -131,4 +131,18 @@ test('Godot package contains map data, network, adapter, manifest and handoff',a
   assert.equal(zip.manifest.worldVersion,2);
   assert.equal(new DataView(zip.bytes.buffer).getUint32(0,true),0x04034b50);
   assert.equal(JSON.parse(zip.files.get(zip.manifest.worldFile)).roads.length,9);
+});
+
+test('embedded sprite assets roundtrip and validate references without external URLs',()=>{
+  const src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC';
+  let world=createWorld({width:1400,height:900});
+  world=addSpriteAsset(world,{name:'Warehouse artwork',src,width:32,height:32});
+  assert.equal(world.assets.length,1);
+  world=createEntity(world,'props',{name:'Garage with sprite',type:'garage',x:300,y:200,scale:1,rotation:0,assetId:world.assets[0].id});
+  assert.equal(world.props[0].assetId,world.assets[0].id);
+  assert.deepEqual(parseWorld(serializeWorld(world)),world);
+  assert.equal(buildWorldZip(world,'extends Node2D\nfunc load_world(path): pass').manifest.worldVersion,2);
+  assert.throws(()=>createEntity(world,'props',{type:'garage',x:4,y:5,scale:1,rotation:0,assetId:'asset-missing'}),/Unknown sprite asset/);
+  assert.throws(()=>addSpriteAsset(world,{name:'Unsafe',src:'https://untrusted.example/sprite.png',width:32,height:32}),/embedded PNG/);
+  assert.throws(()=>normalizeWorld({...world,assets:[]}),/Unknown sprite asset/);
 });
