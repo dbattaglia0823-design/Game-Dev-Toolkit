@@ -6,7 +6,8 @@ import {createWorld,demoWorld,normalizeWorld,parseWorld,serializeWorld,createEnt
   reorderEntity,scatterVegetation} from '../map-builder/world-model.js';
 import {distance,nearestOnPath,pointInPolygon,polygonArea,roadAt,regionAt,
   sampleRoad,roadIntersections,scatterPoints,seeded} from '../map-builder/world-geometry.js';
-import {buildWorldZip,buildRoadNetwork} from '../map-builder/world-export.js';
+import {buildWorldZip,buildRoadNetwork,worldSlug} from '../map-builder/world-export.js';
+import {buildRoadJunctions} from '../map-builder/world-junctions.js';
 import {roadInsertCandidate,regionInsertCandidate,insertShapePoint,translateEntity,
   duplicateEntity,paintSceneryBrush,eraseSceneryBrush} from '../map-builder/world-edit-tools.js';
 import {nearestRoadPlacement,roadwayClearance,placementFootprint,placeBesideRoad,
@@ -402,4 +403,86 @@ test('Atlas Coast organic city roads and full world props pass conservative road
   assert.equal(atlas.markers.filter(m=>m.type==='race_start').length,7);
   assert.equal(atlas.roads.length,132);
   assert.equal(atlas.props.length,2079);
+});
+
+
+test('automatic junction polygons clear markings and connect crossing roads of any width',()=>{
+  let world=createWorld({width:1200,height:1000});
+  const defaults={roadClass:'city',surface:'asphalt',lanes:2,shoulder:5,smooth:false,markings:true};
+  world=createEntity(world,'roads',{...defaults,name:'Broadway',width:54,points:coords([100,450],[1100,450])});
+  world=createEntity(world,'roads',{...defaults,name:'Birch Avenue',width:32,points:coords([500,120],[500,900])});
+  const junctions=buildRoadJunctions(world.roads);
+  assert.equal(junctions.length,1);
+  const j=junctions[0];
+  assert.equal(j.kind,'crossing');
+  assert.equal(j.roads.length,2);
+  assert.ok(j.polygon.length>=4,'Crossing surface should use an intersection footprint polygon');
+  assert.ok(j.polygon.some(p=>p.x>515&&p.y>475),'Paving must cover both road edges, not a point decal');
+  assert.ok(j.polygon.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)));
+  const graph=buildRoadNetwork(world);
+  assert.equal(graph.junctions.length,1);
+  assert.equal(graph.connections.length,1);
+  assert.equal(graph.connections[0].junctionId,j.id);
+  assert.equal(graph.connections[0].kind,'crossing');
+  assert.equal(graph.junctions[0].polygon.length,j.polygon.length);
+});
+
+test('T-junctions join roads whose paved footprints overlap without centerline crossing',()=>{
+  let world=createWorld({width:1200,height:1000});
+  const base={roadClass:'city',surface:'asphalt',width:40,lanes:2,shoulder:5,markings:true,smooth:false};
+  world=createEntity(world,'roads',{...base,name:'Main street',points:coords([100,500],[1100,500])});
+  world=createEntity(world,'roads',{...base,name:'Side lane',width:28,
+    points:coords([500,270],[500,466])});
+  assert.equal(roadIntersections(world.roads).length,0,'Centerlines intentionally do not intersect');
+  const nodes=buildRoadJunctions(world.roads);
+  assert.equal(nodes.length,1);
+  assert.equal(nodes[0].kind,'tee');
+  assert.equal(buildRoadNetwork(world).connections[0].kind,'tee');
+  assert.equal(nodes[0].roads.length,2);
+});
+
+test('collinear, close endpoints connect but parallel nearby streets do not become false junctions',()=>{
+  let world=createWorld({width:1200,height:1000});
+  const base={roadClass:'country',surface:'asphalt',width:36,lanes:2,shoulder:4,markings:true,smooth:false};
+  world=createEntity(world,'roads',{...base,name:'Road A',points:coords([110,400],[490,400])});
+  world=createEntity(world,'roads',{...base,name:'Road B',points:coords([499,400],[900,400])});
+  assert.equal(buildRoadJunctions(world.roads).length,1);
+  assert.equal(buildRoadJunctions(world.roads)[0].kind,'endpoint');
+  world=createEntity(world,'roads',{...base,name:'Close parallel',width:46,
+    points:coords([110,448],[900,448])});
+  assert.equal(buildRoadJunctions(world.roads).length,1,
+    'Close but independent parallel street lanes should not connect');
+});
+
+test('multi-road crossing clusters have one physical node with complete road-pair connections',()=>{
+  let world=createWorld({width:1200,height:1000});
+  const base={roadClass:'city',surface:'asphalt',width:38,lanes:2,shoulder:4,markings:true,smooth:false};
+  world=createEntity(world,'roads',{...base,name:'Road A',points:coords([100,500],[1100,500])});
+  world=createEntity(world,'roads',{...base,name:'Road B',points:coords([500,100],[500,900])});
+  world=createEntity(world,'roads',{...base,name:'Road C',points:coords([200,200],[800,800])});
+  const nodes=buildRoadJunctions(world.roads);
+  assert.equal(nodes.length,1);
+  assert.equal(nodes[0].roads.length,3);
+  const graph=buildRoadNetwork(world);
+  assert.equal(graph.connections.length,3);
+  assert.ok(graph.connections.every(c=>c.junctionId===nodes[0].id));
+});
+
+test('Atlas Coast intersections stay available beyond the former 50-road rendering limit',async()=>{
+  const atlas=parseWorld(await readFile(new URL('../map-builder/atlas-coast.world.json',import.meta.url),'utf8'));
+  const intersections=buildRoadJunctions(atlas.roads);
+  assert.ok(atlas.roads.length>50);
+  assert.ok(intersections.length>90,'Major highways, city streets and race approaches need junction paving');
+  assert.ok(intersections.some(j=>j.kind==='tee'||j.kind==='endpoint'));
+  assert.ok(intersections.every(j=>j.polygon.length>=3&&j.roads.length>=2));
+  const network=buildRoadNetwork(atlas);
+  assert.equal(network.junctions.length,intersections.length);
+  assert.ok(network.connections.length>=network.junctions.length);
+  assert.ok(network.connections.every(c=>network.junctions.some(j=>j.id===c.junctionId)));
+  const source=await readFile(new URL('../map-builder/world_loader.gd',import.meta.url),'utf8');
+  const zip=buildWorldZip(atlas,source);
+  const name=worldSlug(atlas.name);
+  assert.ok(zip.files.has('navigation/'+name+'.roads.json'));
+  const content=JSON.parse(zip.files.get('navigation/'+name+'.roads.json'));
+  assert.equal(content.junctions.length,intersections.length);
 });

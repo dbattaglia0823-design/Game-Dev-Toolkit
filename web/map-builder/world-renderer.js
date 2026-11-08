@@ -1,4 +1,5 @@
-import {boundsOf,clamp,pointInPolygon,roadIntersections,sampleRoad,scatterPoints,stringSeed,seeded} from './world-geometry.js';
+import {boundsOf,clamp,pointInPolygon,sampleRoad,scatterPoints,stringSeed,seeded} from './world-geometry.js';
+import {buildRoadJunctions} from './world-junctions.js';
 import {getEntity} from './world-model.js';
 import {roadInsertCandidate,regionInsertCandidate} from './world-edit-tools.js';
 
@@ -20,7 +21,7 @@ const circle=(ctx,x,y,r,color)=>{
 const rect=(ctx,x,y,w,h,color)=>{ctx.fillStyle=color;ctx.fillRect(x,y,w,h);};
 const expand=(a,n)=>({minX:a.minX-n,minY:a.minY-n,maxX:a.maxX+n,maxY:a.maxY+n});
 const visible=(a,b)=>!b||a.maxX>=b.minX&&a.minX<=b.maxX&&a.maxY>=b.minY&&a.minY<=b.maxY;
-const decoCache=new WeakMap(),junctionCache=new WeakMap();
+const decoCache=new WeakMap();
 const spriteCache=new Map();
 function getSprite(asset){
   if(!asset)return null;
@@ -128,17 +129,42 @@ function drawRoads(ctx,roads,bounds,options){
     if(!visible(expand(boundsOf(roads[i].points),roads[i].width/2+20),bounds))continue;
     drawRoadBase(ctx,roads[i],samples[i]);
   }
-  if(options?.junctions!==false && roads.length<=50){
-    let junctions=junctionCache.get(roads);
-    if(!junctions){junctions=roadIntersections(roads);junctionCache.set(roads,junctions);}
-    for(const j of junctions){
-      if(!visible({minX:j.x-45,minY:j.y-45,maxX:j.x+45,maxY:j.y+45},bounds))continue;
-      circle(ctx,j.x,j.y,j.width*.57,ROAD_COLORS[j.surface]);
-    }
-  }
   for(let i=0;i<roads.length;i++){
     if(!visible(expand(boundsOf(roads[i].points),roads[i].width/2+20),bounds))continue;
     drawRoadLines(ctx,roads[i],samples[i]);
+  }
+  // Every crossing/T-junction is now repaved AFTER lane markings. The
+  // polygon joins the roadway footprints and erases overlapping painted lines.
+  // Cached geometry makes even the 132-road Atlas Coast plan practical.
+  if(options?.junctions!==false){
+    const junctions=buildRoadJunctions(roads);
+    for(const junction of junctions){
+      if(!visible({
+        minX:junction.x-junction.radius,minY:junction.y-junction.radius,
+        maxX:junction.x+junction.radius,maxY:junction.y+junction.radius
+      },bounds))continue;
+      stroke(ctx,junction.polygon,true);
+      ctx.fillStyle=ROAD_COLORS[junction.surface]||ROAD_COLORS.asphalt;
+      ctx.fill();
+      // Sidewalk/crosswalk style stop bars at urban intersections, never on
+      // highways, off-road courses, or race tracks.
+      if(options.quality===0 || junction.approaches.length<2 ||
+        junction.approaches.some(a=>a.roadClass==='highway'||a.roadClass==='track'||
+          a.surface==='dirt'||a.surface==='gravel'))continue;
+      for(const approach of junction.approaches){
+        if(!approach.markings||!['city','service'].includes(approach.roadClass))continue;
+        const v=approach.tangent,n=approach.normal;
+        for(const sign of [-1,1]){
+          const reach=Math.max(5,...junction.polygon.map(p=>
+            (p.x-junction.x)*v.x*sign+(p.y-junction.y)*v.y*sign));
+          const cx=junction.x+v.x*sign*(reach+9),cy=junction.y+v.y*sign*(reach+9);
+          const half=Math.max(5,approach.width/2-5);
+          ctx.beginPath();ctx.moveTo(cx-n.x*half,cy-n.y*half);
+          ctx.lineTo(cx+n.x*half,cy+n.y*half);
+          ctx.lineWidth=2.4;ctx.strokeStyle='#f2ebd4c9';ctx.stroke();
+        }
+      }
+    }
   }
 }
 function drawTree(ctx,type,seed){

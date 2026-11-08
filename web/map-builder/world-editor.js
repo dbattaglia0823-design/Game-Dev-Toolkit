@@ -10,6 +10,7 @@ import {
 import {distance,clamp,nearestOnPath,pointInPolygon,regionAt,sampleRoad} from './world-geometry.js';
 import {drawWorld,drawEditorOverlay} from './world-renderer.js';
 import {buildWorldZip,worldSlug} from './world-export.js';
+import {buildRoadJunctions} from './world-junctions.js';
 import {
   placeBesideRoad,placeSiteMarker,nearestRoadPlacement,placementFootprint,
   roadwayClearance,repairRoadsideObjects
@@ -40,6 +41,7 @@ const snapEnd = p => {
 };
 const currentDisplay = ()=>({
   showTerrain:$('show-terrain').checked,showRoads:$('show-roads').checked,
+  junctions:$('show-junctions').checked,
   showScenery:$('show-scenery').checked,showMarkers:$('show-markers').checked
 });
 function render(){
@@ -106,7 +108,9 @@ function focusPoint(p){
 function refreshHeader(){
   $('world-title').value=doc.name;
   $('world-dimensions').textContent=doc.world.width+' × '+doc.world.height+' world units';
-  $('object-count').textContent=doc.roads.length+' roads · '+doc.regions.length+' regions · '+doc.props.length+' scenery';
+  $('object-count').textContent=doc.roads.length+' roads · '+
+    buildRoadJunctions(doc.roads).length+' intersections · '+
+    doc.regions.length+' regions · '+doc.props.length+' scenery';
   const canFinish=draft && draft.points.length>=(draft.type==='road'?2:3);
   $('finish-shape').disabled=!canFinish;$('cancel-shape').disabled=!draft;
   $('delete-entity').disabled=!selection;
@@ -680,7 +684,7 @@ $('scatter').addEventListener('click',()=>{
   change(d=>scatterVegetation(d,id,Number($('scatter-count').value)),'Scattered vegetation while avoiding roads.');
 });
 $('road-shoulder').addEventListener('input',e=>{$('shoulder-label').textContent=e.target.value+' m';});
-for(const id of ['show-roads','show-terrain','show-scenery','show-markers','show-boundaries'])
+for(const id of ['show-roads','show-junctions','show-terrain','show-scenery','show-markers','show-boundaries'])
   $(id).addEventListener('change',requestRender);
 $('entities-filter').addEventListener('change',refreshEntities);
 const fields={

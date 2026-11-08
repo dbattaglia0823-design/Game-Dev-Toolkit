@@ -83,6 +83,7 @@ func load_world_json(source: String) -> bool:
             continue
         var data: Dictionary = road
         _road_cache[str(data.get("id", ""))] = _sample_path(data.get("points", []), bool(data.get("smooth", true)))
+    _build_junctions()
     _build_blockers()
     queue_redraw()
     return true
@@ -175,6 +176,237 @@ func _sample_path(points: Array, smooth: bool) -> PackedVector2Array:
                 (-2.0 * t3 + 3.0 * t2) * p2 +
                 (t3 - t2) * m2)
     return output
+
+
+# Automatic, derived planar junctions for the same interpolated road centerlines
+# used by the browser. World Forge v2 JSON needs no stored intersection records.
+const JUNCTION_CELL := 160.0
+var _junctions: Array[Dictionary] = []
+
+func get_intersections() -> Array:
+    return _junctions.duplicate(true)
+
+func _junction_grid_key(x: int, y: int) -> String:
+    return str(x) + ":" + str(y)
+
+func _junction_cells(a: Vector2, b: Vector2, padding: float = 0.0) -> Array[String]:
+    var keys: Array[String] = []
+    var min_x: int = floori((minf(a.x,b.x) - padding) / JUNCTION_CELL)
+    var max_x: int = floori((maxf(a.x,b.x) + padding) / JUNCTION_CELL)
+    var min_y: int = floori((minf(a.y,b.y) - padding) / JUNCTION_CELL)
+    var max_y: int = floori((maxf(a.y,b.y) + padding) / JUNCTION_CELL)
+    for x in range(min_x,max_x + 1):
+        for y in range(min_y,max_y + 1):
+            keys.append(_junction_grid_key(x,y))
+    return keys
+
+func _junction_near_segments(grid: Dictionary, position: Vector2, radius: float) -> Array:
+    var hits: Array = []
+    var seen: Dictionary = {}
+    for key in _junction_cells(position,position,radius):
+        for segment in grid.get(key,[]):
+            var unique: String = str(segment.get("key",""))
+            if not seen.has(unique):
+                seen[unique] = true
+                hits.append(segment)
+    return hits
+
+func _add_raw_junction(nodes: Array, pos: Vector2, a: String, b: String,
+        kind: String, width: float) -> void:
+    if a == b:
+        return
+    for existing in nodes:
+        var roads: Array = existing.get("roads",[])
+        if roads.has(a) and roads.has(b) and (existing["at"] as Vector2).distance_to(pos) < maxf(12.0,width * 0.45):
+            return
+    nodes.append({"at":pos,"roads":[a,b],"kind":kind})
+
+func _junction_tangent(path: PackedVector2Array, position: Vector2) -> Vector2:
+    var minimum: float = INF
+    var direction := Vector2.RIGHT
+    for i in range(1,path.size()):
+        var a: Vector2 = path[i - 1]
+        var b: Vector2 = path[i]
+        var nearest: Vector2 = Geometry2D.get_closest_point_to_segment(position,a,b)
+        var dist: float = position.distance_squared_to(nearest)
+        if dist < minimum and a.distance_squared_to(b) > 0.00001:
+            minimum = dist
+            direction = (b - a).normalized()
+    return direction
+
+func _make_junction_shape(center: Vector2, arms: Array) -> PackedVector2Array:
+    var corners := PackedVector2Array()
+    for i in range(arms.size()):
+        for j in range(i + 1,arms.size()):
+            var a: Dictionary = arms[i]
+            var b: Dictionary = arms[j]
+            var normal_a: Vector2 = a["normal"]
+            var normal_b: Vector2 = b["normal"]
+            var det: float = normal_a.cross(normal_b)
+            if absf(det) < 0.22:
+                continue
+            var half_a: float = float(a["width"]) * 0.5 + 2.5
+            var half_b: float = float(b["width"]) * 0.5 + 2.5
+            var limit: float = minf(185.0,maxf(float(a["width"]),float(b["width"])) * 2.0 + 22.0)
+            for sign_a in [-1.0,1.0]:
+                for sign_b in [-1.0,1.0]:
+                    var sa: float = sign_a * half_a
+                    var sb: float = sign_b * half_b
+                    var local := Vector2((sa * normal_b.y - normal_a.y * sb) / det,
+                        (normal_a.x * sb - sa * normal_b.x) / det)
+                    corners.append(center + local.limit_length(limit))
+    if corners.size() < 3:
+        var widest: float = 20.0
+        for arm in arms:
+            widest = maxf(widest,float(arm["width"]))
+        for i in range(12):
+            var a: float = float(i) * TAU / 12.0
+            corners.append(center + Vector2(cos(a),sin(a)) * (widest * 0.62 + 6.0))
+    return Geometry2D.convex_hull(corners)
+
+func _build_junctions() -> void:
+    _junctions.clear()
+    var road_array: Array = world_data.get("roads",[])
+    if road_array.size() < 2:
+        return
+    var grid: Dictionary = {}
+    var roads_by_id: Dictionary = {}
+    var raw: Array = []
+    # Only compare sampled segments that occupy the same 160-unit cell.
+    for road in road_array:
+        var id: String = str(road.get("id",""))
+        roads_by_id[id] = road
+        var path: PackedVector2Array = _road_cache.get(id,PackedVector2Array())
+        var added: Array = []
+        for i in range(1,path.size()):
+            var a: Vector2 = path[i - 1]
+            var b: Vector2 = path[i]
+            if a.distance_squared_to(b) < 0.000001:
+                continue
+            var found: Dictionary = {}
+            for cell in _junction_cells(a,b):
+                for other in grid.get(cell,[]):
+                    var identifier: String = str(other.get("key",""))
+                    if found.has(identifier):
+                        continue
+                    found[identifier] = true
+                    var hit: Variant = Geometry2D.segment_intersects_segment(a,b,other["a"],other["b"])
+                    if hit is Vector2:
+                        _add_raw_junction(raw,hit,id,str(other["road"]),"crossing",
+                            minf(float(road.get("width",36)),float((roads_by_id[str(other["road"])] as Dictionary).get("width",36))))
+            added.append({"a":a,"b":b,"road":id,"key":id + "-" + str(i)})
+        for segment in added:
+            for cell in _junction_cells(segment["a"],segment["b"]):
+                var list: Array = grid.get(cell,[])
+                list.append(segment)
+                grid[cell] = list
+    # T connections: the end of one street reaches the other street's painted
+    # footprint even when the endpoint stops before its geometric centerline.
+    for road in road_array:
+        var id: String = str(road.get("id",""))
+        var path: PackedVector2Array = _road_cache.get(id,PackedVector2Array())
+        if path.size() < 2:
+            continue
+        for endpoint_index in [0,path.size() - 1]:
+            var p: Vector2 = path[endpoint_index]
+            var own_direction: Vector2 = (path[1] - path[0]).normalized() if endpoint_index == 0 else (path[-1] - path[-2]).normalized()
+            var best_by_road: Dictionary = {}
+            for segment in _junction_near_segments(grid,p,220.0):
+                var other_id: String = str(segment["road"])
+                if id == other_id:
+                    continue
+                var other: Dictionary = roads_by_id[other_id]
+                var q: Vector2 = Geometry2D.get_closest_point_to_segment(p,segment["a"],segment["b"])
+                var d: float = p.distance_to(q)
+                var allowance: float = float(road.get("width",36)) * 0.5 + float(road.get("shoulder",5)) + float(other.get("width",36)) * 0.5 + float(other.get("shoulder",5)) + 4.0
+                if d > allowance:
+                    continue
+                var other_path: PackedVector2Array = _road_cache.get(other_id,PackedVector2Array())
+                var joined_end: bool = p.distance_to(other_path[0]) < 20.0 or p.distance_to(other_path[-1]) < 20.0
+                var direction: Vector2 = ((segment["b"] as Vector2) - (segment["a"] as Vector2)).normalized()
+                if not joined_end and absf(own_direction.cross(direction)) < 0.27:
+                    continue
+                if not best_by_road.has(other_id) or d < float(best_by_road[other_id]["distance"]):
+                    best_by_road[other_id] = {"at":(p + q) * 0.5,"distance":d,
+                        "kind":"endpoint" if joined_end else "tee"}
+            for other_id in best_by_road.keys():
+                var proposal: Dictionary = best_by_road[other_id]
+                _add_raw_junction(raw,proposal["at"],id,other_id,str(proposal["kind"]),
+                    minf(float(road.get("width",36)),float((roads_by_id[other_id] as Dictionary).get("width",36))))
+    # Adjacent road pairs touching the same paved space become one junction,
+    # rather than stacked intersection decals.
+    var merged: Array = []
+    for node in raw:
+        var position: Vector2 = node["at"]
+        var target: Dictionary = {}
+        for previous in merged:
+            var tolerance: float = 12.0
+            for road_id in node["roads"]:
+                tolerance = maxf(tolerance,minf(52.0,float((roads_by_id[road_id] as Dictionary).get("width",36)) * 0.47))
+            if (previous["at"] as Vector2).distance_to(position) <= tolerance:
+                target = previous
+                break
+        if target.is_empty():
+            merged.append({"at":position,"roads":(node["roads"] as Array).duplicate(),
+                "kind":node["kind"],"count":1})
+        else:
+            var n: int = int(target["count"])
+            target["at"] = ((target["at"] as Vector2) * n + position) / float(n + 1)
+            target["count"] = n + 1
+            for road_id in node["roads"]:
+                if not (target["roads"] as Array).has(road_id):
+                    (target["roads"] as Array).append(road_id)
+            if node["kind"] == "crossing":
+                target["kind"] = "crossing"
+    for node in merged:
+        var center: Vector2 = node["at"]
+        var arms: Array = []
+        var preferred_surface: String = "asphalt"
+        var best_priority: float = -1.0
+        for road_id in node["roads"]:
+            var road: Dictionary = roads_by_id[road_id]
+            var tangent: Vector2 = _junction_tangent(_road_cache[road_id],center)
+            var surface: String = str(road.get("surface","asphalt"))
+            var priority: float = 4.0 if surface == "asphalt" else (3.0 if surface == "concrete" else (2.0 if surface == "track" else 1.0))
+            priority += float(road.get("width",36)) / 10000.0
+            if priority > best_priority:
+                preferred_surface = surface
+                best_priority = priority
+            arms.append({"id":road_id,"roadClass":road.get("roadClass","city"),
+                "surface":surface,"width":road.get("width",36),"markings":road.get("markings",true),
+                "normal":Vector2(-tangent.y,tangent.x),"tangent":tangent})
+        var poly: PackedVector2Array = _make_junction_shape(center,arms)
+        _junctions.append({"at":center,"polygon":poly,"roads":node["roads"],
+            "surface":preferred_surface,"approaches":arms,"kind":node["kind"]})
+
+func _draw_junctions() -> void:
+    for node in _junctions:
+        var polygon: PackedVector2Array = node["polygon"]
+        if polygon.size() < 3:
+            continue
+        draw_colored_polygon(polygon,ROAD_COLORS.get(node["surface"],ROAD_COLORS["asphalt"]))
+        var arms: Array = node["approaches"]
+        var allow_stops: bool = arms.size() >= 2
+        for arm in arms:
+            if str(arm["roadClass"]) in ["highway","track"] or str(arm["surface"]) in ["dirt","gravel"]:
+                allow_stops = false
+                break
+        if not allow_stops:
+            continue
+        var center: Vector2 = node["at"]
+        for arm in arms:
+            if not bool(arm["markings"]) or not str(arm["roadClass"]) in ["city","service"]:
+                continue
+            var tangent: Vector2 = arm["tangent"]
+            var normal: Vector2 = arm["normal"]
+            var half_width: float = maxf(5.0,float(arm["width"]) * 0.5 - 5.0)
+            for sign in [-1.0,1.0]:
+                var reach: float = 5.0
+                for vertex in polygon:
+                    reach = maxf(reach,(vertex - center).dot(tangent) * sign)
+                var bar_center: Vector2 = center + tangent * sign * (reach + 9.0)
+                draw_line(bar_center - normal * half_width,
+                    bar_center + normal * half_width,Color("#f2ebd4c9"),2.4,true)
 
 func _line(path: PackedVector2Array, width: float, color: Color) -> void:
     if path.size() > 1:
@@ -306,6 +538,7 @@ func _draw() -> void:
         _draw_road(road,false)
     for road in world_data.get("roads",[]):
         _draw_road(road,true)
+    _draw_junctions()
     for item in world_data.get("props",[]):
         _draw_prop(item)
     if draw_markers:
