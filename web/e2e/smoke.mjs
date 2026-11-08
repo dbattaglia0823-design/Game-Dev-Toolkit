@@ -175,7 +175,7 @@ try{
     return JSON.parse(await readFile(await file.path(),'utf8'));
   }
   const painted=await getMapExport();
-  assert.ok(painted.layers[0].tiles.some(t=>t?.index===3),'Brush must paint selected tile');
+  assert.ok(painted.layers[0].tiles.some(t=>t?.index===3),'Brush must paint selected tile; '+JSON.stringify({name:painted.name,tiles:painted.layers[0].tiles.filter(Boolean),status:await page.locator('#status').innerText(),cursor:await page.locator('#cursor-position').innerText(),selectedTile:await page.locator('.tile-choice.selected').count(),canvas:stageBox,map:await page.locator('#map-size-label').innerText()}));
   await page.locator('#undo-map').click();
   assert.ok(!(await getMapExport()).layers[0].tiles.some(Boolean),'Undo must restore empty layer');
   await page.locator('#redo-map').click();
