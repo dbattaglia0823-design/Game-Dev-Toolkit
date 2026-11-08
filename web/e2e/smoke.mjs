@@ -237,6 +237,12 @@ try{
   assert.equal(atlas.markers.filter(m=>m.type==='dealership').length,11);
   assert.equal(atlas.markers.filter(m=>m.type==='race_start').length,7);
   assert.ok(atlas.roads.some(r=>r.surface==='dirt'&&r.roadClass==='track'));
+  assert.match(await page.locator('#object-count').innerText(),/\d+ intersections/,
+    'Large Atlas Coast map must now generate junctions beyond the former 50-road limit');
+  assert.equal(await page.locator('#show-junctions').isChecked(),true);
+  await page.locator('#show-junctions').uncheck();
+  assert.equal(await page.locator('#show-junctions').isChecked(),false);
+  await page.locator('#show-junctions').check();
   await page.locator('#fit').click();
   const atlasZoom=parseInt(await page.locator('#zoom-value').innerText(),10);
   assert.ok(atlasZoom>=0&&atlasZoom<=8,'Large world must fit in tiny mobile and desktop viewports');
