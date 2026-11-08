@@ -12,6 +12,7 @@ class_name GDTRacingWorld
 var world_data: Dictionary = {}
 var _solid_body: StaticBody2D
 var _road_cache: Dictionary = {}
+var _sprite_textures: Dictionary = {}
 
 const BIOME_COLORS = {
     "grass": Color("#728e61"), "forest": Color("#456d50"), "mountain": Color("#838578"),
@@ -53,6 +54,28 @@ func load_world_json(source: String) -> bool:
     for key in ["roads", "regions", "props", "markers"]:
         if typeof(decoded.get(key, null)) != TYPE_ARRAY:
             return false
+    var textures: Dictionary = {}
+    for asset in decoded.get("assets", []):
+        if typeof(asset) != TYPE_DICTIONARY:
+            return false
+        var src: String = str(asset.get("src", ""))
+        var comma: int = src.find(",")
+        if comma < 0:
+            return false
+        var header: String = src.substr(0,comma)
+        var data: PackedByteArray = Marshalls.base64_to_raw(src.substr(comma + 1))
+        var image: Image = Image.new()
+        var status: Error = ERR_FILE_UNRECOGNIZED
+        if header.begins_with("data:image/png"):
+            status = image.load_png_from_buffer(data)
+        elif header.begins_with("data:image/webp"):
+            status = image.load_webp_from_buffer(data)
+        if status != OK:
+            push_error("Could not load custom sprite artwork: " + str(asset.get("id", "")))
+            return false
+        image.convert(Image.FORMAT_RGBA8)
+        textures[str(asset.get("id", ""))] = ImageTexture.create_from_image(image)
+    _sprite_textures = textures
     world_data = decoded
     _road_cache.clear()
     for road in world_data.get("roads", []):
@@ -229,6 +252,15 @@ func _draw_prop(entry: Dictionary) -> void:
     var scale_value: float = float(entry.get("scale",1))
     draw_set_transform(position,deg_to_rad(float(entry.get("rotation",0))),Vector2.ONE * scale_value)
     var kind: String = str(entry.get("type","rock"))
+    var asset_id: String = str(entry.get("assetId",""))
+    if _sprite_textures.has(asset_id):
+        var texture: Texture2D = _sprite_textures[asset_id]
+        var max_side: float = 132.0 if kind in ["building","warehouse","garage","gas_station","parking"] else 65.0
+        var factor: float = max_side / maxf(float(maxi(texture.get_width(),texture.get_height())),1.0)
+        var dim: Vector2 = Vector2(texture.get_width(),texture.get_height()) * factor
+        draw_texture_rect(texture,Rect2(-dim/2.0,dim),false)
+        draw_set_transform(Vector2.ZERO,0.0,Vector2.ONE)
+        return
     if kind in ["oak","pine","palm","bush"]:
         draw_circle(Vector2(8,10),23,Color(0.16,0.25,0.19,0.4))
         var color := Color("#4f915a")
