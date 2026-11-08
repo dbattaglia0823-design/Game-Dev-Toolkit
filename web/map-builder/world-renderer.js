@@ -20,6 +20,17 @@ const rect=(ctx,x,y,w,h,color)=>{ctx.fillStyle=color;ctx.fillRect(x,y,w,h);};
 const expand=(a,n)=>({minX:a.minX-n,minY:a.minY-n,maxX:a.maxX+n,maxY:a.maxY+n});
 const visible=(a,b)=>!b||a.maxX>=b.minX&&a.minX<=b.maxX&&a.maxY>=b.minY&&a.minY<=b.maxY;
 const decoCache=new WeakMap(),junctionCache=new WeakMap();
+const spriteCache=new Map();
+function getSprite(asset){
+  if(!asset)return null;
+  const cached=spriteCache.get(asset.id);
+  if(cached&&cached.src===asset.src)return cached.image;
+  const image=new Image();
+  image.onload=()=>document.dispatchEvent(new Event('gdt-world-asset-ready'));
+  spriteCache.set(asset.id,{image,src:asset.src});
+  image.src=asset.src;
+  return image;
+}
 function regionDetails(region,seed){
   const existing=decoCache.get(region);
   if(existing)return existing;
@@ -186,10 +197,20 @@ function drawBuilding(ctx,kind){
     rect(ctx,-w/2+8,-h/2+7,w-16,5,'#596772');
   }
 }
-export function drawProp(ctx,prop){
+export function drawProp(ctx,prop,assets=[]){
   const size=prop.type==='building'||prop.type==='warehouse'?1.2:1;
   ctx.save();ctx.translate(prop.x,prop.y);ctx.rotate(prop.rotation*Math.PI/180);ctx.scale(prop.scale*size,prop.scale*size);
   const type=prop.type;
+  const asset=prop.assetId?assets.find(item=>item.id===prop.assetId):null;
+  if(asset){
+    const image=getSprite(asset);
+    if(image?.complete && image.naturalWidth){
+      const maxSide=['building','warehouse','garage','gas_station','parking'].includes(type)?132:65;
+      const ratio=maxSide/Math.max(asset.width,asset.height);
+      ctx.drawImage(image,-asset.width*ratio/2,-asset.height*ratio/2,asset.width*ratio,asset.height*ratio);
+      ctx.restore();return;
+    }
+  }
   if(['oak','pine','palm','bush'].includes(type)){
     ctx.fillStyle='#1b3d3263';ctx.beginPath();ctx.ellipse(11,13,27,20,-.25,0,Math.PI*2);ctx.fill();
     if(type==='bush'){circle(ctx,0,0,18,'#3c7650');circle(ctx,-8,-5,11,'#549461');}
@@ -233,7 +254,7 @@ export function drawWorld(ctx,doc,options={}){
   if(options.showTerrain!==false)for(const region of doc.regions)drawRegion(ctx,region,doc.world.seed,quality,bounds);
   if(options.showRoads!==false)drawRoads(ctx,doc.roads,bounds,options);
   if(options.showScenery!==false)for(const prop of doc.props){
-    if(visible({minX:prop.x-130,minY:prop.y-130,maxX:prop.x+130,maxY:prop.y+130},bounds))drawProp(ctx,prop);
+    if(visible({minX:prop.x-200,minY:prop.y-200,maxX:prop.x+200,maxY:prop.y+200},bounds))drawProp(ctx,prop,doc.assets||[]);
   }
   if(options.showMarkers!==false)drawMarkers(ctx,doc.markers,bounds);
   ctx.restore();
