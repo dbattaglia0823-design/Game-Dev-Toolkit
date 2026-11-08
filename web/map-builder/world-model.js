@@ -7,7 +7,7 @@ export const ROAD_CLASSES=Object.freeze(['city','highway','country','mountain','
 export const BIOMES=Object.freeze(['grass','forest','mountain','rock','beach','ocean','lake','city','desert','farmland']);
 export const PROPS=Object.freeze(['oak','pine','palm','bush','rock','boulder','house','building','warehouse','garage','gas_station','streetlight','sign','barrier','dock','parking']);
 export const MARKERS=Object.freeze(['player_spawn','race_start','checkpoint','finish','garage','dealership','fuel','mission','fast_travel','traffic_spawn','custom']);
-const LIM={roads:180,regions:220,props:4000,markers:400,roadPoints:100,regionPoints:180};
+const LIM={roads:180,regions:220,props:4000,markers:400,assets:12,roadPoints:100,regionPoints:180};
 const idOk=value=>typeof value==='string'&&/^[a-z][a-z0-9_-]{0,55}$/.test(value);
 const title=(value, fallback)=> typeof value==='string' ? (value.trim().slice(0,80)||fallback):fallback;
 const integer=(n,min,max,label)=>{if(!Number.isInteger(n)||n<min||n>max)throw new RangeError('Invalid '+label);return n;};
@@ -56,7 +56,7 @@ function validEntity(item,type,w,h){
     return {id:item.id,name:title(item.name,'Scenery'),type:oneOf(item.type,PROPS,'prop type'),
       x:real(item.x,0,w,'prop x'),y:real(item.y,0,h,'prop y'),
       rotation:real(item.rotation,-360,360,'prop rotation'),
-      scale:real(item.scale,.25,5,'prop scale')};
+      scale:real(item.scale,.25,5,'prop scale'),assetId:item.assetId===undefined||item.assetId===null?'':(idOk(item.assetId)?item.assetId:(()=>{throw new TypeError('Invalid asset ID');})())};
   }
   if(type==='markers'){
     return {id:item.id,name:title(item.name,'Marker'),type:oneOf(item.type,MARKERS,'marker type'),
@@ -70,7 +70,7 @@ export function createWorld({name='New racing world',width=3200,height=2200,seed
   integer(width,600,24000,'world width');integer(height,600,24000,'world height');
   integer(seed,0,2147483647,'world seed');oneOf(base,BIOMES,'base biome');
   return {format:WORLD_FORMAT,version:WORLD_VERSION,name:title(name,'Untitled world'),
-    world:{width,height,seed,base},roads:[],regions:[],props:[],markers:[]};
+    world:{width,height,seed,base},roads:[],regions:[],props:[],markers:[],assets:[]};
 }
 export function normalizeWorld(raw){
   if(!raw||typeof raw!=='object'||raw.format!==WORLD_FORMAT||raw.version!==WORLD_VERSION)
@@ -81,8 +81,20 @@ export function normalizeWorld(raw){
   const seed=integer(raw.world.seed,0,2147483647,'world seed');
   const base=oneOf(raw.world.base,BIOMES,'base biome');
   const result={format:WORLD_FORMAT,version:WORLD_VERSION,name:title(raw.name,'Untitled world'),
-    world:{width,height,seed,base},roads:[],regions:[],props:[],markers:[]};
+    world:{width,height,seed,base},roads:[],regions:[],props:[],markers:[],assets:[]};
   const ids=new Set();
+  const allAssets=raw.assets??[];
+  if(!Array.isArray(allAssets)||allAssets.length>LIM.assets)throw new RangeError('Invalid sprite asset count');
+  let assetBytes=0;
+  for(const asset of allAssets){
+    if(!asset||typeof asset!=='object'||!idOk(asset.id)||ids.has(asset.id))throw new TypeError('Invalid/duplicate sprite asset ID');
+    if(typeof asset.src!=='string'||!/^data:image\/(?:png|webp);base64,[A-Za-z0-9+/=]+$/.test(asset.src)||asset.src.length>1_400_000)throw new TypeError('Only embedded PNG/WebP sprite assets under 1 MB are supported');
+    assetBytes+=asset.src.length;
+    if(assetBytes>7_000_000)throw new RangeError('Sprite artwork exceeds 7 MB');
+    result.assets.push({id:asset.id,name:title(asset.name,'Custom sprite'),src:asset.src,
+      width:integer(asset.width,1,2048,'sprite width'),height:integer(asset.height,1,2048,'sprite height')});
+    ids.add(asset.id);
+  }
   for(const type of ['roads','regions','props','markers']){
     if(!Array.isArray(raw[type])||raw[type].length>LIM[type])throw new RangeError('Invalid '+type+' count');
     result[type]=raw[type].map(item=>{
@@ -91,6 +103,7 @@ export function normalizeWorld(raw){
       ids.add(checked.id);return checked;
     });
   }
+  for(const prop of result.props)if(prop.assetId && !result.assets.some(a=>a.id===prop.assetId))throw new TypeError('Unknown sprite asset: '+prop.assetId);
   return result;
 }
 export const parseWorld = raw => {
@@ -111,13 +124,21 @@ export function createEntity(doc,type,input){
   const id=unique(type==='roads'?'road':type==='regions'?'region':type==='props'?'prop':'marker',
     ['roads','regions','props','markers'].flatMap(t=>doc[t]));
   const item=validEntity({id,...input},type,doc.world.width,doc.world.height);
+  if(type==='props'&&item.assetId&&!doc.assets.some(a=>a.id===item.assetId))throw new TypeError('Unknown sprite asset');
   return {...doc,[type]:[...doc[type],item]};
+}
+/** Keep imported artwork embedded in versioned world JSON; no external image hosts. */
+export function addSpriteAsset(doc,{name,src,width,height}){
+  if(doc.assets.length>=LIM.assets)throw new RangeError('Maximum of 12 custom sprite assets');
+  const id=unique('asset',[...doc.assets,...doc.roads,...doc.regions,...doc.props,...doc.markers]);
+  return normalizeWorld({...doc,assets:[...doc.assets,{id,name,src,width,height}]});
 }
 export function updateEntity(doc,id,patch){
   const found=getEntity(doc,id);
   if(!found)return doc;
   const {type,item}=found;
   const updated=validEntity({...item,...patch,id},type,doc.world.width,doc.world.height);
+  if(type==='props'&&updated.assetId&&!doc.assets.some(a=>a.id===updated.assetId))throw new TypeError('Unknown sprite asset');
   return {...doc,[type]:doc[type].map(value=>value.id===id?updated:value)};
 }
 export function removeEntity(doc,id){
