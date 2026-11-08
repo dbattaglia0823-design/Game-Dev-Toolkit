@@ -325,6 +325,60 @@ function addDraftPoint(p,detail){
   refreshHeader();requestRender();
   status(draft.points.length+' control points · Enter to finish · Esc to cancel');
 }
+/** Paint or erase with continuous sampling while the pointer is held.
+ * A full press/drag is committed once on pointerup, not on each spray tick.
+ */
+function brushSettings(){
+  return {type:$('prop-type').value,assetId:$('prop-asset').value,
+    radius:Number($('brush-radius').value),spacing:Number($('brush-spacing').value),
+    count:Number($('brush-density').value),variation:$('brush-variation').checked,
+    avoidRoads:$('brush-avoid-roads').checked,avoidWater:$('brush-avoid-water').checked};
+}
+function sprayAt(position){
+  if(gesture?.mode!=='spray'||!position)return;
+  const before=doc,settings=brushSettings();
+  try{
+    doc=gesture.erase?eraseSceneryBrush(doc,position,settings.radius):paintSceneryBrush(doc,position,settings);
+    if(doc!==before){gesture.changed=true;gesture.lastCount=doc.props.length;requestRender();}
+    if(doc.props.length>=4000&&!gesture.erase)status('Scenery limit reached (4,000 objects).');
+  }catch(e){errorMessage(e);finishSpray(true);}
+}
+function beginSpray(event,p){
+  const settings=brushSettings();
+  if(!Number.isFinite(settings.radius)||settings.radius<8||settings.radius>250||
+     !Number.isFinite(settings.spacing)||settings.spacing<5||settings.spacing>200){
+    status('Brush radius must be 8–250 and spacing must be 5–200.');return;
+  }
+  gesture={mode:'spray',before:doc,last:worldPoint(p.x,p.y),erase:$('scenery-erase').checked,changed:false,
+    lastCount:doc.props.length,pointerId:event.pointerId,timer:null};
+  canvas.setPointerCapture(event.pointerId);
+  sprayAt(gesture.last);
+  if(gesture?.mode!=='spray')return;
+  gesture.timer=setInterval(()=>{if(gesture?.mode==='spray')sprayAt(gesture.last);},110);
+  status(gesture.erase?'Hold and drag to remove scenery.':'Hold and drag to scatter scenery.');
+}
+function continueSpray(p){
+  if(gesture?.mode!=='spray')return;
+  if(p.x<0||p.y<0||p.x>doc.world.width||p.y>doc.world.height){
+    gesture.last=null;return;
+  }
+  const to=worldPoint(p.x,p.y);
+  const from=gesture.last;
+  const radius=Number($('brush-radius').value);
+  if(from){
+    const steps=Math.min(35,Math.ceil(distance(from,to)/Math.max(8,radius*.65)));
+    for(let i=1;i<=steps;i++)sprayAt({x:from.x+(to.x-from.x)*i/steps,y:from.y+(to.y-from.y)*i/steps});
+  }else sprayAt(to);
+  if(gesture?.mode==='spray')gesture.last=to;
+}
+function finishSpray(cancel=false){
+  if(gesture?.mode!=='spray')return;
+  const current=gesture;clearInterval(current.timer);gesture=null;
+  if(cancel){doc=current.before;refreshUI();status('Scenery stroke canceled.');return;}
+  if(current.changed){
+    makeSnapshot(current.before,(current.erase?'Erased ':'Painted ')+Math.abs(doc.props.length-current.before.props.length)+' scenery objects. One undo step.');
+  }else{requestRender();status('No scenery changed. Try a smaller spacing or different location.');}
+}
 canvas.addEventListener('contextmenu',event=>{event.preventDefault();if(draft)finishDraft();});
 canvas.addEventListener('pointerdown',event=>{
   if(![0,1,2].includes(event.button))return;
@@ -338,6 +392,7 @@ canvas.addEventListener('pointerdown',event=>{
   canvas.focus({preventScroll:true});
   if(tool==='road'||tool==='terrain'){addDraftPoint(p,event.detail);return;}
   if(tool==='prop'){
+    if($('scenery-paint').checked||$('scenery-erase').checked){beginSpray(event,p);return;}
     const type=$('prop-type').value;
     change(d=>createEntity(d,'props',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,scale:1,rotation:0,assetId:$('prop-asset').value}),'Placed '+type.replace(/_/g,' ')+'.');
     setSelection(doc.props.at(-1)?.id);return;
@@ -348,15 +403,28 @@ canvas.addEventListener('pointerdown',event=>{
     setSelection(doc.markers.at(-1)?.id);return;
   }
   if(tool==='select'){
+    const current=selectedShape();
+    if(pointInsertMode?.id===selection?.id&&current){
+      insertSelectedPoint(p,pointInsertMode.mode);return;
+    }
+    if(event.shiftKey&&current){
+      insertSelectedPoint(p,'between');return;
+    }
+    if(event.altKey&&current){
+      const hit=hitTest(p);
+      if(hit?.id===selection.id){
+        gesture={mode:'shape',before:doc,id:selection.id,start:p};
+        canvas.setPointerCapture(event.pointerId);
+        return;
+      }
+    }
     // Double-click an existing road/poly edge to insert a new handle.
     if(event.detail>=2 && selection){
       const found=getEntity(doc,selection.id);
       if(found&&['roads','regions'].includes(found.type)){
-        const path=found.item.points,nearest=nearestOnPath(p,found.type==='regions'?[...path,path[0]]:path);
-        if(nearest.distance<Math.max(24,22/zoom)){
-          const index=nearest.segment+1;
-          change(d=>insertControlPoint(d,found.item.id,index,worldPoint(p.x,p.y)),'New control point added.');
-          setSelection(found.item.id,index);return;
+        const near=found.type==='roads'?roadInsertCandidate(found.item,p):regionInsertCandidate(found.item,p);
+        if(near?.distance<clamp(14/zoom,17,75)){
+          insertSelectedPoint(p,'between');return;
         }
       }
     }
@@ -378,9 +446,13 @@ canvas.addEventListener('pointermove',event=>{
   hover=(p.x>=0&&p.y>=0&&p.x<=doc.world.width&&p.y<=doc.world.height)?worldPoint(p.x,p.y):null;
   $('coordinates').textContent=hover?'x '+Math.round(hover.x)+' / y '+Math.round(hover.y):'Outside world';
   if(gesture){
-    if(gesture.mode==='pan'){offsetX=gesture.startX+p.sx-gesture.sx;offsetY=gesture.startY+p.sy-gesture.sy;}
+    if(gesture.mode==='spray'){continueSpray(p);}
+    else if(gesture.mode==='pan'){offsetX=gesture.startX+p.sx-gesture.sx;offsetY=gesture.startY+p.sy-gesture.sy;}
     else if(gesture.mode==='control'){
       try{doc=moveControlPoint(doc,gesture.id,gesture.index,worldPoint(p.x,p.y));}
+      catch(e){errorMessage(e);}
+    }else if(gesture.mode==='shape'){
+      try{doc=translateEntity(gesture.before,gesture.id,p.x-gesture.start.x,p.y-gesture.start.y);}
       catch(e){errorMessage(e);}
     }else if(gesture.mode==='entity'){
       try{
@@ -393,9 +465,16 @@ canvas.addEventListener('pointermove',event=>{
 });
 function pointerEnd(event,wasCancelled=false){
   if(!gesture)return;
+  if(gesture.mode==='spray'){
+    const pointerId=gesture.pointerId;
+    finishSpray(wasCancelled);
+    if(canvas.hasPointerCapture(pointerId))canvas.releasePointerCapture(pointerId);
+    return;
+  }
   const current=gesture;gesture=null;
   if(wasCancelled && current.before){doc=current.before;refreshUI();}
-  else if(current.before && current.before!==doc)makeSnapshot(current.before,'Moved '+(current.mode==='control'?'control point':'object')+'.');
+  else if(current.before && current.before!==doc)makeSnapshot(current.before,
+    'Moved '+(current.mode==='control'?'control point':current.mode==='shape'?'entire shape':'object')+'.');
   else requestRender();
   if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
 }
@@ -429,7 +508,7 @@ document.addEventListener('keydown',event=>{
   if(next){event.preventDefault();setTool(next);}
 });
 document.addEventListener('keyup',event=>{if(event.code==='Space')panSpace=false;});
-window.addEventListener('blur',()=>{panSpace=false;});
+window.addEventListener('blur',()=>{panSpace=false;if(gesture?.mode==='spray')finishSpray();});
 document.querySelectorAll('[data-tool]').forEach(button=>button.addEventListener('click',()=>setTool(button.dataset.tool)));
 $('finish-shape').addEventListener('click',finishDraft);$('cancel-shape').addEventListener('click',()=>cancelDraft());
 $('undo-world').addEventListener('click',undo);$('redo-world').addEventListener('click',redo);
