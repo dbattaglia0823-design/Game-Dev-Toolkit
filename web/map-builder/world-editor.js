@@ -80,7 +80,7 @@ function focusPoint(p){
   offsetX=viewport.clientWidth/2-p.x*zoom;offsetY=viewport.clientHeight/2-p.y*zoom;requestRender();
 }
 function refreshHeader(){
-  $('world-title').textContent=doc.name;
+  $('world-title').value=doc.name;
   $('world-dimensions').textContent=doc.world.width+' × '+doc.world.height+' world units';
   $('object-count').textContent=doc.roads.length+' roads · '+doc.regions.length+' regions · '+doc.props.length+' scenery';
   const canFinish=draft && draft.points.length>=(draft.type==='road'?2:3);
@@ -101,8 +101,8 @@ function makeSnapshot(before,label){
 }
 function change(edit,label){
   const before=doc;
-  try{const next=edit(doc);if(next!==doc){doc=next;makeSnapshot(before,label);}else requestRender();}
-  catch(e){doc=before;errorMessage(e);}
+  try{const next=edit(doc);if(next!==doc){doc=next;makeSnapshot(before,label);}else requestRender();return true;}
+  catch(e){doc=before;errorMessage(e);return false;}
 }
 function undo(){
   if(!undoStack.length)return status('No earlier changes.');
@@ -249,17 +249,18 @@ function finishDraft(){
   const work=draft;
   if(work.points.length<(work.type==='road'?2:3)){status('Add more points before finishing.');return;}
   try{
+    let applied=false;
     if(work.type==='road'){
       const roadClass=$('road-class').value,surface=$('road-surface').value;
       const width=Number($('road-width').value),lanes=Number($('road-lanes').value);
       const shoulder=Number($('road-shoulder').value);
-      change(d=>createEntity(d,'roads',{name:roadClass[0].toUpperCase()+roadClass.slice(1)+' road',roadClass,surface,
+      applied=change(d=>createEntity(d,'roads',{name:roadClass[0].toUpperCase()+roadClass.slice(1)+' road',roadClass,surface,
         width,lanes,shoulder,smooth:$('road-smooth').checked,markings:$('road-markings').checked,points:work.points}),'Curved road added. Select it to refine the control points.');
     }else{
       const biome=$('biome').value,elevation=Number($('elevation').value);
-      change(d=>createEntity(d,'regions',{name:biome[0].toUpperCase()+biome.slice(1)+' region',biome,elevation,points:work.points}),'Terrain area added. Select its boundary to reshape the area.');
+      applied=change(d=>createEntity(d,'regions',{name:biome[0].toUpperCase()+biome.slice(1)+' region',biome,elevation,points:work.points}),'Terrain area added. Select its boundary to reshape the area.');
     }
-    draft=null;refreshHeader();requestRender();
+    if(applied){draft=null;refreshHeader();requestRender();}
   }catch(e){errorMessage(e);}
 }
 function addDraftPoint(p,detail){
@@ -435,6 +436,7 @@ for(const [elementId,options] of Object.entries(fields)){
     }catch(e){errorMessage(e);refreshInspector();}
   });
 }
+$('world-title').addEventListener('change',e=>change(d=>normalizeWorld({...d,name:e.target.value}),'World renamed.'));
 $('new-world').addEventListener('click',()=>$('new-dialog').showModal());
 $('cancel-new').addEventListener('click',()=>$('new-dialog').close());
 $('create-demo').addEventListener('click',()=>{
