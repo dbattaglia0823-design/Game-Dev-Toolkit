@@ -258,6 +258,16 @@ try{
   await page.locator('#scatter').click();
   world=await exportWorld();
   assert.ok(world.props.length>0,'Scattering must create freeform world-space props');
+  // Custom sprites are self-contained in exported world JSON and Godot packages.
+  const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC','base64');
+  await page.locator('#import-sprite').setInputFiles({name:'garage.png',mimeType:'image/png',buffer:png});
+  assert.equal(await page.locator('#prop-asset option').count(),2);
+  await page.locator('[data-tool="prop"]').click();
+  await page.locator('#prop-type').selectOption('garage');
+  await clickWorld(.64,.61);
+  world=await exportWorld();
+  assert.equal(world.assets.length,1,'Imported artwork must be embedded');
+  assert.equal(world.props.at(-1).assetId,world.assets[0].id,'Prop must reference selected artwork');
   await page.locator('[data-tool="marker"]').click();
   await page.locator('#marker-type').selectOption('race_start');
   await clickWorld(.58,.63);
