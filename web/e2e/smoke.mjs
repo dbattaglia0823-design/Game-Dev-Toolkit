@@ -166,8 +166,13 @@ try{
   assert.equal(await page.locator('.tile-choice').count(),32);
   assert.equal(await page.locator('.layer-row').count(),3);
   await page.locator('.tile-choice').nth(3).click();
-  const stageBox=await page.locator('#map-canvas').boundingBox();
-  await page.mouse.click(stageBox.x+stageBox.width/2,stageBox.y+stageBox.height/2);
+  async function clickMap(dx=0,dy=0){
+    // Mobile palette selection can scroll the workspace offscreen.
+    await page.locator('#map-canvas').scrollIntoViewIfNeeded();
+    const stageBox=await page.locator('#map-canvas').boundingBox();
+    await page.mouse.click(stageBox.x+stageBox.width/2+dx,stageBox.y+stageBox.height/2+dy);
+  }
+  await clickMap();
   async function getMapExport(){
     const next=page.waitForEvent('download');
     await page.locator('#export-json').click();
@@ -175,16 +180,16 @@ try{
     return JSON.parse(await readFile(await file.path(),'utf8'));
   }
   const painted=await getMapExport();
-  assert.ok(painted.layers[0].tiles.some(t=>t?.index===3),'Brush must paint selected tile; '+JSON.stringify({name:painted.name,tiles:painted.layers[0].tiles.filter(Boolean),status:await page.locator('#status').innerText(),cursor:await page.locator('#cursor-position').innerText(),selectedTile:await page.locator('.tile-choice.selected').count(),canvas:stageBox,map:await page.locator('#map-size-label').innerText()}));
+  assert.ok(painted.layers[0].tiles.some(t=>t?.index===3),'Brush must paint selected tile; '+JSON.stringify({name:painted.name,tiles:painted.layers[0].tiles.filter(Boolean),status:await page.locator('#status').innerText(),cursor:await page.locator('#cursor-position').innerText(),selectedTile:await page.locator('.tile-choice.selected').count(),map:await page.locator('#map-size-label').innerText()}));
   await page.locator('#undo-map').click();
   assert.ok(!(await getMapExport()).layers[0].tiles.some(Boolean),'Undo must restore empty layer');
   await page.locator('#redo-map').click();
   assert.ok((await getMapExport()).layers[0].tiles.some(Boolean),'Redo must restore stroke');
   await page.locator('[data-tool="block"]').click();
-  await page.mouse.click(stageBox.x+stageBox.width/2,stageBox.y+stageBox.height/2);
+  await clickMap();
   assert.ok((await getMapExport()).collision.some(Boolean),'Collision paint must set blocked cells');
   await page.locator('[data-tool="object"]').click();
-  await page.mouse.click(stageBox.x+stageBox.width/2+40,stageBox.y+stageBox.height/2);
+  await clickMap(40);
   assert.equal((await getMapExport()).objects.length,1,'Marker placement must persist');
   const zipDownload=page.waitForEvent('download');
   await page.locator('#export-godot').click();
