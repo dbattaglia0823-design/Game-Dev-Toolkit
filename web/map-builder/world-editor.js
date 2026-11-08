@@ -1,6 +1,6 @@
 import {
   createWorld,demoWorld,parseWorld,serializeWorld,normalizeWorld,getEntity,
-  createEntity,updateEntity,removeEntity,reorderEntity,moveControlPoint,insertControlPoint,
+  createEntity,addSpriteAsset,updateEntity,removeEntity,reorderEntity,moveControlPoint,insertControlPoint,
   deleteControlPoint,scatterVegetation
 } from './world-model.js';
 import {distance,clamp,nearestOnPath,pointInPolygon,regionAt,sampleRoad} from './world-geometry.js';
@@ -185,7 +185,8 @@ function refreshInspector(){
   }else if(type==='regions'){
     $('inspect-biome').value=item.biome;$('inspect-elevation').value=item.elevation;
   }else if(type==='props'){
-    $('inspect-prop-type').value=item.type;$('inspect-scale').value=item.scale;$('inspect-rotation').value=item.rotation;
+    $('inspect-prop-type').value=item.type;$('inspect-asset').value=item.assetId||'';
+    $('inspect-scale').value=item.scale;$('inspect-rotation').value=item.rotation;
   }else{
     $('inspect-marker-type').value=item.type;$('inspect-properties').value=JSON.stringify(item.properties,null,2);
   }
@@ -221,7 +222,16 @@ function refreshEntities(){
     const p=document.createElement('p');p.className='muted-copy';p.textContent='Showing the first 180 items. Filter by category to find more.';list.append(p);
   }
 }
-function refreshUI(){refreshHeader();refreshInspector();refreshEntities();requestRender();}
+function refreshSpriteLists(){
+  for(const id of ['prop-asset','inspect-asset']){
+    const select=$(id),previous=select.value;
+    select.replaceChildren();
+    select.append(new Option('Built-in illustration',''));
+    for(const asset of doc.assets||[])select.append(new Option(asset.name,asset.id));
+    select.value=(doc.assets||[]).some(a=>a.id===previous)?previous:'';
+  }
+}
+function refreshUI(){refreshSpriteLists();refreshHeader();refreshInspector();refreshEntities();requestRender();}
 function startWorld(world,message){
   clearTimeout(autosaveTimer);
   doc=normalizeWorld(world);selection=null;draft=null;gesture=null;
@@ -277,7 +287,7 @@ canvas.addEventListener('pointerdown',event=>{
   if(tool==='road'||tool==='terrain'){addDraftPoint(p,event.detail);return;}
   if(tool==='prop'){
     const type=$('prop-type').value;
-    change(d=>createEntity(d,'props',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,scale:1,rotation:0}),'Placed '+type.replace(/_/g,' ')+'.');
+    change(d=>createEntity(d,'props',{type,name:type.replace(/_/g,' '),x:p.x,y:p.y,scale:1,rotation:0,assetId:$('prop-asset').value}),'Placed '+type.replace(/_/g,' ')+'.');
     setSelection(doc.props.at(-1)?.id);return;
   }
   if(tool==='marker'){
@@ -407,7 +417,7 @@ const fields={
   'inspect-road-width':{width:'number'},'inspect-road-lanes':{lanes:'number'},
   'inspect-road-shoulder':{shoulder:'number'},'inspect-road-smooth':{smooth:'boolean'},
   'inspect-road-markings':{markings:'boolean'},'inspect-biome':{biome:'string'},
-  'inspect-elevation':{elevation:'number'},'inspect-prop-type':{type:'string'},
+  'inspect-elevation':{elevation:'number'},'inspect-prop-type':{type:'string'},'inspect-asset':{assetId:'string'},
   'inspect-scale':{scale:'number'},'inspect-rotation':{rotation:'number'},
   'inspect-marker-type':{type:'string'},'inspect-x':{x:'number'},'inspect-y':{y:'number'},
   'inspect-properties':{properties:'json'}
@@ -494,6 +504,28 @@ $('export-godot').addEventListener('click',async()=>{
     status('Godot 4 world ZIP downloaded. See CODEX_IMPORT.md inside.');
   }catch(e){errorMessage(e);}
   finally{button.disabled=false;}
+});
+document.addEventListener('gdt-world-asset-ready',requestRender);
+$('import-sprite').addEventListener('change',async event=>{
+  const file=event.target.files?.[0];
+  if(!file)return;
+  try{
+    if(!['image/png','image/webp'].includes(file.type))throw new TypeError('Only PNG and WebP artwork is supported.');
+    if(file.size>950_000)throw new RangeError('Sprite artwork must be under 950 KB.');
+    const src=await new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onload=()=>resolve(reader.result);
+      reader.onerror=()=>reject(new Error('Could not read sprite file.'));
+      reader.readAsDataURL(file);
+    });
+    const image=new Image();image.src=src;await image.decode();
+    if(image.naturalWidth>2048||image.naturalHeight>2048)throw new RangeError('Sprites must be 2048 pixels or smaller.');
+    const previous=doc;
+    change(d=>addSpriteAsset(d,{name:file.name,src,width:image.naturalWidth,height:image.naturalHeight}),
+      'Imported custom artwork: '+file.name+'. Select it for scenery placement.');
+    if(doc!==previous){const id=doc.assets.at(-1).id;$('prop-asset').value=id;}
+  }catch(e){errorMessage(e);}
+  event.target.value='';
 });
 const resize=new ResizeObserver(requestRender);resize.observe(viewport);
 window.addEventListener('resize',requestRender);
