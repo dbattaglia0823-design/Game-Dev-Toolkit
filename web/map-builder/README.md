@@ -10,7 +10,8 @@ The visual direction uses an original illustrated top-down style. WORKS: Motorsp
 - **Freeform biomes:** Draw and reshape polygon terrain regions: grass, forests, mountains, rock, beaches, ocean, lakes, cities, desert and farmland. Overlap regions and adjust their ordering.
 - **Scenery:** Place trees, conifers, palms, bushes, rocks, houses, office buildings, warehouses, racing garages, fuel stations, signs, parking areas, barriers, streetlights and docks. Import your own top-down PNG/WebP scenery sprites (up to 950 KB each) and attach them to individual objects as an artwork override; images are embedded in the world JSON and Godot ZIP. Scatter vegetation inside selected land regions while avoiding roads.
 - **Gameplay markers:** Player/traffic spawns, race starts, checkpoints, finish, garage, dealership, fuel, mission and fast-travel points, with editable JSON properties.
-- **Editing and navigation:** Per-point curve and coastline editing, double-click to insert a point, control-point deletion, entity ordering, visibility controls, pan/zoom, minimap, undo/redo and automatic browser-local recovery.
+- **Editing and navigation:** Select any existing road and use **Insert on curve**, **Extend start**, or **Extend end** to add road control points. Shift-click directly on a selected curve or double-click near it, drag control handles, edit point X/Y numerically, or Alt-drag to move an entire road or terrain shape. Duplicate and nudge placed scenery, terrain, roads and markers; rotate and resize scenery; edit marker properties, entity draw order and visibility. Includes pan/zoom, minimap, undo/redo and browser-local recovery.
+- **Continuous scenery painting:** Enable **Hold and drag to scatter** under Scenery to paint while holding the left mouse button, even when stationary. Adjust brush radius, density, spacing, random size/rotation, road avoidance and water avoidance. Enable **Erase scenery with brush** to remove nearby objects. An entire press-and-drag stroke is one undo step; canceled strokes are restored.
 - **Export:** World JSON, flattened PNG preview, and Godot 4 ZIP including the vector world loader, road centerlines and junction hints, marker metadata and integration guide.
 
 The included Coastal Ridge example has a city, forests, mountains, lake, sand and ocean, winding road networks, buildings, nature and race markers.
@@ -20,12 +21,14 @@ The included Coastal Ridge example has a city, forests, mountains, lake, sand an
 1. Choose **Draw road (R)**, road class, surface, width, lane count and shoulder.
 2. Click to create the centerline. Add points around bends. Click near existing road endpoints to snap.
 3. Press **Enter**, double-click, right-click or **Finish shape** to save.
-4. Switch to **Select (V)**. Drag its control points to reshape. Double-click along an existing road segment to insert a point. Select a point and choose **Remove point**.
-5. Edit road attributes on the right-side inspector.
+4. Switch to **Select (V)** and click an existing road or select it in the Entities list. Click **+ Insert on curve** in the Inspector, then click anywhere along that road's visible centerline to add a point. Alternatively Shift-click the selected road, or double-click the curve. The new point is selected automatically.
+5. To extend an existing road without creating a disconnected road, use **Extend start** or **Extend end** in the Inspector and click the new endpoint. Drag handles or edit their X/Y numbers; choose **Remove point** to simplify a curve.
+6. Use Alt-drag to move an entire selected road or terrain shape without changing its geometry. Duplicate creates a separate editable copy; Move/Nudge buttons adjust its world position.
+7. Edit width, material, lanes, shoulder, curve smoothing and markings on the right-side inspector.
 
 For a coast, choose **Terrain (T)** and Beach or Ocean, click the polygon boundary, then press Enter. Select the resulting region and drag its outline to refine the shoreline. Use **Scatter selected region** to populate land with biome-appropriate trees/rocks/palms. Roads and polygon shapes are based on floating-point world coordinates; there is no snapped grid.
 
-Keyboard: V select, R road, T terrain, P scenery, M marker, H pan, Enter finish, Esc cancel, Delete remove selected, Space or middle-button drag pan, mouse wheel zoom, Ctrl/Cmd+Z undo, Ctrl/Cmd+Y or Ctrl/Cmd+Shift+Z redo.
+Keyboard: V select, R road, T terrain, P scenery, M marker, H pan, Enter finish, Esc cancel, Delete remove selected, Shift-click selected road to insert a point, Alt-drag selected shape to move it, Space or middle-button drag pan, mouse wheel zoom, Ctrl/Cmd+D duplicate, Ctrl/Cmd+Z undo, Ctrl/Cmd+Y or Ctrl/Cmd+Shift+Z redo.
 
 ## Versioned world data
 
