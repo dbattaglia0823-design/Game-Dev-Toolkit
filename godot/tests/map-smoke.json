@@ -1,0 +1,56 @@
+{
+  "format": "gdt.topdown-map",
+  "version": 1,
+  "name": "Godot smoke",
+  "width": 2,
+  "height": 2,
+  "tileSize": 32,
+  "tilesets": [
+    {
+      "id": "test",
+      "name": "Tile",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAM0lEQVR4nO3OMQEAMAjEwKf2OlcYiosMlouBXN1+P4udzTkAAAAAAAAAAAAAAAAAAECSDFXjAnC0T3HoAAAAAElFTkSuQmCC",
+      "width": 32,
+      "height": 32
+    }
+  ],
+  "layers": [
+    {
+      "id": "ground",
+      "name": "Ground",
+      "visible": true,
+      "locked": false,
+      "opacity": 1,
+      "tiles": [
+        {
+          "set": "test",
+          "index": 0
+        },
+        null,
+        {
+          "set": "test",
+          "index": 0
+        },
+        null
+      ]
+    }
+  ],
+  "collision": [
+    0,
+    1,
+    1,
+    0
+  ],
+  "objects": [
+    {
+      "id": "player-1",
+      "type": "player_spawn",
+      "name": "Start",
+      "x": 0,
+      "y": 0,
+      "properties": {
+        "team": "blue"
+      }
+    }
+  ]
+}
