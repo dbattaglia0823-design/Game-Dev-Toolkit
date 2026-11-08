@@ -47,5 +47,5 @@ export function buildWorldZip(doc,loader){
       ''
     ].join('\n')]
   ]);
-  return {files,bytes:createZip(files),manifest:JSON.parse(files.get('manifest.json'))};
+  return {files,bytes:createZip(files,{maxFileSize:8_000_000}),manifest:JSON.parse(files.get('manifest.json'))};
 }
