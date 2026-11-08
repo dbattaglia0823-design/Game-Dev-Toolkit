@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1019">
+  <meta name="description" content="Choose a game development tool: top-down map editor, functional UI builder, templates, validation, exports, and demos for Web and Godot 4.">
+  <title>Game Dev Toolkit — Tool Hub</title>
+  <link rel="stylesheet" href="web/home/home.css">
+  <script defer src="web/home/home.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to tools</a>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="./" aria-label="Game Dev Toolkit home">
+        <span class="brand-symbol" aria-hidden="true"><span>G</span><span class="brand-pip"></span></span>
+        <span class="brand-name">GAME DEV <strong>TOOLKIT</strong><small>WORKSPACE</small></span>
+      </a>
+      <nav class="top-nav" aria-label="Sections">
+        <a href="#build">Builders</a>
+        <a href="#integrate">Integrate</a>
+        <a href="#explore">Explore</a>
+        <a class="nav-github" href="https://github.com/dbattaglia0823-design/Game-Dev-Toolkit">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> ALL YOUR GAME TOOLS, ONE PLACE</div>
+        <h1 id="page-title">What are we <em>building</em> today?</h1>
+        <p>Design levels, build interfaces, validate layouts, and export to your game. Pick a workspace and get straight to work.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="web/map-builder/index.html">Open 2D Map Builder <span aria-hidden="true">↗</span></a>
+          <a class="button secondary" href="web/builder/index.html">Open UI Builder <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-meta"><span><span class="tiny-check" aria-hidden="true">✓</span> Browser-based</span><span><span class="tiny-check" aria-hidden="true">✓</span> Web + Godot 4 workflows</span><span><span class="tiny-check" aria-hidden="true">✓</span> Exportable files</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-top"><span class="art-dots"><i></i><i></i><i></i></span><span>LEVEL / FOREST CROSSING</span><span class="art-tag">2D EDITOR</span></div>
+        <div class="art-inner">
+          <div class="art-sidebar"><span class="art-tool selected">▦</span><span class="art-tool">◇</span><span class="art-tool">◈</span><span class="art-tool">⌁</span></div>
+          <div class="art-grid">
+            <span class="tile land"></span><span class="tile land"></span><span class="tile tree"></span><span class="tile land"></span><span class="tile land"></span><span class="tile water"></span><span class="tile water"></span><span class="tile water"></span>
+            <span class="tile land"></span><span class="tile tree"></span><span class="tile land"></span><span class="tile path"></span><span class="tile path"></span><span class="tile water"></span><span class="tile water"></span><span class="tile water"></span>
+            <span class="tile land"></span><span class="tile land"></span><span class="tile path"></span><span class="tile path"></span><span class="tile land"></span><span class="tile bridge"></span><span class="tile bridge"></span><span class="tile water"></span>
+            <span class="tile tree"></span><span class="tile land"></span><span class="tile path"></span><span class="tile land"></span><span class="tile land marker"></span><span class="tile path"></span><span class="tile path"></span><span class="tile land"></span>
+            <span class="tile land"></span><span class="tile land"></span><span class="tile path"></span><span class="tile land"></span><span class="tile tree"></span><span class="tile land"></span><span class="tile land"></span><span class="tile land"></span>
+          </div>
+        </div>
+        <div class="art-bottom"><span><i class="signal" aria-hidden="true"></i> 3 LAYERS</span><span>32 × 32 GRID</span><span>100%</span></div>
+      </div>
+    </section>
+
+    <section class="directory" aria-labelledby="directory-heading">
+      <div class="directory-top">
+        <div><p class="section-kicker">THE WORKSPACE</p><h2 id="directory-heading">Choose a tool</h2></div>
+        <div class="search-box">
+          <label for="tool-search">Find a tool</label>
+          <div class="search-input-wrap">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="tool-search" type="search" placeholder="Search tools or features..." autocomplete="off" aria-controls="tool-directory">
+            <kbd aria-hidden="true">/</kbd>
+          </div>
+        </div>
+      </div>
+      <div id="results-count" class="results-count" role="status" aria-live="polite">12 tools and demos</div>
+      <div id="tool-directory">
+        <section id="build" class="tool-section" aria-labelledby="build-heading" data-tool-section>
+          <div class="group-heading"><div><span class="group-num">01</span><h3 id="build-heading">Build & design</h3></div><span class="group-description">Create maps, screens and interfaces</span></div>
+          <div class="tool-grid">
+            <a class="tool-card featured" href="web/map-builder/index.html" data-tool-card data-search="top down tilemap spritesheet level map terrain collisions 2d pixel art">
+              <span class="card-top"><span class="card-icon map-icon" aria-hidden="true">▦</span><span class="card-label">LEVEL DESIGN</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>2D Map Builder</strong><span class="card-description">Paint top-down maps with tiles, layers, collision zones and gameplay markers.</span>
+              <span class="card-bottom">START BUILDING <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card featured" href="web/builder/index.html" data-tool-card data-search="functional ui wireframe controls drag drop layouts buttons game interface hud skill trees">
+              <span class="card-top"><span class="card-icon ui-icon" aria-hidden="true">▣</span><span class="card-label">INTERFACE DESIGN</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Functional UI Builder</strong><span class="card-description">Arrange menus, controls and HUDs with real action and data-binding IDs.</span>
+              <span class="card-bottom">OPEN EDITOR <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/builder/index.html?preset=skill-tree" data-tool-card data-search="skill tree node graph buttons connections progression levels abilities builder">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">⌘</span><span class="card-label">PROGRESSION</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Skill Tree Designer</strong><span class="card-description">Open the UI builder with a connected skill-tree layout ready to edit.</span>
+              <span class="card-bottom">EDIT SKILL TREE <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/builder/legacy-studio.html" data-tool-card data-search="legacy visual studio v1 colors fonts image elements visual layout editor">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">◈</span><span class="card-label">CLASSIC EDITOR</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Legacy Visual Studio</strong><span class="card-description">Continue editing older visual UI layouts and export Web or Godot scenes.</span>
+              <span class="card-bottom">OPEN STUDIO <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+        </section>
+
+        <section id="integrate" class="tool-section" aria-labelledby="integrate-heading" data-tool-section>
+          <div class="group-heading"><div><span class="group-num">02</span><h3 id="integrate-heading">Discover & integrate</h3></div><span class="group-description">Find, validate and package layouts</span></div>
+          <div class="tool-grid">
+            <a class="tool-card" href="web/catalog/index.html" data-tool-card data-search="template library catalog 57 layouts menu inventory garage dealership race selection">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">▤</span><span class="card-label">TEMPLATE LIBRARY</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Template Library</strong><span class="card-description">Browse 57 functional layouts for menus, inventories, shops, garages and more.</span>
+              <span class="card-bottom">BROWSE TEMPLATES <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/package/index.html" data-tool-card data-search="integration package builder export download zip godot web codex templates">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">⬡</span><span class="card-label">EXPORT</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Integration Package Builder</strong><span class="card-description">Bundle functional layouts, contracts and adapters for Web or Godot 4.</span>
+              <span class="card-bottom">BUILD PACKAGE <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/validator/index.html" data-tool-card data-search="integration validator test inspect checks diagnostics action bindings accessibility">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">✓</span><span class="card-label">QUALITY CHECK</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Integration Validator</strong><span class="card-description">Check layout structure, action IDs, data bindings and integration warnings.</span>
+              <span class="card-bottom">VALIDATE LAYOUT <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+        </section>
+
+        <section id="explore" class="tool-section" aria-labelledby="explore-heading" data-tool-section>
+          <div class="group-heading"><div><span class="group-num">03</span><h3 id="explore-heading">Preview & learn</h3></div><span class="group-description">See working examples and reusable components</span></div>
+          <div class="tool-grid">
+            <a class="tool-card" href="web/showcase/index.html" data-tool-card data-search="ui showcase buttons inventory hud upgrades preview components interactive gallery">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">▥</span><span class="card-label">GALLERY</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>UI Showcase</strong><span class="card-description">Explore themed interface components, inventory cards, upgrades and HUD examples.</span>
+              <span class="card-bottom">VIEW SHOWCASE <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/menu-demo/index.html" data-tool-card data-search="interactive game menu templates main pause settings game over navigation">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">☷</span><span class="card-label">DEMO</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Game Menu Templates</strong><span class="card-description">Try reusable main-menu, settings, pause and game-over screen flows.</span>
+              <span class="card-bottom">TRY MENUS <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/layout-kit/behaviors-demo/index.html" data-tool-card data-search="functional ui behaviors example inventory equipment search filtering shop selection confirmation">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">⇄</span><span class="card-label">DEMO</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>UI Behaviors Demo</strong><span class="card-description">Test searching, item selection, equipment slots and confirmation actions.</span>
+              <span class="card-bottom">TRY BEHAVIORS <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/layout-kit/example/index.html" data-tool-card data-search="functional layout runtime example action binding live adapter">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">⧉</span><span class="card-label">EXAMPLE</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Layout Runtime Demo</strong><span class="card-description">Preview functional layouts running with data bindings and action events.</span>
+              <span class="card-bottom">VIEW EXAMPLE <span aria-hidden="true">→</span></span>
+            </a>
+            <a class="tool-card" href="web/demo/index.html" data-tool-card data-search="web utilities core storage settings tabs modal save load demo">
+              <span class="card-top"><span class="card-icon" aria-hidden="true">◉</span><span class="card-label">FOUNDATIONS</span><span class="card-arrow" aria-hidden="true">↗</span></span>
+              <strong>Web Utilities Demo</strong><span class="card-description">Explore reusable settings, tab navigation, dialogs and save/load storage.</span>
+              <span class="card-bottom">VIEW DEMO <span aria-hidden="true">→</span></span>
+            </a>
+          </div>
+        </section>
+      </div>
+      <p id="empty-results" class="empty-state" hidden>No matching tools. Try “map”, “UI”, “export” or “menu”.</p>
+    </section>
+    <section class="next-step" aria-label="Integration guidance">
+      <div class="next-step-icon" aria-hidden="true">→</div>
+      <div><strong>Building a game with Godot or JavaScript?</strong><p>Export a map or UI layout from its builder, then use the included integration instructions to connect it to your game.</p></div>
+      <a href="https://github.com/dbattaglia0823-design/Game-Dev-Toolkit#start-here">Read setup guide <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+  <footer class="shell footer">
+    <span><strong>GDT</strong> / GAME DEVELOPMENT TOOLKIT</span>
+    <nav aria-label="Documentation">
+      <a href="https://github.com/dbattaglia0823-design/Game-Dev-Toolkit">Repository</a>
+      <a href="https://github.com/dbattaglia0823-design/Game-Dev-Toolkit/tree/main/docs">Documentation</a>
+    </nav>
+    <span>Built for creators. Powered by the browser.</span>
+  </footer>
+</body>
+</html>
