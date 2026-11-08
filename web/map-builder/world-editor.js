@@ -726,5 +726,7 @@ $('import-sprite').addEventListener('change',async event=>{
 const resize=new ResizeObserver(requestRender);resize.observe(viewport);
 window.addEventListener('resize',requestRender);
 try{const stored=localStorage.getItem(AUTO);if(stored)doc=parseWorld(stored);}catch{}
+// Read-only integration/testing API. Callers cannot mutate editor state through this snapshot.
+window.GDTWorldForge=Object.freeze({getSnapshot:()=>structuredClone(doc)});
 refreshUI();
 requestAnimationFrame(()=>{fit();status('Freeform world loaded. Select a road or draw one with Road (R).');});
