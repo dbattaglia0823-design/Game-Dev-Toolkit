@@ -230,9 +230,12 @@ try{
     await page.mouse.click(bounds.x+bounds.width*x,bounds.y+bounds.height*y);
   }
   async function exportWorld() {
-    const result=page.waitForEvent('download');
+    const result=page.waitForEvent('download',{timeout:6000});
     await page.locator('#export-world').click();
-    const file=await result;
+    const file=await result.catch(async err=>{
+      throw new Error('World JSON export failed: '+await page.locator('#status').innerText()+
+        '; page errors: '+JSON.stringify(errors)+'; '+err.message);
+    });
     return JSON.parse(await readFile(await file.path(),'utf8'));
   }
   await page.locator('[data-tool="road"]').click();
