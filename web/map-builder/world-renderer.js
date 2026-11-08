@@ -95,7 +95,6 @@ function traceOffset(points,offset){
 }
 function drawRoadBase(ctx,road,points){
   const w=road.width,s=road.shoulder;
-  drawRoadStroke(ctx,points,w+s*2+7,'#202b273e');
   drawRoadStroke(ctx,points,w+s*2,road.surface==='dirt'?'#baa27a':road.surface==='gravel'?'#a99f8a':'#6b6760');
   drawRoadStroke(ctx,points,w+3,'#242a2e99');
   drawRoadStroke(ctx,points,w,ROAD_COLORS[road.surface]);
@@ -175,7 +174,6 @@ function drawTree(ctx,type,seed){
 function drawBuilding(ctx,kind){
   const size={house:[66,54],building:[76,87],warehouse:[116,72],garage:[96,75],gas_station:[92,63],parking:[135,100]}[kind]||[76,62];
   const [w,h]=size;
-  rect(ctx,-w/2+9,-h/2+12,w,h,'#25312b76');
   if(kind==='parking'){
     rect(ctx,-w/2,-h/2,w,h,'#575b5b');ctx.strokeStyle='#e4dfbc';ctx.lineWidth=2;
     for(let i=-w/2+16;i<w/2;i+=20){ctx.beginPath();ctx.moveTo(i,-h/2+4);ctx.lineTo(i,-h/2+38);ctx.stroke();}
@@ -213,17 +211,15 @@ export function drawProp(ctx,prop,assets=[]){
     }
   }
   if(['oak','pine','palm','bush'].includes(type)){
-    ctx.fillStyle='#1b3d3263';ctx.beginPath();ctx.ellipse(11,13,27,20,-.25,0,Math.PI*2);ctx.fill();
     if(type==='bush'){circle(ctx,0,0,18,'#3c7650');circle(ctx,-8,-5,11,'#549461');}
     else drawTree(ctx,type,stringSeed(prop.id));
   }else if(['house','building','warehouse','garage','gas_station','parking'].includes(type))drawBuilding(ctx,type);
   else if(type==='rock'||type==='boulder'){
     const r=type==='boulder'?26:15;
-    ctx.fillStyle='#313b3670';ctx.beginPath();ctx.ellipse(8,10,r,r*.7,.1,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#8b918d';ctx.beginPath();ctx.moveTo(-r,3);ctx.lineTo(-r*.6,-r*.7);ctx.lineTo(r*.4,-r);ctx.lineTo(r,r*.4);ctx.lineTo(0,r*.7);ctx.closePath();ctx.fill();
     ctx.fillStyle='#c6c5b4';ctx.beginPath();ctx.moveTo(-r*.6,-r*.7);ctx.lineTo(r*.4,-r);ctx.lineTo(0,0);ctx.closePath();ctx.fill();
   }else if(type==='streetlight'){
-    circle(ctx,5,7,8,'#1b292850');circle(ctx,0,0,4,'#4e5857');circle(ctx,-1,-2,2,'#ffedb3');
+    circle(ctx,0,0,4,'#4e5857');circle(ctx,-1,-2,2,'#ffedb3');
   }else if(type==='sign'){rect(ctx,-3,0,6,23,'#6d6050');rect(ctx,-18,-15,36,17,'#e4d8ab');rect(ctx,-15,-11,30,3,'#8b7c66');}
   else if(type==='barrier'){rect(ctx,-28,-7,56,14,'#e7e1d0');for(let x=-28;x<25;x+=15)rect(ctx,x,-7,8,14,'#c65c4d');}
   else if(type==='dock'){rect(ctx,-21,-64,42,128,'#6e5237');for(let y=-59;y<64;y+=19)rect(ctx,-18,y,36,4,'#b18d57');}
