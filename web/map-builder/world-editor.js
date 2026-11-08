@@ -557,7 +557,7 @@ for(const button of document.querySelectorAll('[data-nudge]')){
 for(const [id,changeBy] of [['rotate-prop-left',-15],['rotate-prop-right',15]]){
   $(id).addEventListener('click',()=>{
     const found=selection?getEntity(doc,selection.id):null;if(found?.type!=='props')return;
-    const next=((found.item.rotation+changeBy+360)%720)-360;
+    const next=(((found.item.rotation+changeBy+180)%360+360)%360)-180;
     change(d=>updateEntity(d,selection.id,{rotation:next}),'Rotated scenery.');
   });
 }
