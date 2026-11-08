@@ -7,6 +7,8 @@ import {createWorld,demoWorld,normalizeWorld,parseWorld,serializeWorld,createEnt
 import {distance,nearestOnPath,pointInPolygon,polygonArea,roadAt,regionAt,
   sampleRoad,roadIntersections,scatterPoints,seeded} from '../map-builder/world-geometry.js';
 import {buildWorldZip,buildRoadNetwork} from '../map-builder/world-export.js';
+import {roadInsertCandidate,regionInsertCandidate,insertShapePoint,translateEntity,
+  duplicateEntity,paintSceneryBrush,eraseSceneryBrush} from '../map-builder/world-edit-tools.js';
 
 const coords=(...xy)=>xy.map(([x,y])=>({x,y}));
 test('v2 racing worlds have no tiles or cell grid and roundtrip with stable IDs',()=>{
@@ -145,4 +147,88 @@ test('embedded sprite assets roundtrip and validate references without external 
   assert.throws(()=>createEntity(world,'props',{type:'garage',x:4,y:5,scale:1,rotation:0,assetId:'asset-missing'}),/Unknown sprite asset/);
   assert.throws(()=>addSpriteAsset(world,{name:'Unsafe',src:'https://untrusted.example/sprite.png',width:32,height:32}),/embedded PNG/);
   assert.throws(()=>normalizeWorld({...world,assets:[]}),/Unknown sprite asset/);
+});
+
+
+test('new road insertion maps curved samples back to their original editable span',()=>{
+  let doc=createWorld({width:1600,height:1400});
+  doc=createEntity(doc,'roads',{name:'Hairpin',roadClass:'mountain',surface:'asphalt',
+    width:34,lanes:2,shoulder:4,markings:true,smooth:true,
+    points:coords([120,650],[440,210],[850,800],[1200,590])});
+  const road=doc.roads[0];
+  const sample=sampleRoad(road.points,true,9);
+  const target=sample[Math.round(sample.length*.45)];
+  const hit=roadInsertCandidate(road,{x:target.x+3,y:target.y+2});
+  assert.ok(hit.distance<5,'Select a point on the actual curved centerline');
+  assert.ok(hit.index>=1&&hit.index<=3);
+  const added=insertShapePoint(doc,road.id,{x:target.x+3,y:target.y+2},{maxDistance:20});
+  assert.equal(added.doc.roads[0].points.length,5);
+  assert.deepEqual(added.doc.roads[0].points[added.index],{x:added.point.x,y:added.point.y});
+  assert.deepEqual(doc.roads[0].points,road.points,'Existing control points must remain unmodified');
+  assert.throws(()=>insertShapePoint(doc,road.id,{x:1500,y:1400},{maxDistance:10}),/Click close/);
+  const appended=insertShapePoint(doc,road.id,{x:1400,y:800},{mode:'end'});
+  assert.deepEqual(appended.doc.roads[0].points.at(-1),{x:1400,y:800});
+  const prepended=insertShapePoint(doc,road.id,{x:20,y:500},{mode:'start'});
+  assert.deepEqual(prepended.doc.roads[0].points[0],{x:20,y:500});
+  assert.deepEqual(parseWorld(serializeWorld(added.doc)),added.doc,'New road points must survive exports');
+});
+test('terrain polygon insertion supports closing edge, then point movement/removal',()=>{
+  let doc=createWorld();
+  doc=createEntity(doc,'regions',{name:'Coast',biome:'beach',elevation:0,points:coords([60,80],[450,80],[450,450],[60,450])});
+  const region=doc.regions[0];
+  const hit=regionInsertCandidate(region,{x:52,y:260});
+  assert.equal(hit.index,region.points.length,'Closing edge must insert at the array end');
+  const result=insertShapePoint(doc,region.id,{x:52,y:260},{maxDistance:20});
+  assert.equal(result.doc.regions[0].points.length,5);
+  assert.deepEqual(result.point,{x:60,y:260});
+  assert.equal(moveControlPoint(result.doc,region.id,result.index,{x:20,y:250}).regions[0].points[result.index].x,20);
+  assert.equal(deleteControlPoint(result.doc,region.id,result.index).regions[0].points.length,4);
+});
+test('duplicate and translate roads, terrain, props and markers without modifying originals',()=>{
+  let doc=createWorld({width:1200,height:1000});
+  doc=createEntity(doc,'roads',{name:'Ridge',roadClass:'country',surface:'gravel',width:24,lanes:1,
+    shoulder:2,markings:false,smooth:true,points:coords([100,150],[320,250],[500,330])});
+  const road=doc.roads[0],beforeLength=road.points.length;
+  let out=duplicateEntity(doc,road.id,45);
+  assert.equal(out.doc.roads.length,2);assert.notEqual(out.id,road.id);
+  assert.equal(out.doc.roads[1].points.length,beforeLength);
+  assert.equal(out.doc.roads[1].name,'Ridge copy');
+  assert.equal(out.doc.roads[1].points[0].x,145);
+  const translated=translateEntity(out.doc,road.id,120,75);
+  assert.equal(translated.roads[0].points[0].x,220);
+  assert.equal(translated.roads[0].points[0].y,225);
+  assert.deepEqual(out.doc.roads[0].points,road.points);
+  doc=createEntity(doc,'markers',{name:'Finish',type:'finish',x:1000,y:900,rotation:0,properties:{laps:3}});
+  out=duplicateEntity(doc,doc.markers[0].id,90);
+  assert.equal(out.doc.markers.length,2);
+  assert.deepEqual(out.doc.markers[1].properties,{laps:3});
+  assert.deepEqual(parseWorld(serializeWorld(out.doc)),out.doc);
+  const moved=translateEntity(doc,doc.markers[0].id,600,900);
+  assert.equal(moved.markers[0].x,1200);
+  assert.equal(moved.markers[0].y,1000);
+  assert.throws(()=>duplicateEntity(doc,'unknown'),/Select an entity/);
+});
+test('drag scenery brush uses world-space radius, spacing, road/water avoidance and safe output',()=>{
+  let doc=createWorld({width:1600,height:1100,seed:33});
+  doc=createEntity(doc,'regions',{name:'Ocean',biome:'ocean',elevation:0,
+    points:coords([1200,0],[1600,0],[1600,1100],[1200,1100])});
+  doc=createEntity(doc,'roads',{name:'Straight highway',roadClass:'highway',surface:'asphalt',
+    width:80,lanes:2,shoulder:4,markings:true,smooth:false,points:coords([0,530],[1600,530])});
+  const rand=seeded(500);
+  const brush={type:'pine',radius:120,spacing:27,count:12,variation:true,avoidRoads:true,avoidWater:true};
+  const first=paintSceneryBrush(doc,{x:800,y:300},brush,rand);
+  assert.ok(first.props.length>0);
+  assert.ok(first.props.every(p=>distance(p,{x:800,y:300})<=120));
+  assert.ok(first.props.every(p=>!roadAt(first,p)));
+  assert.ok(first.props.every((p,i)=>first.props.slice(0,i).every(q=>distance(p,q)>=27)));
+  assert.equal(doc.props.length,0,'Original document must remain unchanged');
+  assert.deepEqual(parseWorld(serializeWorld(first)),first);
+  const water=paintSceneryBrush(doc,{x:1450,y:300},{...brush,radius:50},seeded(4));
+  assert.equal(water,doc,'Water avoidance prevents painting');
+  const eraser=eraseSceneryBrush(first,{x:800,y:300},120);
+  assert.equal(eraser.props.length,0);
+  assert.equal(first.props.length>0,true);
+  assert.equal(eraseSceneryBrush(doc,{x:800,y:300},120),doc,'Empty eraser stroke is a no-op');
+  assert.throws(()=>paintSceneryBrush(doc,{x:50,y:50},{...brush,radius:-2}),/Brush radius/);
+  assert.throws(()=>paintSceneryBrush(doc,{x:50,y:50},{...brush,count:100}),/Brush density/);
 });
