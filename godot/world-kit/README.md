@@ -5,7 +5,7 @@ Attach world_loader.gd to a Node2D in Godot 4.3+ and set world_path to a World F
 The loader reads **gdt.racing-world version 2**; the original tile map adapter (godot/map-kit/map_loader.gd) continues to handle **gdt.topdown-map version 1** separately.
 
 - Draws continuous roads with smooth sampled splines, shoulders, center markings and road edges; it does not construct a TileMapLayer.
-- Draws stylized region polygons (forest, mountain, rock, sand, water, city) and simplified top-down scenery.
+- Draws stylized region polygons (forest, mountain, rock, sand, water, city), simplified top-down scenery and any embedded custom PNG/WebP sprite overrides supplied by the editor.
 - Builds StaticBody2D blocking polygons for ocean/lake regions and rectangle collision shapes for trees, rocks, buildings and barriers. Set blocking_layer and vehicle collision masks in the consuming game.
 - get_markers(type) returns independent gameplay markers with properties; marker_position(marker) returns continuous Vector2 coordinates.
 - get_road_paths() returns sampled road centerlines, width, lanes, and material. road_near(point) returns a road dictionary if on-road. get_surface_at(point) prefers road surfaces, then biome regions.
