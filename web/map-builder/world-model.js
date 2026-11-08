@@ -181,7 +181,8 @@ export function scatterVegetation(doc,regionId,count=50,type='auto'){
 }
 export function demoWorld(){
   const doc=createWorld({name:'Coastal Ridge · Open World',width:3400,height:2300,seed:4319});
-  const region=(biome,name,xy,elevation=0)=>({id:'region-'+(doc.regions.length+1),biome,name,
+  let regionId=0,roadId=0,propId=0,markerId=0;
+  const region=(biome,name,xy,elevation=0)=>({id:'region-'+(++regionId),biome,name,
     elevation,points:xy.map(([x,y])=>({x,y}))});
   doc.regions.push(
     region('mountain','Highland cliffs',[[0,0],[1450,0],[1280,240],[800,440],[400,770],[0,690]],540),
@@ -194,7 +195,7 @@ export function demoWorld(){
     region('grass','Coastal park',[[1980,1530],[2470,1480],[2840,1710],[2920,2110],[2550,2300],[2110,2110]],13)
   );
   const road=(name,roadClass,surface,width,lanes,xy,shoulder=5,markings=true)=>({
-    id:'road-'+(doc.roads.length+1),name,roadClass,surface,width,lanes,shoulder,markings,smooth:true,
+    id:'road-'+(++roadId),name,roadClass,surface,width,lanes,shoulder,markings,smooth:true,
     points:xy.map(([x,y])=>({x,y}))
   });
   doc.roads.push(
@@ -208,7 +209,7 @@ export function demoWorld(){
     road('Beach approach','service','dirt',20,1,[[2570,1650],[2820,1800],[2950,1960],[3100,2070]],2,false),
     road('Factory access','service','concrete',23,1,[[1760,820],[1690,620],[1550,540]],2,false)
   );
-  const prop=(type,x,y,scale=1,rotation=0,name)=>({id:'prop-'+(doc.props.length+1),name:name||type.replace(/_/g,' '),type,x,y,scale,rotation});
+  const prop=(type,x,y,scale=1,rotation=0,name)=>({id:'prop-'+(++propId),name:name||type.replace(/_/g,' '),type,x,y,scale,rotation});
   for(let i=0;i<28;i++)for(let j=0;j<2;j++){
     const x=1410+i%7*165+j*65,y=680+Math.floor(i/7)*280+j*85;
     if(x<2530&&y<1680 && !roadAt(doc,{x,y}))doc.props.push(prop(i%5===0?'warehouse':i%3===0?'building':'house',x,y,.75+(i%4)*.14,i%2?90:0));
@@ -225,7 +226,7 @@ export function demoWorld(){
       doc.props.push(prop(type,p.x,p.y,.58+(i%7)*.13,i*67%360));
     }
   }
-  const marker=(type,name,x,y,properties={})=>({id:'marker-'+(doc.markers.length+1),type,name,x,y,rotation:0,properties});
+  const marker=(type,name,x,y,properties={})=>({id:'marker-'+(++markerId),type,name,x,y,rotation:0,properties});
   doc.markers.push(marker('player_spawn','Player start',1530,720),
     marker('garage','Motorsport workshop',1600,570),
     marker('race_start','Coastal sprint start',1870,440),
