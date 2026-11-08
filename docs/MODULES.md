@@ -39,7 +39,20 @@ Menu controller emits validated transitions; actual games must connect pause and
 
 Builder exports validated JSON layouts, not executable games or Godot scenes. See `web/builder/README.md`.
 
-## Top-down level map editor
+## World Forge v2 — Freeform racing-world authoring
+
+| Path | Runtime | Purpose | Validation |
+|---|---|---|---|
+| `web/map-builder/world-model.js` | Node / Web | Versioned continuous worlds; splines, biome polygons, scenery, markers; strict validation | Node tests |
+| `web/map-builder/world-geometry.js` | Node / Web | Spline sampling, road connections, geometry hit-testing, scattering | Node tests |
+| `web/map-builder/world-renderer.js` | Browser Canvas | Original stylized terrain, curved roads, buildings and vegetation | Desktop/mobile browser smoke |
+| `web/map-builder/world-editor.js` | Browser | World Forge interactive editor, inspector, history and exports | Desktop/mobile browser smoke |
+| `web/map-builder/world-export.js` | Node / Web | Sampled road-network metadata and Godot 4 ZIP | Node tests |
+| `godot/world-kit/world_loader.gd` | Godot 4 | Continuous runtime render, surface queries and blocking geometry | Godot 4.4 headless smoke |
+
+World Forge v2 is non-tile-based and independent of UI schemas and game saves. The legacy v1 tile authoring files below remain supported from web/map-builder/legacy.html.
+
+## Legacy v1 tile map editor
 
 | Path | Runtime | Purpose | Validation |
 |---|---|---|---|
