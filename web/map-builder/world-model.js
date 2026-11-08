@@ -56,7 +56,7 @@ function validEntity(item,type,w,h){
     return {id:item.id,name:title(item.name,'Scenery'),type:oneOf(item.type,PROPS,'prop type'),
       x:real(item.x,0,w,'prop x'),y:real(item.y,0,h,'prop y'),
       rotation:real(item.rotation,-360,360,'prop rotation'),
-      scale:real(item.scale,.25,5,'prop scale'),assetId:item.assetId===undefined||item.assetId===null?'':(idOk(item.assetId)?item.assetId:(()=>{throw new TypeError('Invalid asset ID');})())};
+      scale:real(item.scale,.25,5,'prop scale'),assetId:!item.assetId?'':(idOk(item.assetId)?item.assetId:(()=>{throw new TypeError('Invalid asset ID');})())};
   }
   if(type==='markers'){
     return {id:item.id,name:title(item.name,'Marker'),type:oneOf(item.type,MARKERS,'marker type'),
@@ -119,7 +119,7 @@ export function getEntity(doc,id){
   return null;
 }
 export function createEntity(doc,type,input){
-  if(!Object.hasOwn(LIM,type))throw new TypeError('Unsupported entity collection');
+  if(!['roads','regions','props','markers'].includes(type))throw new TypeError('Unsupported entity collection');
   if(doc[type].length>=LIM[type])throw new RangeError('Maximum '+type+' reached');
   const id=unique(type==='roads'?'road':type==='regions'?'region':type==='props'?'prop':'marker',
     ['roads','regions','props','markers'].flatMap(t=>doc[t]));
