@@ -417,7 +417,7 @@ test('automatic junction polygons clear markings and connect crossing roads of a
   assert.equal(j.kind,'crossing');
   assert.equal(j.roads.length,2);
   assert.ok(j.polygon.length>=4,'Crossing surface should use an intersection footprint polygon');
-  assert.ok(j.polygon.some(p=>p.x>520&&p.y>465),'Paving must cover both road edges, not a point decal');
+  assert.ok(j.polygon.some(p=>p.x>515&&p.y>475),'Paving must cover both road edges, not a point decal');
   assert.ok(j.polygon.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)));
   const graph=buildRoadNetwork(world);
   assert.equal(graph.junctions.length,1);
