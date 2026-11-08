@@ -127,3 +127,7 @@ kbd{background:#24374b;color:#ffd1ac;font:10px/1.4 ui-monospace,monospace;border
 }
 @media(max-width:390px){.tool-buttons{grid-template-columns:repeat(2,1fr)}.minimap-wrap{display:none}.world-page .gdt-btn{font-size:10px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Embedded user artwork is optional; built-in illustrated props remain the default. */
+.upload-asset{display:block;cursor:pointer;text-align:center;margin-top:8px}
+.asset-hint{font-size:10px;line-height:1.55;color:#8599ac;margin:7px 0 0}
