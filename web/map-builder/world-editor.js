@@ -18,7 +18,7 @@ const AUTO='gdt.world-forge.autosave.v2',SAVE='gdt.world-forge.manual.v2';
 let doc=demoWorld(),tool='select',selection=null,draft=null,gesture=null,hover=null,pointInsertMode=null;
 let zoom=.25,offsetX=0,offsetY=0,panSpace=false,dirty=false,frame=0,autosaveTimer=0;
 let undoStack=[],redoStack=[];
-const minZoom=.045,maxZoom=5;
+const minZoom=.007,maxZoom=5; // Entire 22k+ worlds still fit on narrow mobile viewports.
 const status=message=>{$('status').textContent=message;};
 const errorMessage=e=>status(e?.message||'Action failed.');
 const worldPoint = (x,y)=>({x:clamp(x,0,doc.world.width),y:clamp(y,0,doc.world.height)});
@@ -64,7 +64,10 @@ function render(){
   miniCtx.setTransform(1,0,0,1,0,0);miniCtx.clearRect(0,0,mini.width,mini.height);
   miniCtx.save();
   const scale=Math.min(mini.width/doc.world.width,mini.height/doc.world.height);
-  miniCtx.scale(scale,scale);drawWorld(miniCtx,doc,{...currentDisplay(),quality:0,junctions:false,showMarkers:false});
+  // Detailed scenery is unreadable on a 190px-wide minimap and costly with large worlds.
+  miniCtx.scale(scale,scale);drawWorld(miniCtx,doc,{...currentDisplay(),
+    showScenery:currentDisplay().showScenery&&doc.props.length<500,
+    quality:0,junctions:false,showMarkers:false});
   miniCtx.restore();
   miniCtx.strokeStyle='#f5c18e';miniCtx.lineWidth=1.7;
   miniCtx.strokeRect(Math.max(0,-offsetX/zoom)*scale,Math.max(0,-offsetY/zoom)*scale,
@@ -636,6 +639,24 @@ $('cancel-new').addEventListener('click',()=>$('new-dialog').close());
 $('create-demo').addEventListener('click',()=>{
   startWorld(demoWorld(),'Loaded the Coastal Ridge example world.');$('new-dialog').close();
 });
+async function loadAtlasCoast(){
+  if(dirty&&!window.confirm('Replace current unsaved edits with Atlas Coast? Export JSON first if you want a backup.'))return;
+  const controls=[$('load-atlas'),$('create-atlas')];
+  controls.forEach(button=>button.disabled=true);
+  status('Opening Atlas Coast master layout…');
+  try{
+    const response=await fetch('./atlas-coast.world.json',{cache:'no-store'});
+    if(!response.ok)throw new Error('Could not retrieve Atlas Coast world ('+response.status+').');
+    const data=await response.text();
+    const world=parseWorld(data);
+    startWorld(world,'Atlas Coast loaded: '+world.roads.length+' roads, '+world.regions.length+
+      ' biomes and '+world.markers.filter(m=>m.type==='dealership').length+' dealerships. Export JSON as your own backup.');
+    if($('new-dialog').open)$('new-dialog').close();
+  }catch(e){errorMessage(e);}
+  finally{controls.forEach(button=>button.disabled=false);}
+}
+$('load-atlas').addEventListener('click',loadAtlasCoast);
+$('create-atlas').addEventListener('click',loadAtlasCoast);
 $('confirm-new').addEventListener('click',()=>{
   try{
     const next=createWorld({name:$('new-name').value,width:Number($('new-width').value),
