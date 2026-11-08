@@ -141,8 +141,7 @@ export function buildRoadJunctions(roads){
         if(s.road.id===road.id)continue;
         const hit=pointSegment(p,s.a,s.b);
         const other=s.road,ends=index.paths.get(other.id);
-        const isEnd=ends.some(q=>distance(p,q)<=20)||
-          distance(p,ends[0])<=20||distance(p,ends.at(-1))<=20;
+        const isEnd=distance(p,ends[0])<=20||distance(p,ends.at(-1))<=20;
         const overlap=road.width/2+road.shoulder+other.width/2+other.shoulder+4;
         const angle=Math.abs(cross(ownTangent,s.tangent));
         if(hit.distance>overlap||(!isEnd&&angle<.27))continue;
