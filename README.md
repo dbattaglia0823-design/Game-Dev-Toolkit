@@ -16,7 +16,7 @@ The previous visual editor remains available as [Legacy Visual Studio](web/build
 
 ## World Forge — Continuous Racing World Builder
 
-Use [World Forge](web/map-builder/index.html) to create detailed, **non-tile-based** top-down open worlds with curved spline roads, shoulder/lanes/surfaces, freeform cities, forests, mountains, sand, beaches, oceans, scenery and gameplay markers. Adjust individual spline points, scatter vegetation, edit biomes, and export versioned world JSON, a PNG preview or a Godot 4 ZIP with continuous road geometry and marker data. See the [World Forge guide](web/map-builder/README.md) and [Godot world adapter](godot/world-kit/README.md).
+Use [World Forge](web/map-builder/index.html) to create detailed, **non-tile-based** top-down open worlds with curved spline roads, shoulder/lanes/surfaces, freeform cities, forests, mountains, sand, beaches, oceans, scenery and gameplay markers. Adjust individual spline points, scatter vegetation, import custom PNG/WebP scenery sprites, edit biomes, and export versioned world JSON, a PNG preview or a Godot 4 ZIP with continuous road geometry and marker data. See the [World Forge guide](web/map-builder/README.md) and [Godot world adapter](godot/world-kit/README.md).
 
 The [Legacy Tile Map Builder](web/map-builder/legacy.html) preserves all previous tile editing, maps and browser storage. World Forge version 2 geometry is intentionally distinct from old version 1 tile maps; no automatic conversion or game-save migration is performed.
 
