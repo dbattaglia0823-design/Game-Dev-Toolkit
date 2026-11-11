@@ -35,3 +35,6 @@ jobs:
 
       - name: Validate standalone vehicle audio runtime
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/audio_bank_smoke.gd
+
+      - name: Validate detailed 48kHz stereo V8 loader
+        run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/detailed_v8_audio_smoke.gd
