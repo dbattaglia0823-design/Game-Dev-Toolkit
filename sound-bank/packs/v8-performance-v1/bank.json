@@ -1,0 +1,484 @@
+{
+  "format_version": 1,
+  "sample_rate": 22050,
+  "origin": "Original procedural V8 audio synthesis; no real vehicle or third-party recordings",
+  "families": {
+    "v8_smallblock_ohv": [
+      {
+        "rpm": 750,
+        "nominal_rpm": 750,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/750_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/750_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/750_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1650,
+        "nominal_rpm": 1650,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/1650_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/1650_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/1650_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3400,
+        "nominal_rpm": 3400,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/3400_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/3400_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/3400_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 6200,
+        "nominal_rpm": 6200,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/6200_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/6200_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_smallblock_ohv/6200_intake_on.wav"
+        }
+      }
+    ],
+    "v8_bigblock_ohv": [
+      {
+        "rpm": 650,
+        "nominal_rpm": 650,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/650_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/650_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/650_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1400,
+        "nominal_rpm": 1400,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/1400_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/1400_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/1400_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 2800,
+        "nominal_rpm": 2800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/2800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/2800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/2800_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 5200,
+        "nominal_rpm": 5200,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/5200_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/5200_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_bigblock_ohv/5200_intake_on.wav"
+        }
+      }
+    ],
+    "v8_ls_ohv": [
+      {
+        "rpm": 750,
+        "nominal_rpm": 750,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/750_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/750_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/750_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1700,
+        "nominal_rpm": 1700,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/1700_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/1700_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/1700_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3500,
+        "nominal_rpm": 3500,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/3500_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/3500_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/3500_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 6800,
+        "nominal_rpm": 6800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/6800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/6800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_ohv/6800_intake_on.wav"
+        }
+      }
+    ],
+    "v8_coyote_dohc": [
+      {
+        "rpm": 900,
+        "nominal_rpm": 900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/900_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1900,
+        "nominal_rpm": 1900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/1900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/1900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/1900_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 4200,
+        "nominal_rpm": 4200,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/4200_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/4200_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/4200_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 7600,
+        "nominal_rpm": 7600,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/7600_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/7600_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_coyote_dohc/7600_intake_on.wav"
+        }
+      }
+    ],
+    "v8_hemi": [
+      {
+        "rpm": 700,
+        "nominal_rpm": 700,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/700_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_hemi/700_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/700_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1600,
+        "nominal_rpm": 1600,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/1600_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_hemi/1600_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/1600_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3400,
+        "nominal_rpm": 3400,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/3400_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_hemi/3400_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/3400_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 6500,
+        "nominal_rpm": 6500,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/6500_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_hemi/6500_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_hemi/6500_intake_on.wav"
+        }
+      }
+    ],
+    "v8_euro_cross": [
+      {
+        "rpm": 850,
+        "nominal_rpm": 850,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/850_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/850_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/850_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1900,
+        "nominal_rpm": 1900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/1900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/1900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/1900_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 4300,
+        "nominal_rpm": 4300,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/4300_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/4300_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/4300_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 7800,
+        "nominal_rpm": 7800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/7800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/7800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_euro_cross/7800_intake_on.wav"
+        }
+      }
+    ],
+    "v8_flat_plane": [
+      {
+        "rpm": 950,
+        "nominal_rpm": 950,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/950_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/950_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/950_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 2200,
+        "nominal_rpm": 2200,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/2200_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/2200_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/2200_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 5100,
+        "nominal_rpm": 5100,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/5100_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/5100_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/5100_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 8800,
+        "nominal_rpm": 8800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/8800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/8800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_flat_plane/8800_intake_on.wav"
+        }
+      }
+    ],
+    "v8_roots_blown": [
+      {
+        "rpm": 800,
+        "nominal_rpm": 800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/800_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1900,
+        "nominal_rpm": 1900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/1900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/1900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/1900_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3800,
+        "nominal_rpm": 3800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/3800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/3800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/3800_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 7000,
+        "nominal_rpm": 7000,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/7000_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/7000_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_roots_blown/7000_intake_on.wav"
+        }
+      }
+    ],
+    "v8_twin_turbo": [
+      {
+        "rpm": 850,
+        "nominal_rpm": 850,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/850_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/850_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/850_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 2100,
+        "nominal_rpm": 2100,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/2100_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/2100_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/2100_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3900,
+        "nominal_rpm": 3900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/3900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/3900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/3900_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 7200,
+        "nominal_rpm": 7200,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/7200_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/7200_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_twin_turbo/7200_intake_on.wav"
+        }
+      }
+    ],
+    "v8_ls_street_cam": [
+      {
+        "rpm": 800,
+        "nominal_rpm": 800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/800_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1750,
+        "nominal_rpm": 1750,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/1750_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/1750_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/1750_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3500,
+        "nominal_rpm": 3500,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/3500_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/3500_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/3500_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 6700,
+        "nominal_rpm": 6700,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/6700_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/6700_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_street_cam/6700_intake_on.wav"
+        }
+      }
+    ],
+    "v8_ls_race_cam": [
+      {
+        "rpm": 1050,
+        "nominal_rpm": 1050,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/1050_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/1050_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/1050_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 2050,
+        "nominal_rpm": 2050,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/2050_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/2050_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/2050_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3900,
+        "nominal_rpm": 3900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/3900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/3900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/3900_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 6900,
+        "nominal_rpm": 6900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/6900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/6900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_race_cam/6900_intake_on.wav"
+        }
+      }
+    ],
+    "v8_ls_straight_pipe": [
+      {
+        "rpm": 800,
+        "nominal_rpm": 800,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/800_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/800_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/800_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 1700,
+        "nominal_rpm": 1700,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/1700_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/1700_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/1700_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 3600,
+        "nominal_rpm": 3600,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/3600_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/3600_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/3600_intake_on.wav"
+        }
+      },
+      {
+        "rpm": 6900,
+        "nominal_rpm": 6900,
+        "files": {
+          "exhaust_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/6900_exhaust_on.wav",
+          "exhaust_off": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/6900_exhaust_off.wav",
+          "intake_on": "res://assets/audio/vehicle_bank/engines/v8_ls_straight_pipe/6900_intake_on.wav"
+        }
+      }
+    ]
+  },
+  "vehicles": {},
+  "effects": {
+    "v8_turbo_spool_loop": "res://assets/audio/vehicle_bank/effects/v8_turbo_spool_loop.wav",
+    "v8_twin_turbo_spool_loop": "res://assets/audio/vehicle_bank/effects/v8_twin_turbo_spool_loop.wav",
+    "v8_roots_whine_loop": "res://assets/audio/vehicle_bank/effects/v8_roots_whine_loop.wav",
+    "v8_twin_screw_whine_loop": "res://assets/audio/vehicle_bank/effects/v8_twin_screw_whine_loop.wav",
+    "v8_centrifugal_whine_loop": "res://assets/audio/vehicle_bank/effects/v8_centrifugal_whine_loop.wav",
+    "v8_intake_suction_loop": "res://assets/audio/vehicle_bank/effects/v8_intake_suction_loop.wav",
+    "v8_exhaust_burble_loop": "res://assets/audio/vehicle_bank/effects/v8_exhaust_burble_loop.wav",
+    "v8_exhaust_pop_single": "res://assets/audio/vehicle_bank/effects/v8_exhaust_pop_single.wav",
+    "v8_exhaust_pop_double": "res://assets/audio/vehicle_bank/effects/v8_exhaust_pop_double.wav",
+    "v8_bov_vent": "res://assets/audio/vehicle_bank/effects/v8_bov_vent.wav",
+    "v8_bov_recirc": "res://assets/audio/vehicle_bank/effects/v8_bov_recirc.wav",
+    "v8_compressor_flutter": "res://assets/audio/vehicle_bank/effects/v8_compressor_flutter.wav",
+    "v8_external_wastegate": "res://assets/audio/vehicle_bank/effects/v8_external_wastegate.wav",
+    "v8_blower_bypass": "res://assets/audio/vehicle_bank/effects/v8_blower_bypass.wav",
+    "v8_ignition_start": "res://assets/audio/vehicle_bank/effects/v8_ignition_start.wav",
+    "v8_shift_cut": "res://assets/audio/vehicle_bank/effects/v8_shift_cut.wav",
+    "v8_rev_limiter": "res://assets/audio/vehicle_bank/effects/v8_rev_limiter.wav",
+    "v8_shutdown": "res://assets/audio/vehicle_bank/effects/v8_shutdown.wav"
+  }
+}
