@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "origin": "Original synthesized previews, generated for this toolkit. Not OEM/field recordings.",
+  "license": "Original project-owned asset; no third-party samples used.",
+  "sample_rate": 16000,
+  "channels": 1,
+  "bit_depth": 16,
+  "loop_safe": false,
+  "notes": "Short audition previews with fades. For runtime RPM loops use build_bank.py or the REDLINE bank importer.",
+  "clips": [
+    {
+      "id": "i4_stock_idle",
+      "family": "i4_na",
+      "rpm": 800,
+      "modifier": "stock",
+      "path": "previews/i4_stock_idle.wav"
+    },
+    {
+      "id": "i4_turbo_rev",
+      "family": "i4_turbo",
+      "rpm": 3800,
+      "modifier": "turbo",
+      "path": "previews/i4_turbo_rev.wav"
+    },
+    {
+      "id": "i6_turbo_rev",
+      "family": "i6_turbo",
+      "rpm": 4300,
+      "modifier": "turbo",
+      "path": "previews/i6_turbo_rev.wav"
+    },
+    {
+      "id": "v6_twin_turbo_rev",
+      "family": "v6_tt",
+      "rpm": 3800,
+      "modifier": "twin_turbo",
+      "path": "previews/v6_twin_turbo_rev.wav"
+    },
+    {
+      "id": "v8_cross_stock_idle",
+      "family": "v8_cross",
+      "rpm": 750,
+      "modifier": "stock",
+      "path": "previews/v8_cross_stock_idle.wav"
+    },
+    {
+      "id": "v8_cross_street_cam_idle",
+      "family": "v8_cross",
+      "rpm": 780,
+      "modifier": "street_cam",
+      "path": "previews/v8_cross_street_cam_idle.wav"
+    },
+    {
+      "id": "v8_cross_race_cam_idle",
+      "family": "v8_cross",
+      "rpm": 825,
+      "modifier": "race_cam",
+      "path": "previews/v8_cross_race_cam_idle.wav"
+    },
+    {
+      "id": "v8_cross_straight_pipe_rev",
+      "family": "v8_cross",
+      "rpm": 4600,
+      "modifier": "straight_pipe",
+      "path": "previews/v8_cross_straight_pipe_rev.wav"
+    },
+    {
+      "id": "v8_supercharged_rev",
+      "family": "v8_super",
+      "rpm": 4900,
+      "modifier": "supercharger",
+      "path": "previews/v8_supercharged_rev.wav"
+    },
+    {
+      "id": "v8_flat_rev",
+      "family": "v8_flat",
+      "rpm": 6100,
+      "modifier": "stock",
+      "path": "previews/v8_flat_rev.wav"
+    },
+    {
+      "id": "v10_na_rev",
+      "family": "v10_na",
+      "rpm": 6700,
+      "modifier": "stock",
+      "path": "previews/v10_na_rev.wav"
+    },
+    {
+      "id": "w16_turbo_rev",
+      "family": "w16_tt",
+      "rpm": 4300,
+      "modifier": "turbo",
+      "path": "previews/w16_turbo_rev.wav"
+    },
+    {
+      "id": "turbo_flutter",
+      "event": "turbo_flutter",
+      "path": "previews/turbo_flutter.wav"
+    },
+    {
+      "id": "bov_vent",
+      "event": "bov_vent",
+      "path": "previews/bov_vent.wav"
+    },
+    {
+      "id": "roots_whine",
+      "event": "roots_whine",
+      "path": "previews/roots_whine.wav"
+    },
+    {
+      "id": "exhaust_pop",
+      "event": "exhaust_pop",
+      "path": "previews/exhaust_pop.wav"
+    }
+  ]
+}
