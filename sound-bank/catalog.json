@@ -1,0 +1,2323 @@
+{
+  "schema_version": 1,
+  "description": "Reusable game-audio design approximations, not OEM recordings.",
+  "sources": {
+    "Redline": "https://github.com/dbattaglia0823-design/Redline",
+    "Streetbound": "https://github.com/dbattaglia0823-design/Streetbound"
+  },
+  "license_notes": "Only original synthesis and locally user-owned REDLINE files may be imported. External recordings require verification before redistribution.",
+  "families": {
+    "i3": {
+      "cylinders": 3,
+      "character": "Three-cylinder pulse"
+    },
+    "i4_na": {
+      "cylinders": 4,
+      "character": "Naturally aspirated inline four"
+    },
+    "i4_turbo": {
+      "cylinders": 4,
+      "character": "Turbocharged inline four"
+    },
+    "i4_vtec": {
+      "cylinders": 4,
+      "character": "High-revving VTEC-style inline four"
+    },
+    "i5_turbo": {
+      "cylinders": 5,
+      "character": "Turbocharged inline five"
+    },
+    "h4_na": {
+      "cylinders": 4,
+      "character": "Naturally aspirated boxer four"
+    },
+    "h4_turbo": {
+      "cylinders": 4,
+      "character": "Turbocharged boxer four"
+    },
+    "i6_na": {
+      "cylinders": 6,
+      "character": "Naturally aspirated straight six"
+    },
+    "i6_turbo": {
+      "cylinders": 6,
+      "character": "Turbocharged straight six"
+    },
+    "vr6_na": {
+      "cylinders": 6,
+      "character": "Narrow-angle six"
+    },
+    "v6_na": {
+      "cylinders": 6,
+      "character": "Naturally aspirated V6"
+    },
+    "v6_tt": {
+      "cylinders": 6,
+      "character": "Twin-turbo V6"
+    },
+    "v8_cross": {
+      "cylinders": 8,
+      "character": "Cross-plane V8"
+    },
+    "v8_flat": {
+      "cylinders": 8,
+      "character": "Flat-plane V8"
+    },
+    "v8_flat_tt": {
+      "cylinders": 8,
+      "character": "Flat-plane turbo V8"
+    },
+    "v8_super": {
+      "cylinders": 8,
+      "character": "Supercharged cross-plane V8"
+    },
+    "v10_na": {
+      "cylinders": 10,
+      "character": "Naturally aspirated V10"
+    },
+    "v12_na": {
+      "cylinders": 12,
+      "character": "Naturally aspirated V12"
+    },
+    "h6_na": {
+      "cylinders": 6,
+      "character": "Naturally aspirated boxer six"
+    },
+    "h6_turbo": {
+      "cylinders": 6,
+      "character": "Turbocharged boxer six"
+    },
+    "w12_na": {
+      "cylinders": 12,
+      "character": "W12"
+    },
+    "w16_tt": {
+      "cylinders": 16,
+      "character": "W16 turbo"
+    },
+    "rotary_2": {
+      "cylinders": 4,
+      "character": "Two-rotor acoustic approximation"
+    },
+    "rotary_3": {
+      "cylinders": 6,
+      "character": "Three-rotor acoustic approximation"
+    },
+    "diesel_i4": {
+      "cylinders": 4,
+      "character": "Diesel inline four"
+    },
+    "diesel_i6": {
+      "cylinders": 6,
+      "character": "Diesel inline six"
+    },
+    "ev": {
+      "cylinders": 0,
+      "character": "Motor and reduction-drive only"
+    }
+  },
+  "vehicles": {
+    "redline:miata": {
+      "name": "MIATA",
+      "source": "Redline",
+      "source_id": "miata",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.42,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          135,
+          290,
+          760,
+          1850
+        ],
+        "runner_ms": [
+          0,
+          0.14,
+          0.22,
+          0.08
+        ],
+        "pulse_ms": 1.55,
+        "intake_hz": 1600
+      }
+    },
+    "redline:civic_si": {
+      "name": "CIVIC SI",
+      "source": "Redline",
+      "source_id": "civic_si",
+      "family": "i4_vtec",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.276,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          155,
+          350,
+          970,
+          2500
+        ],
+        "runner_ms": [
+          0,
+          0.08,
+          0.12,
+          0.04
+        ],
+        "pulse_ms": 1.05,
+        "intake_hz": 2250,
+        "lift_rpm": 5500
+      }
+    },
+    "redline:gti_vr6": {
+      "name": "GTI VR6",
+      "source": "Redline",
+      "source_id": "gti_vr6",
+      "family": "vr6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.54,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          95,
+          205,
+          600,
+          1550
+        ],
+        "runner_ms": [
+          0,
+          0.8,
+          0.18,
+          0.95,
+          0.25,
+          0.7
+        ],
+        "pulse_ms": 1.65,
+        "intake_hz": 1400
+      }
+    },
+    "redline:rsx": {
+      "name": "RSX",
+      "source": "Redline",
+      "source_id": "rsx",
+      "family": "i4_vtec",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.3,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          145,
+          330,
+          900,
+          2320
+        ],
+        "runner_ms": [
+          0,
+          0.11,
+          0.2,
+          0.07
+        ],
+        "pulse_ms": 1.1,
+        "intake_hz": 2110,
+        "lift_rpm": 5800
+      }
+    },
+    "redline:brz": {
+      "name": "BRZ",
+      "source": "Redline",
+      "source_id": "brz",
+      "family": "h4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.384,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          120,
+          260,
+          650,
+          1580
+        ],
+        "runner_ms": [
+          0,
+          0.18,
+          0.22,
+          0.09
+        ],
+        "pulse_ms": 1.45,
+        "intake_hz": 1660
+      }
+    },
+    "redline:integra": {
+      "name": "INTEGRA",
+      "source": "Redline",
+      "source_id": "integra",
+      "family": "i4_vtec",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.3,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          165,
+          380,
+          1050,
+          2800
+        ],
+        "runner_ms": [
+          0,
+          0.06,
+          0.17,
+          0.03
+        ],
+        "pulse_ms": 0.98,
+        "intake_hz": 2380,
+        "lift_rpm": 5700
+      }
+    },
+    "redline:gti": {
+      "name": "GTI",
+      "source": "Redline",
+      "source_id": "gti",
+      "family": "i4_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.336,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          105,
+          225,
+          580,
+          1440
+        ],
+        "runner_ms": [
+          0,
+          0.17,
+          0.11,
+          0.06
+        ],
+        "pulse_ms": 1.55,
+        "intake_hz": 1580
+      }
+    },
+    "redline:s2000": {
+      "name": "S2000",
+      "source": "Redline",
+      "source_id": "s2000",
+      "family": "i4_vtec",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.216,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          150,
+          340,
+          980,
+          2580
+        ],
+        "runner_ms": [
+          0,
+          0.06,
+          0.12,
+          0.02
+        ],
+        "pulse_ms": 0.9,
+        "intake_hz": 2500,
+        "lift_rpm": 6000
+      }
+    },
+    "redline:gr86": {
+      "name": "GR86",
+      "source": "Redline",
+      "source_id": "gr86",
+      "family": "h4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.432,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          105,
+          240,
+          590,
+          1450
+        ],
+        "runner_ms": [
+          0,
+          0.15,
+          0.26,
+          0.11
+        ],
+        "pulse_ms": 1.6,
+        "intake_hz": 1510
+      }
+    },
+    "redline:z350": {
+      "name": "Z350",
+      "source": "Redline",
+      "source_id": "z350",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.54,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          110,
+          270,
+          720,
+          1900
+        ],
+        "runner_ms": [
+          0,
+          0.65,
+          0.12,
+          0.85,
+          0.18,
+          0.6
+        ],
+        "pulse_ms": 1.4,
+        "intake_hz": 1730
+      }
+    },
+    "redline:supra": {
+      "name": "SUPRA",
+      "source": "Redline",
+      "source_id": "supra",
+      "family": "i6_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.252,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          88,
+          195,
+          505,
+          1390
+        ],
+        "runner_ms": [
+          0,
+          0.32,
+          0.14,
+          0.42,
+          0.1,
+          0.28
+        ],
+        "pulse_ms": 1.5,
+        "intake_hz": 1510
+      }
+    },
+    "redline:m3": {
+      "name": "M3",
+      "source": "Redline",
+      "source_id": "m3",
+      "family": "i6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.204,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          135,
+          310,
+          910,
+          2350
+        ],
+        "runner_ms": [
+          0,
+          0.24,
+          0.08,
+          0.28,
+          0.11,
+          0.21
+        ],
+        "pulse_ms": 0.95,
+        "intake_hz": 2090
+      }
+    },
+    "redline:sti": {
+      "name": "STI",
+      "source": "Redline",
+      "source_id": "sti",
+      "family": "h4_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.6,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          83,
+          175,
+          450,
+          1200
+        ],
+        "runner_ms": [
+          0,
+          2.6,
+          0.65,
+          3.3
+        ],
+        "pulse_ms": 1.8,
+        "intake_hz": 1370
+      }
+    },
+    "redline:evo": {
+      "name": "EVO",
+      "source": "Redline",
+      "source_id": "evo",
+      "family": "i4_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.42,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          112,
+          250,
+          660,
+          1720
+        ],
+        "runner_ms": [
+          0,
+          0.27,
+          0.12,
+          0.2
+        ],
+        "pulse_ms": 1.25,
+        "intake_hz": 1810
+      }
+    },
+    "redline:type_r": {
+      "name": "TYPE R",
+      "source": "Redline",
+      "source_id": "type_r",
+      "family": "i4_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.24,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          125,
+          290,
+          800,
+          2100
+        ],
+        "runner_ms": [
+          0,
+          0.08,
+          0.14,
+          0.04
+        ],
+        "pulse_ms": 1.03,
+        "intake_hz": 2220
+      }
+    },
+    "redline:mustang": {
+      "name": "MUSTANG",
+      "source": "Redline",
+      "source_id": "mustang",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.396,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          78,
+          170,
+          440,
+          1250
+        ],
+        "runner_ms": [
+          0,
+          0.9,
+          0.16,
+          1,
+          0.78,
+          0.12,
+          0.92,
+          0.06
+        ],
+        "pulse_ms": 1.25,
+        "intake_hz": 1540
+      }
+    },
+    "redline:supra_gr": {
+      "name": "SUPRA GR",
+      "source": "Redline",
+      "source_id": "supra_gr",
+      "family": "i6_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.228,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          93,
+          215,
+          560,
+          1520
+        ],
+        "runner_ms": [
+          0,
+          0.18,
+          0.08,
+          0.22,
+          0.11,
+          0.15
+        ],
+        "pulse_ms": 1.25,
+        "intake_hz": 1630
+      }
+    },
+    "redline:camaro": {
+      "name": "CAMARO",
+      "source": "Redline",
+      "source_id": "camaro",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.54,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          62,
+          135,
+          330,
+          930
+        ],
+        "runner_ms": [
+          0,
+          1.45,
+          0.18,
+          1.65,
+          1.25,
+          0.1,
+          1.35,
+          0.04
+        ],
+        "pulse_ms": 1.9,
+        "intake_hz": 1270
+      }
+    },
+    "redline:golf_r": {
+      "name": "GOLF R",
+      "source": "Redline",
+      "source_id": "golf_r",
+      "family": "i4_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.3,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          110,
+          240,
+          630,
+          1640
+        ],
+        "runner_ms": [
+          0,
+          0.12,
+          0.19,
+          0.05
+        ],
+        "pulse_ms": 1.38,
+        "intake_hz": 1710
+      }
+    },
+    "redline:z400": {
+      "name": "Z400",
+      "source": "Redline",
+      "source_id": "z400",
+      "family": "v6_tt",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.276,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          85,
+          205,
+          550,
+          1580
+        ],
+        "runner_ms": [
+          0,
+          0.48,
+          0.08,
+          0.57,
+          0.16,
+          0.43
+        ],
+        "pulse_ms": 1.3,
+        "intake_hz": 1740
+      }
+    },
+    "redline:z06": {
+      "name": "Z06",
+      "source": "Redline",
+      "source_id": "z06",
+      "family": "v8_flat",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.18,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          130,
+          315,
+          870,
+          2580
+        ],
+        "runner_ms": [
+          0,
+          0.21,
+          0.06,
+          0.25,
+          0.09,
+          0.23,
+          0.03,
+          0.2
+        ],
+        "pulse_ms": 0.87,
+        "intake_hz": 2400
+      }
+    },
+    "redline:gtr": {
+      "name": "GTR",
+      "source": "Redline",
+      "source_id": "gtr",
+      "family": "v6_tt",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.324,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          90,
+          215,
+          590,
+          1690
+        ],
+        "runner_ms": [
+          0,
+          0.55,
+          0.13,
+          0.72,
+          0.2,
+          0.48
+        ],
+        "pulse_ms": 1.15,
+        "intake_hz": 1840
+      }
+    },
+    "redline:r8": {
+      "name": "R8",
+      "source": "Redline",
+      "source_id": "r8",
+      "family": "v10_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.168,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          125,
+          310,
+          960,
+          2780
+        ],
+        "runner_ms": [
+          0,
+          0.29,
+          0.07,
+          0.34,
+          0.1,
+          0.25,
+          0.03,
+          0.31,
+          0.12,
+          0.27
+        ],
+        "pulse_ms": 0.82,
+        "intake_hz": 2460
+      }
+    },
+    "redline:gt500": {
+      "name": "GT500",
+      "source": "Redline",
+      "source_id": "gt500",
+      "family": "v8_super",
+      "induction": "roots_supercharger",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.384,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          72,
+          160,
+          420,
+          1160
+        ],
+        "runner_ms": [
+          0,
+          0.82,
+          0.13,
+          0.96,
+          0.75,
+          0.09,
+          0.88,
+          0.03
+        ],
+        "pulse_ms": 1.3,
+        "intake_hz": 1660
+      }
+    },
+    "redline:redeye": {
+      "name": "REDEYE",
+      "source": "Redline",
+      "source_id": "redeye",
+      "family": "v8_super",
+      "induction": "roots_supercharger",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.516,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          56,
+          125,
+          345,
+          995
+        ],
+        "runner_ms": [
+          0,
+          1.4,
+          1.55,
+          0.1,
+          1.25,
+          0.08,
+          0.18,
+          1.35
+        ],
+        "pulse_ms": 1.85,
+        "intake_hz": 1390
+      }
+    },
+    "redline:turbo_s": {
+      "name": "TURBO S",
+      "source": "Redline",
+      "source_id": "turbo_s",
+      "family": "h6_turbo",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.228,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          102,
+          225,
+          640,
+          1790
+        ],
+        "runner_ms": [
+          0,
+          0.24,
+          0.08,
+          0.3,
+          0.11,
+          0.2
+        ],
+        "pulse_ms": 1.18,
+        "intake_hz": 1860
+      }
+    },
+    "redline:mclaren": {
+      "name": "MCLAREN",
+      "source": "Redline",
+      "source_id": "mclaren",
+      "family": "v8_flat_tt",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.204,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          115,
+          265,
+          750,
+          2190
+        ],
+        "runner_ms": [
+          0,
+          0.26,
+          0.09,
+          0.32,
+          0.12,
+          0.23,
+          0.04,
+          0.29
+        ],
+        "pulse_ms": 0.93,
+        "intake_hz": 2130
+      }
+    },
+    "redline:sf90": {
+      "name": "SF90",
+      "source": "Redline",
+      "source_id": "sf90",
+      "family": "v8_flat_tt",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.18,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          125,
+          285,
+          810,
+          2350
+        ],
+        "runner_ms": [
+          0,
+          0.17,
+          0.05,
+          0.23,
+          0.08,
+          0.19,
+          0.03,
+          0.21
+        ],
+        "pulse_ms": 0.9,
+        "intake_hz": 2280
+      }
+    },
+    "redline:demon": {
+      "name": "DEMON",
+      "source": "Redline",
+      "source_id": "demon",
+      "family": "v8_super",
+      "induction": "roots_supercharger",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.468,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          58,
+          135,
+          365,
+          1070
+        ],
+        "runner_ms": [
+          0,
+          1.15,
+          1.35,
+          0.11,
+          1.08,
+          0.07,
+          0.16,
+          1.22
+        ],
+        "pulse_ms": 1.65,
+        "intake_hz": 1510
+      }
+    },
+    "redline:chiron": {
+      "name": "CHIRON",
+      "source": "Redline",
+      "source_id": "chiron",
+      "family": "w16_tt",
+      "induction": "single_turbo",
+      "cam_lope": 0.08,
+      "exhaust": 0.22,
+      "intake": 0.7,
+      "roughness": 0.144,
+      "tone": 0,
+      "overrun": 0.25,
+      "boost_psi": 0,
+      "design": {
+        "resonances": [
+          58,
+          140,
+          370,
+          1190
+        ],
+        "runner_ms": [
+          0,
+          0.28,
+          0.65,
+          0.4,
+          0.08,
+          0.35,
+          0.72,
+          0.47,
+          0.04,
+          0.32,
+          0.69,
+          0.44,
+          0.1,
+          0.37,
+          0.74,
+          0.49
+        ],
+        "pulse_ms": 1.35,
+        "intake_hz": 1690
+      }
+    },
+    "streetbound:acura-integra": {
+      "name": "Acura Integra",
+      "source": "Streetbound",
+      "source_id": "acura-integra",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.25,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:acura-tl": {
+      "name": "Acura TL",
+      "source": "Streetbound",
+      "source_id": "acura-tl",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:acura-tlx": {
+      "name": "Acura TLX",
+      "source": "Streetbound",
+      "source_id": "acura-tlx",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:acura-tsx": {
+      "name": "Acura TSX",
+      "source": "Streetbound",
+      "source_id": "acura-tsx",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.13,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:acura-ilx": {
+      "name": "Acura ILX",
+      "source": "Streetbound",
+      "source_id": "acura-ilx",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:alfa-romeo-giulia": {
+      "name": "Alfa Romeo Giulia",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-giulia",
+      "family": "v6_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.41,
+      "boost_psi": 15
+    },
+    "streetbound:alfa-romeo-stelvio": {
+      "name": "Alfa Romeo Stelvio",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-stelvio",
+      "family": "v6_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.57,
+      "roughness": 0.25,
+      "tone": -0.19,
+      "overrun": 0.44,
+      "boost_psi": 15
+    },
+    "streetbound:alfa-romeo-tonale": {
+      "name": "Alfa Romeo Tonale",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-tonale",
+      "family": "i4_turbo",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.57,
+      "roughness": 0.25,
+      "tone": 0.02,
+      "overrun": 0.44,
+      "boost_psi": 12
+    },
+    "streetbound:alfa-romeo-mito": {
+      "name": "Alfa Romeo MiTo",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-mito",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:alfa-romeo-giulietta": {
+      "name": "Alfa Romeo Giulietta",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-giulietta",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:alfa-romeo-brera": {
+      "name": "Alfa Romeo Brera",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-brera",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:alfa-romeo-4c": {
+      "name": "Alfa Romeo 4C",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-4c",
+      "family": "i4_turbo",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.25,
+      "tone": 0.23,
+      "overrun": 0.84,
+      "boost_psi": 17
+    },
+    "streetbound:alfa-romeo-33-stradale": {
+      "name": "Alfa Romeo 33 Stradale",
+      "source": "Streetbound",
+      "source_id": "alfa-romeo-33-stradale",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.04,
+      "overrun": 0.92,
+      "boost_psi": 0
+    },
+    "streetbound:aston-martin-db9": {
+      "name": "Aston Martin DB9",
+      "source": "Streetbound",
+      "source_id": "aston-martin-db9",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.33,
+      "tone": 0.37,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:aston-martin-db11": {
+      "name": "Aston Martin DB11",
+      "source": "Streetbound",
+      "source_id": "aston-martin-db11",
+      "family": "v12_na",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.33,
+      "tone": 0.37,
+      "overrun": 0.84,
+      "boost_psi": 15
+    },
+    "streetbound:aston-martin-db12": {
+      "name": "Aston Martin DB12",
+      "source": "Streetbound",
+      "source_id": "aston-martin-db12",
+      "family": "v8_cross",
+      "induction": "turbo",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.84,
+      "boost_psi": 17
+    },
+    "streetbound:aston-martin-dbs": {
+      "name": "Aston Martin DBS",
+      "source": "Streetbound",
+      "source_id": "aston-martin-dbs",
+      "family": "v12_na",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.33,
+      "tone": 0.37,
+      "overrun": 0.84,
+      "boost_psi": 17
+    },
+    "streetbound:aston-martin-vantage": {
+      "name": "Aston Martin Vantage",
+      "source": "Streetbound",
+      "source_id": "aston-martin-vantage",
+      "family": "v8_cross",
+      "induction": "turbo",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.84,
+      "boost_psi": 15
+    },
+    "streetbound:aston-martin-vanquish": {
+      "name": "Aston Martin Vanquish",
+      "source": "Streetbound",
+      "source_id": "aston-martin-vanquish",
+      "family": "v12_na",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.33,
+      "tone": 0.37,
+      "overrun": 0.84,
+      "boost_psi": 18
+    },
+    "streetbound:aston-martin-rapide": {
+      "name": "Aston Martin Rapide",
+      "source": "Streetbound",
+      "source_id": "aston-martin-rapide",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.33,
+      "tone": 0.37,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:aston-martin-dbx": {
+      "name": "Aston Martin DBX",
+      "source": "Streetbound",
+      "source_id": "aston-martin-dbx",
+      "family": "v8_cross",
+      "induction": "turbo",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.57,
+      "roughness": 0.65,
+      "tone": -0.5,
+      "overrun": 0.44,
+      "boost_psi": 16
+    },
+    "streetbound:aston-martin-valkyrie": {
+      "name": "Aston Martin Valkyrie",
+      "source": "Streetbound",
+      "source_id": "aston-martin-valkyrie",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.33,
+      "tone": 0.81,
+      "overrun": 0.92,
+      "boost_psi": 0
+    },
+    "streetbound:aston-martin-one-77": {
+      "name": "Aston Martin One-77",
+      "source": "Streetbound",
+      "source_id": "aston-martin-one-77",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.33,
+      "tone": 0.39,
+      "overrun": 0.92,
+      "boost_psi": 0
+    },
+    "streetbound:audi-a3": {
+      "name": "Audi A3",
+      "source": "Streetbound",
+      "source_id": "audi-a3",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:audi-a4": {
+      "name": "Audi A4",
+      "source": "Streetbound",
+      "source_id": "audi-a4",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.13,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:audi-a5": {
+      "name": "Audi A5",
+      "source": "Streetbound",
+      "source_id": "audi-a5",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.13,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:audi-a6": {
+      "name": "Audi A6",
+      "source": "Streetbound",
+      "source_id": "audi-a6",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:audi-a7": {
+      "name": "Audi A7",
+      "source": "Streetbound",
+      "source_id": "audi-a7",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:audi-a8": {
+      "name": "Audi A8",
+      "source": "Streetbound",
+      "source_id": "audi-a8",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.39,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:audi-q3": {
+      "name": "Audi Q3",
+      "source": "Streetbound",
+      "source_id": "audi-q3",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.25,
+      "tone": 0.02,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:audi-q5": {
+      "name": "Audi Q5",
+      "source": "Streetbound",
+      "source_id": "audi-q5",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.25,
+      "tone": 0.02,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:audi-q7": {
+      "name": "Audi Q7",
+      "source": "Streetbound",
+      "source_id": "audi-q7",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.25,
+      "tone": -0.19,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:bmw-i8": {
+      "name": "BMW i8",
+      "source": "Streetbound",
+      "source_id": "bmw-i8",
+      "family": "i3",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.34,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.15,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:bmw-m2": {
+      "name": "BMW M2",
+      "source": "Streetbound",
+      "source_id": "bmw-m2",
+      "family": "i6_turbo",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.93,
+      "roughness": 0.25,
+      "tone": 0.08,
+      "overrun": 0.38,
+      "boost_psi": 17
+    },
+    "streetbound:bmw-m3": {
+      "name": "BMW M3",
+      "source": "Streetbound",
+      "source_id": "bmw-m3",
+      "family": "i6_turbo",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.93,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.52,
+      "boost_psi": 18
+    },
+    "streetbound:bmw-m4": {
+      "name": "BMW M4",
+      "source": "Streetbound",
+      "source_id": "bmw-m4",
+      "family": "i6_turbo",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.93,
+      "roughness": 0.25,
+      "tone": 0.2,
+      "overrun": 0.41,
+      "boost_psi": 18
+    },
+    "streetbound:bmw-m8": {
+      "name": "BMW M8",
+      "source": "Streetbound",
+      "source_id": "bmw-m8",
+      "family": "v8_cross",
+      "induction": "turbo",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.84,
+      "boost_psi": 19
+    },
+    "streetbound:bmw-x3": {
+      "name": "BMW X3",
+      "source": "Streetbound",
+      "source_id": "bmw-x3",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.25,
+      "tone": 0.02,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:bmw-x5": {
+      "name": "BMW X5",
+      "source": "Streetbound",
+      "source_id": "bmw-x5",
+      "family": "i6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.77,
+      "roughness": 0.25,
+      "tone": -0.07,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:bmw-z4": {
+      "name": "BMW Z4",
+      "source": "Streetbound",
+      "source_id": "bmw-z4",
+      "family": "i6_turbo",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.93,
+      "roughness": 0.25,
+      "tone": 0.08,
+      "overrun": 0.38,
+      "boost_psi": 15
+    },
+    "streetbound:bentley-continental-gt": {
+      "name": "Bentley Continental GT",
+      "source": "Streetbound",
+      "source_id": "bentley-continental-gt",
+      "family": "w12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.07,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:bentley-flying-spur": {
+      "name": "Bentley Flying Spur",
+      "source": "Streetbound",
+      "source_id": "bentley-flying-spur",
+      "family": "w12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.17,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:bentley-bentayga": {
+      "name": "Bentley Bentayga",
+      "source": "Streetbound",
+      "source_id": "bentley-bentayga",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.65,
+      "tone": -0.5,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:bentley-mulsanne": {
+      "name": "Bentley Mulsanne",
+      "source": "Streetbound",
+      "source_id": "bentley-mulsanne",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.39,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:bentley-arnage": {
+      "name": "Bentley Arnage",
+      "source": "Streetbound",
+      "source_id": "bentley-arnage",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.39,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:bugatti-eb110": {
+      "name": "Bugatti EB110",
+      "source": "Streetbound",
+      "source_id": "bugatti-eb110",
+      "family": "v12_na",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.33,
+      "tone": 0.39,
+      "overrun": 1,
+      "boost_psi": 20
+    },
+    "streetbound:bugatti-veyron": {
+      "name": "Bugatti Veyron",
+      "source": "Streetbound",
+      "source_id": "bugatti-veyron",
+      "family": "w16_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.3,
+      "tone": -0.45,
+      "overrun": 1,
+      "boost_psi": 23
+    },
+    "streetbound:bugatti-chiron": {
+      "name": "Bugatti Chiron",
+      "source": "Streetbound",
+      "source_id": "bugatti-chiron",
+      "family": "w16_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.3,
+      "tone": -0.41,
+      "overrun": 1,
+      "boost_psi": 26
+    },
+    "streetbound:bugatti-divo": {
+      "name": "Bugatti Divo",
+      "source": "Streetbound",
+      "source_id": "bugatti-divo",
+      "family": "w16_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.3,
+      "tone": -0.21,
+      "overrun": 1,
+      "boost_psi": 26
+    },
+    "streetbound:bugatti-centodieci": {
+      "name": "Bugatti Centodieci",
+      "source": "Streetbound",
+      "source_id": "bugatti-centodieci",
+      "family": "w16_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.3,
+      "tone": -0.21,
+      "overrun": 1,
+      "boost_psi": 27
+    },
+    "streetbound:bugatti-bolide": {
+      "name": "Bugatti Bolide",
+      "source": "Streetbound",
+      "source_id": "bugatti-bolide",
+      "family": "w16_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.3,
+      "tone": -0.21,
+      "overrun": 1,
+      "boost_psi": 28
+    },
+    "streetbound:cadillac-escalade": {
+      "name": "Cadillac Escalade",
+      "source": "Streetbound",
+      "source_id": "cadillac-escalade",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.65,
+      "tone": -0.71,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:cadillac-ct4": {
+      "name": "Cadillac CT4",
+      "source": "Streetbound",
+      "source_id": "cadillac-ct4",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.13,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:cadillac-ct5": {
+      "name": "Cadillac CT5",
+      "source": "Streetbound",
+      "source_id": "cadillac-ct5",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-camaro-z28": {
+      "name": "Chevrolet Camaro Z28",
+      "source": "Streetbound",
+      "source_id": "chevrolet-camaro-z28",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.61,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-camaro-zl1": {
+      "name": "Chevrolet Camaro ZL1",
+      "source": "Streetbound",
+      "source_id": "chevrolet-camaro-zl1",
+      "family": "v8_cross",
+      "induction": "supercharger",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.59,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-corvette-c5": {
+      "name": "Chevrolet Corvette C5",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-c5",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-corvette-c6": {
+      "name": "Chevrolet Corvette C6",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-c6",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-corvette-c7": {
+      "name": "Chevrolet Corvette C7",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-c7",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-corvette-c8": {
+      "name": "Chevrolet Corvette C8",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-c8",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.3,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.29,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-corvette-z06": {
+      "name": "Chevrolet Corvette Z06",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-z06",
+      "family": "v8_flat",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.5,
+      "tone": 0.73,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:chevrolet-corvette-zr1": {
+      "name": "Chevrolet Corvette ZR1",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-zr1",
+      "family": "v8_flat_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.5,
+      "tone": 0.57,
+      "overrun": 0.84,
+      "boost_psi": 20
+    },
+    "streetbound:chevrolet-corvette-zr1x": {
+      "name": "Chevrolet Corvette ZR1X",
+      "source": "Streetbound",
+      "source_id": "chevrolet-corvette-zr1x",
+      "family": "v8_flat_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.5,
+      "tone": 0.57,
+      "overrun": 0.84,
+      "boost_psi": 22
+    },
+    "streetbound:dodge-charger": {
+      "name": "Dodge Charger",
+      "source": "Streetbound",
+      "source_id": "dodge-charger",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.68,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-challenger": {
+      "name": "Dodge Challenger",
+      "source": "Streetbound",
+      "source_id": "dodge-challenger",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.72,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-viper": {
+      "name": "Dodge Viper",
+      "source": "Streetbound",
+      "source_id": "dodge-viper",
+      "family": "v10_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.25,
+      "tone": 0.12,
+      "overrun": 0.82,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-durango": {
+      "name": "Dodge Durango",
+      "source": "Streetbound",
+      "source_id": "dodge-durango",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.65,
+      "tone": -0.5,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-dart": {
+      "name": "Dodge Dart",
+      "source": "Streetbound",
+      "source_id": "dodge-dart",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-neon": {
+      "name": "Dodge Neon",
+      "source": "Streetbound",
+      "source_id": "dodge-neon",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-avenger": {
+      "name": "Dodge Avenger",
+      "source": "Streetbound",
+      "source_id": "dodge-avenger",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:dodge-magnum": {
+      "name": "Dodge Magnum",
+      "source": "Streetbound",
+      "source_id": "dodge-magnum",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.39,
+      "overrun": 0.28,
+      "boost_psi": 0
+    },
+    "streetbound:ferrari-308": {
+      "name": "Ferrari 308",
+      "source": "Streetbound",
+      "source_id": "ferrari-308",
+      "family": "v8_flat",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.5,
+      "tone": 0.57,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:ferrari-f40": {
+      "name": "Ferrari F40",
+      "source": "Streetbound",
+      "source_id": "ferrari-f40",
+      "family": "v8_flat_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.5,
+      "tone": 0.58,
+      "overrun": 1,
+      "boost_psi": 18
+    },
+    "streetbound:ferrari-f50": {
+      "name": "Ferrari F50",
+      "source": "Streetbound",
+      "source_id": "ferrari-f50",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.33,
+      "tone": 0.74,
+      "overrun": 0.92,
+      "boost_psi": 0
+    },
+    "streetbound:ferrari-enzo": {
+      "name": "Ferrari Enzo",
+      "source": "Streetbound",
+      "source_id": "ferrari-enzo",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.33,
+      "tone": 0.75,
+      "overrun": 0.92,
+      "boost_psi": 0
+    },
+    "streetbound:ferrari-458-italia": {
+      "name": "Ferrari 458 Italia",
+      "source": "Streetbound",
+      "source_id": "ferrari-458-italia",
+      "family": "v8_flat",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.15,
+      "roughness": 0.5,
+      "tone": 0.77,
+      "overrun": 0.71,
+      "boost_psi": 0
+    },
+    "streetbound:ferrari-488-gtb": {
+      "name": "Ferrari 488 GTB",
+      "source": "Streetbound",
+      "source_id": "ferrari-488-gtb",
+      "family": "v8_flat_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.5,
+      "tone": 0.59,
+      "overrun": 0.84,
+      "boost_psi": 19
+    },
+    "streetbound:ferrari-f8-tributo": {
+      "name": "Ferrari F8 Tributo",
+      "source": "Streetbound",
+      "source_id": "ferrari-f8-tributo",
+      "family": "v8_flat_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.5,
+      "tone": 0.61,
+      "overrun": 0.84,
+      "boost_psi": 20
+    },
+    "streetbound:ferrari-roma": {
+      "name": "Ferrari Roma",
+      "source": "Streetbound",
+      "source_id": "ferrari-roma",
+      "family": "v8_flat_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 1.05,
+      "roughness": 0.5,
+      "tone": 0.57,
+      "overrun": 0.84,
+      "boost_psi": 19
+    },
+    "streetbound:ferrari-296-gtb": {
+      "name": "Ferrari 296 GTB",
+      "source": "Streetbound",
+      "source_id": "ferrari-296-gtb",
+      "family": "v6_tt",
+      "induction": "turbo",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.76,
+      "roughness": 0.25,
+      "tone": 0.02,
+      "overrun": 0.84,
+      "boost_psi": 22
+    },
+    "streetbound:ferrari-purosangue": {
+      "name": "Ferrari Purosangue",
+      "source": "Streetbound",
+      "source_id": "ferrari-purosangue",
+      "family": "v12_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.86,
+      "roughness": 0.33,
+      "tone": 0.16,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:ford-bronco": {
+      "name": "Ford Bronco",
+      "source": "Streetbound",
+      "source_id": "ford-bronco",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.25,
+      "tone": -0.19,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:ford-explorer": {
+      "name": "Ford Explorer",
+      "source": "Streetbound",
+      "source_id": "ford-explorer",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.62,
+      "roughness": 0.25,
+      "tone": -0.19,
+      "overrun": 0.31,
+      "boost_psi": 0
+    },
+    "streetbound:ford-f150": {
+      "name": "Ford F150",
+      "source": "Streetbound",
+      "source_id": "ford-f150",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.72,
+      "overrun": 0.38,
+      "boost_psi": 0
+    },
+    "streetbound:ford-fiesta": {
+      "name": "Ford Fiesta",
+      "source": "Streetbound",
+      "source_id": "ford-fiesta",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.24,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:ford-focus": {
+      "name": "Ford Focus",
+      "source": "Streetbound",
+      "source_id": "ford-focus",
+      "family": "i4_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": 0.17,
+      "overrun": 0.25,
+      "boost_psi": 0
+    },
+    "streetbound:ford-mustang": {
+      "name": "Ford Mustang",
+      "source": "Streetbound",
+      "source_id": "ford-mustang",
+      "family": "v8_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.83,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.65,
+      "tone": -0.77,
+      "overrun": 0.82,
+      "boost_psi": 0
+    },
+    "streetbound:ford-taurus": {
+      "name": "Ford Taurus",
+      "source": "Streetbound",
+      "source_id": "ford-taurus",
+      "family": "v6_na",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "exhaust": 0.18,
+      "intake": 0.83,
+      "roughness": 0.25,
+      "tone": -0.08,
+      "overrun": 0.28,
+      "boost_psi": 0
+    }
+  }
+}
