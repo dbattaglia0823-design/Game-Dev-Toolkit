@@ -182,5 +182,105 @@
       "loop": true,
       "path": "sound-bank/library/v8/loops/flat_plane/high_coast.wav"
     }
+  ],
+  "effects": [
+    {
+      "id": "single_turbo_spool",
+      "path": "sound-bank/library/v8/effects/single_turbo_spool.wav",
+      "loop": true,
+      "seconds": 0.7,
+      "trigger": "when active"
+    },
+    {
+      "id": "twin_turbo_spool",
+      "path": "sound-bank/library/v8/effects/twin_turbo_spool.wav",
+      "loop": true,
+      "seconds": 0.7,
+      "trigger": "when active"
+    },
+    {
+      "id": "roots_whine",
+      "path": "sound-bank/library/v8/effects/roots_whine.wav",
+      "loop": true,
+      "seconds": 0.7,
+      "trigger": "when active"
+    },
+    {
+      "id": "twin_screw_whine",
+      "path": "sound-bank/library/v8/effects/twin_screw_whine.wav",
+      "loop": true,
+      "seconds": 0.7,
+      "trigger": "when active"
+    },
+    {
+      "id": "centrifugal_whine",
+      "path": "sound-bank/library/v8/effects/centrifugal_whine.wav",
+      "loop": true,
+      "seconds": 0.7,
+      "trigger": "when active"
+    },
+    {
+      "id": "bov_atmosphere",
+      "path": "sound-bank/library/v8/effects/bov_atmosphere.wav",
+      "loop": false,
+      "seconds": 0.52,
+      "trigger": "on boosted throttle lift"
+    },
+    {
+      "id": "bov_recirc",
+      "path": "sound-bank/library/v8/effects/bov_recirc.wav",
+      "loop": false,
+      "seconds": 0.52,
+      "trigger": "on boosted throttle lift"
+    },
+    {
+      "id": "turbo_flutter",
+      "path": "sound-bank/library/v8/effects/turbo_flutter.wav",
+      "loop": false,
+      "seconds": 0.52,
+      "trigger": "on boosted throttle lift"
+    },
+    {
+      "id": "external_wastegate",
+      "path": "sound-bank/library/v8/effects/external_wastegate.wav",
+      "loop": false,
+      "seconds": 0.52,
+      "trigger": "event"
+    },
+    {
+      "id": "supercharger_bypass",
+      "path": "sound-bank/library/v8/effects/supercharger_bypass.wav",
+      "loop": false,
+      "seconds": 0.52,
+      "trigger": "event"
+    },
+    {
+      "id": "exhaust_pop",
+      "path": "sound-bank/library/v8/effects/exhaust_pop.wav",
+      "loop": false,
+      "seconds": 0.21,
+      "trigger": "event"
+    },
+    {
+      "id": "shift_cut",
+      "path": "sound-bank/library/v8/effects/shift_cut.wav",
+      "loop": false,
+      "seconds": 0.13,
+      "trigger": "event"
+    },
+    {
+      "id": "starter",
+      "path": "sound-bank/library/v8/effects/starter.wav",
+      "loop": false,
+      "seconds": 0.95,
+      "trigger": "event"
+    },
+    {
+      "id": "shutdown",
+      "path": "sound-bank/library/v8/effects/shutdown.wav",
+      "loop": false,
+      "seconds": 0.7,
+      "trigger": "event"
+    }
   ]
 }
