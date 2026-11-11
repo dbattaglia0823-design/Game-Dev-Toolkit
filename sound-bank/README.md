@@ -87,3 +87,10 @@ The [V8 Performance Sound Pack](packs/v8-performance-v1/README.md) now stores **
 Use **python sound-bank/install_pack.py --out /path/to/GAME/assets/audio/vehicle_bank** to extract all WAVs and merge the existing bank and catalog. For selected banks, pass repeated **--engine** flags. Python verifies archive CRCs, expected file names, WAV formats and collision safety before writing. No live dependency on REDLINE or Streetbound is needed to use the V8 pack.
 
 Two portable scripts, **godot/audio/vehicle_sound_bank.gd** and **godot/audio/vehicle_sound_player.gd**, support family selection, load/coast crossfades, effects and explicit sound-family overrides. The original synthesized engine files do not replace independently recorded car audio. No third-party recordings were added.
+
+
+## Phase 3 — V8 Detailed v2: 48-kHz stereo, real stored WAV files
+
+The [V8 Detailed v2 pack](packs/v8-detailed-v2/README.md) adds **85 original synthesized 48-kHz stereo WAV files** in 5 versioned ZIP archives. It covers cammed pushrod and high-rev DOHC V8s, each with **6 RPM anchors, 3 load layers and separate cabin/exterior mixes**, plus 13 boost and event sounds. Download or reuse the assets in any future game without coupling to REDLINE or Streetbound.
+
+Run **python sound-bank/install_detailed_v8.py --out /path/to/GAME/assets/audio/v8_detail_v2** for a collision-safe install. This new 48-kHz pack uses its own manifest and must **not** be merged into the existing 22.05-kHz audio index. The independent Godot loader/player are under godot/audio/detailed_v8_*.gd. These are synthesized interpretations, not field recordings; in-game listening/mastering remains necessary.
