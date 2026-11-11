@@ -151,3 +151,15 @@ See `docs/MENU_VARIANTS.md`.
 | godot/audio/vehicle_sound_bank.gd | Godot 4 | Profile and RPM-layer audio mix recipe | In-game validation pending |
 
 See [Vehicle Sound Bank](../sound-bank/README.md) for generation, integration and recording-licensing constraints.
+
+## Installable V8 Performance Sound Pack
+
+| Path | Runtime | Purpose | Validation |
+|---|---|---|---|
+| sound-bank/packs/v8-performance-v1/bundles/ | Stored original WAV archives | 12 V8 banks, 144 RPM-layer stems, 18 effects | CRC and PCM tests |
+| sound-bank/install_pack.py | Python stdlib | Extract selected WAVs and merge target game's sound index | Python tests |
+| sound-bank/packs/v8-performance-v1/render.mjs | Node 20+ | Reproducible original engine/effect waveform source | Node tests |
+| sound-bank/packs/v8-performance-v1/build_archives.mjs | Node 20+ | Regenerate versioned ZIP sound assets | Node tests |
+| godot/audio/vehicle_sound_player.gd | Godot 4 | Cached in-game RPM crossfades and boost/shift events | Headless smoke tests |
+
+See [V8 pack integration](../sound-bank/packs/v8-performance-v1/README.md). Fully reusable source and binary assets; original synthesis, not OEM recordings. Install only the needed engines into the target game.
