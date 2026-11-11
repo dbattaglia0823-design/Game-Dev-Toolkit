@@ -32,3 +32,6 @@ jobs:
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/map_smoke.gd
       - name: Validate freeform world renderer, roads, surfaces and obstacles
         run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/racing_world_smoke.gd
+
+      - name: Validate standalone vehicle audio runtime
+        run: ./Godot_v4.4.1-stable_linux.x86_64 --headless --path godot --script res://tests/audio_bank_smoke.gd

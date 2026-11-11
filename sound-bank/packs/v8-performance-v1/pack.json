@@ -1,0 +1,215 @@
+{
+  "id": "v8-performance-v1",
+  "schema_version": 1,
+  "format": "Godot 4 16-bit signed PCM WAV mono",
+  "sample_rate": 22050,
+  "channels": 1,
+  "provenance": {
+    "type": "original_procedural_synthesis",
+    "external_recordings_used": false,
+    "oem_recordings": false,
+    "third_party_samples": false,
+    "author": "Game-Dev-Toolkit original synthesis",
+    "license": "MIT repository license (original source and synthesized WAVs)"
+  },
+  "engine_families": {
+    "v8_smallblock_ohv": {
+      "title": "Classic American small-block V8",
+      "banks": "cross",
+      "depth": 0.86,
+      "brightness": 0.28,
+      "cam": 0.08,
+      "rough": 0.22,
+      "rpms": [
+        750,
+        1650,
+        3400,
+        6200
+      ]
+    },
+    "v8_bigblock_ohv": {
+      "title": "Large-displacement OHV V8",
+      "banks": "cross",
+      "depth": 1.09,
+      "brightness": 0.19,
+      "cam": 0.22,
+      "rough": 0.35,
+      "rpms": [
+        650,
+        1400,
+        2800,
+        5200
+      ]
+    },
+    "v8_ls_ohv": {
+      "title": "Modern pushrod LS-style V8",
+      "banks": "cross",
+      "depth": 0.87,
+      "brightness": 0.46,
+      "cam": 0.06,
+      "rough": 0.19,
+      "rpms": [
+        750,
+        1700,
+        3500,
+        6800
+      ]
+    },
+    "v8_coyote_dohc": {
+      "title": "High-revving DOHC muscle V8",
+      "banks": "cross",
+      "depth": 0.68,
+      "brightness": 0.82,
+      "cam": 0.03,
+      "rough": 0.12,
+      "rpms": [
+        900,
+        1900,
+        4200,
+        7600
+      ]
+    },
+    "v8_hemi": {
+      "title": "Large-displacement HEMI-style V8",
+      "banks": "cross",
+      "depth": 1,
+      "brightness": 0.33,
+      "cam": 0.12,
+      "rough": 0.33,
+      "rpms": [
+        700,
+        1600,
+        3400,
+        6500
+      ]
+    },
+    "v8_euro_cross": {
+      "title": "High-output European cross-plane V8",
+      "banks": "cross",
+      "depth": 0.72,
+      "brightness": 0.89,
+      "cam": 0.04,
+      "rough": 0.11,
+      "rpms": [
+        850,
+        1900,
+        4300,
+        7800
+      ]
+    },
+    "v8_flat_plane": {
+      "title": "Flat-plane high-revving V8",
+      "banks": "flat",
+      "depth": 0.48,
+      "brightness": 1.12,
+      "cam": 0.03,
+      "rough": 0.09,
+      "rpms": [
+        950,
+        2200,
+        5100,
+        8800
+      ]
+    },
+    "v8_roots_blown": {
+      "title": "Roots/twin-screw-blown V8",
+      "banks": "cross",
+      "depth": 0.94,
+      "brightness": 0.49,
+      "cam": 0.18,
+      "rough": 0.34,
+      "rpms": [
+        800,
+        1900,
+        3800,
+        7000
+      ]
+    },
+    "v8_twin_turbo": {
+      "title": "Twin-turbo cross-plane V8",
+      "banks": "cross",
+      "depth": 0.72,
+      "brightness": 0.6,
+      "cam": 0.07,
+      "rough": 0.18,
+      "rpms": [
+        850,
+        2100,
+        3900,
+        7200
+      ]
+    },
+    "v8_ls_street_cam": {
+      "title": "Pushrod V8 street cam",
+      "banks": "cross",
+      "depth": 0.9,
+      "brightness": 0.48,
+      "cam": 0.44,
+      "rough": 0.36,
+      "rpms": [
+        800,
+        1750,
+        3500,
+        6700
+      ]
+    },
+    "v8_ls_race_cam": {
+      "title": "Pushrod V8 race cam",
+      "banks": "cross",
+      "depth": 0.94,
+      "brightness": 0.59,
+      "cam": 0.88,
+      "rough": 0.56,
+      "rpms": [
+        1050,
+        2050,
+        3900,
+        6900
+      ]
+    },
+    "v8_ls_straight_pipe": {
+      "title": "Pushrod V8 open straight-pipe exhaust",
+      "banks": "cross",
+      "depth": 0.9,
+      "brightness": 1.12,
+      "cam": 0.1,
+      "rough": 0.57,
+      "rpms": [
+        800,
+        1700,
+        3600,
+        6900
+      ]
+    }
+  },
+  "layers": [
+    "exhaust_on",
+    "exhaust_off",
+    "intake_on"
+  ],
+  "events": [
+    "v8_turbo_spool_loop",
+    "v8_twin_turbo_spool_loop",
+    "v8_roots_whine_loop",
+    "v8_twin_screw_whine_loop",
+    "v8_centrifugal_whine_loop",
+    "v8_intake_suction_loop",
+    "v8_exhaust_burble_loop",
+    "v8_exhaust_pop_single",
+    "v8_exhaust_pop_double",
+    "v8_bov_vent",
+    "v8_bov_recirc",
+    "v8_compressor_flutter",
+    "v8_external_wastegate",
+    "v8_blower_bypass",
+    "v8_ignition_start",
+    "v8_shift_cut",
+    "v8_rev_limiter",
+    "v8_shutdown"
+  ],
+  "engine_count": 12,
+  "engine_sample_count": 144,
+  "event_count": 18,
+  "output_root": "res://assets/audio/vehicle_bank",
+  "notes": "Stylized playable loop stems for future game prototyping. Not authentic measured vehicle recordings; sound quality needs subjective mastering."
+}

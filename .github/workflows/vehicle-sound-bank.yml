@@ -19,3 +19,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s sound-bank/tests -v
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test sound-bank/packs/v8-performance-v1/tests/*.test.mjs

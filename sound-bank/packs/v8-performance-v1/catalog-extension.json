@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "pack": "v8-performance-v1",
+  "description": "Installable V8 audio archetypes; originally synthesized, not measured OEM audio",
+  "families": {
+    "v8_smallblock_ohv": {
+      "cylinders": 8,
+      "character": "Classic American small-block V8"
+    },
+    "v8_bigblock_ohv": {
+      "cylinders": 8,
+      "character": "Large-displacement OHV V8"
+    },
+    "v8_ls_ohv": {
+      "cylinders": 8,
+      "character": "Modern pushrod LS-style V8"
+    },
+    "v8_coyote_dohc": {
+      "cylinders": 8,
+      "character": "High-revving DOHC muscle V8"
+    },
+    "v8_hemi": {
+      "cylinders": 8,
+      "character": "Large-displacement HEMI-style V8"
+    },
+    "v8_euro_cross": {
+      "cylinders": 8,
+      "character": "High-output European cross-plane V8"
+    },
+    "v8_flat_plane": {
+      "cylinders": 8,
+      "character": "Flat-plane high-revving V8"
+    },
+    "v8_roots_blown": {
+      "cylinders": 8,
+      "character": "Roots/twin-screw-blown V8"
+    },
+    "v8_twin_turbo": {
+      "cylinders": 8,
+      "character": "Twin-turbo cross-plane V8"
+    },
+    "v8_ls_street_cam": {
+      "cylinders": 8,
+      "character": "Pushrod V8 street cam"
+    },
+    "v8_ls_race_cam": {
+      "cylinders": 8,
+      "character": "Pushrod V8 race cam"
+    },
+    "v8_ls_straight_pipe": {
+      "cylinders": 8,
+      "character": "Pushrod V8 open straight-pipe exhaust"
+    }
+  },
+  "vehicles": {
+    "toolkit:v8_smallblock_ohv": {
+      "name": "Classic American small-block V8",
+      "source": "Toolkit",
+      "source_id": "v8_smallblock_ohv",
+      "family": "v8_smallblock_ohv",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.08,
+      "intake": 0.8,
+      "roughness": 0.22,
+      "exhaust": 0.25,
+      "tone": 0.28,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_bigblock_ohv": {
+      "name": "Large-displacement OHV V8",
+      "source": "Toolkit",
+      "source_id": "v8_bigblock_ohv",
+      "family": "v8_bigblock_ohv",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.22,
+      "intake": 0.8,
+      "roughness": 0.35,
+      "exhaust": 0.25,
+      "tone": 0.19,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_ls_ohv": {
+      "name": "Modern pushrod LS-style V8",
+      "source": "Toolkit",
+      "source_id": "v8_ls_ohv",
+      "family": "v8_ls_ohv",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.06,
+      "intake": 0.8,
+      "roughness": 0.19,
+      "exhaust": 0.25,
+      "tone": 0.46,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_coyote_dohc": {
+      "name": "High-revving DOHC muscle V8",
+      "source": "Toolkit",
+      "source_id": "v8_coyote_dohc",
+      "family": "v8_coyote_dohc",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.03,
+      "intake": 0.8,
+      "roughness": 0.12,
+      "exhaust": 0.25,
+      "tone": 0.82,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_hemi": {
+      "name": "Large-displacement HEMI-style V8",
+      "source": "Toolkit",
+      "source_id": "v8_hemi",
+      "family": "v8_hemi",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.12,
+      "intake": 0.8,
+      "roughness": 0.33,
+      "exhaust": 0.25,
+      "tone": 0.33,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_euro_cross": {
+      "name": "High-output European cross-plane V8",
+      "source": "Toolkit",
+      "source_id": "v8_euro_cross",
+      "family": "v8_euro_cross",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.04,
+      "intake": 0.8,
+      "roughness": 0.11,
+      "exhaust": 0.25,
+      "tone": 0.89,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_flat_plane": {
+      "name": "Flat-plane high-revving V8",
+      "source": "Toolkit",
+      "source_id": "v8_flat_plane",
+      "family": "v8_flat_plane",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.03,
+      "intake": 0.8,
+      "roughness": 0.09,
+      "exhaust": 0.25,
+      "tone": 1.12,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_roots_blown": {
+      "name": "Roots/twin-screw-blown V8",
+      "source": "Toolkit",
+      "source_id": "v8_roots_blown",
+      "family": "v8_roots_blown",
+      "induction": "roots_supercharger",
+      "cam_lope": 0.18,
+      "intake": 0.8,
+      "roughness": 0.34,
+      "exhaust": 0.25,
+      "tone": 0.49,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_twin_turbo": {
+      "name": "Twin-turbo cross-plane V8",
+      "source": "Toolkit",
+      "source_id": "v8_twin_turbo",
+      "family": "v8_twin_turbo",
+      "induction": "twin_turbo",
+      "cam_lope": 0.07,
+      "intake": 0.8,
+      "roughness": 0.18,
+      "exhaust": 0.25,
+      "tone": 0.6,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_ls_street_cam": {
+      "name": "Pushrod V8 street cam",
+      "source": "Toolkit",
+      "source_id": "v8_ls_street_cam",
+      "family": "v8_ls_street_cam",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.44,
+      "intake": 0.8,
+      "roughness": 0.36,
+      "exhaust": 0.25,
+      "tone": 0.48,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_ls_race_cam": {
+      "name": "Pushrod V8 race cam",
+      "source": "Toolkit",
+      "source_id": "v8_ls_race_cam",
+      "family": "v8_ls_race_cam",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.88,
+      "intake": 0.8,
+      "roughness": 0.56,
+      "exhaust": 0.25,
+      "tone": 0.59,
+      "boost_psi": 0,
+      "overrun": 0.28
+    },
+    "toolkit:v8_ls_straight_pipe": {
+      "name": "Pushrod V8 open straight-pipe exhaust",
+      "source": "Toolkit",
+      "source_id": "v8_ls_straight_pipe",
+      "family": "v8_ls_straight_pipe",
+      "induction": "naturally_aspirated",
+      "cam_lope": 0.1,
+      "intake": 0.8,
+      "roughness": 0.57,
+      "exhaust": 0.25,
+      "tone": 1.12,
+      "boost_psi": 0,
+      "overrun": 0.28
+    }
+  }
+}
