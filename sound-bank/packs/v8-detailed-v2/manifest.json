@@ -1,0 +1,720 @@
+{
+  "id": "v8-detailed-v2",
+  "format_version": 2,
+  "origin": "Toolkit-original synthesized audio; no OEM/third-party recordings",
+  "license": "MIT (repository original material)",
+  "sample_rate": 48000,
+  "channels": 2,
+  "bits_per_sample": 16,
+  "notes": "Portable 48-kHz sound design; not certified against real engine recordings.",
+  "engines": {
+    "v8_ls_race_cam": {
+      "title": "Cammed pushrod V8",
+      "plane": "cross",
+      "cam": 0.91,
+      "bass": 0.93,
+      "brightness": 0.47,
+      "rpms": [
+        950,
+        1400,
+        2300,
+        3700,
+        5400,
+        6800
+      ],
+      "perspectives": [
+        "exterior",
+        "interior"
+      ],
+      "layers": [
+        "exhaust_on",
+        "exhaust_off",
+        "intake_on"
+      ],
+      "rows": [
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 950,
+          "actual_rpm": 949.986,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/950_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 950,
+          "actual_rpm": 949.986,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/950_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 950,
+          "actual_rpm": 949.986,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/950_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 1400,
+          "actual_rpm": 1400.012,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/1400_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 1400,
+          "actual_rpm": 1400.012,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/1400_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 1400,
+          "actual_rpm": 1400.012,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/1400_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 2300,
+          "actual_rpm": 2300.013,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/2300_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 2300,
+          "actual_rpm": 2300.013,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/2300_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 2300,
+          "actual_rpm": 2300.013,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/2300_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 3700,
+          "actual_rpm": 3700.016,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/3700_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 3700,
+          "actual_rpm": 3700.016,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/3700_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 3700,
+          "actual_rpm": 3700.016,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/3700_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 5400,
+          "actual_rpm": 5399.94,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/5400_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 5400,
+          "actual_rpm": 5399.94,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/5400_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 5400,
+          "actual_rpm": 5399.94,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/5400_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 6800,
+          "actual_rpm": 6800.026,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/6800_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 6800,
+          "actual_rpm": 6800.026,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/6800_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 6800,
+          "actual_rpm": 6800.026,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/exterior/6800_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 950,
+          "actual_rpm": 949.986,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/950_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 950,
+          "actual_rpm": 949.986,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/950_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 950,
+          "actual_rpm": 949.986,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/950_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 1400,
+          "actual_rpm": 1400.012,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/1400_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 1400,
+          "actual_rpm": 1400.012,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/1400_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 1400,
+          "actual_rpm": 1400.012,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/1400_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 2300,
+          "actual_rpm": 2300.013,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/2300_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 2300,
+          "actual_rpm": 2300.013,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/2300_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 2300,
+          "actual_rpm": 2300.013,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/2300_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 3700,
+          "actual_rpm": 3700.016,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/3700_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 3700,
+          "actual_rpm": 3700.016,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/3700_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 3700,
+          "actual_rpm": 3700.016,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/3700_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 5400,
+          "actual_rpm": 5399.94,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/5400_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 5400,
+          "actual_rpm": 5399.94,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/5400_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 5400,
+          "actual_rpm": 5399.94,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/5400_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 6800,
+          "actual_rpm": 6800.026,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/6800_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 6800,
+          "actual_rpm": 6800.026,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/6800_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 6800,
+          "actual_rpm": 6800.026,
+          "loop": true,
+          "path": "engines/v8_ls_race_cam/interior/6800_intake_on.wav"
+        }
+      ]
+    },
+    "v8_coyote_dohc": {
+      "title": "High-revving DOHC V8",
+      "plane": "cross",
+      "cam": 0.065,
+      "bass": 0.68,
+      "brightness": 0.92,
+      "rpms": [
+        900,
+        1500,
+        2600,
+        4300,
+        6200,
+        7800
+      ],
+      "perspectives": [
+        "exterior",
+        "interior"
+      ],
+      "layers": [
+        "exhaust_on",
+        "exhaust_off",
+        "intake_on"
+      ],
+      "rows": [
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 900,
+          "actual_rpm": 900,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/900_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 900,
+          "actual_rpm": 900,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/900_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 900,
+          "actual_rpm": 900,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/900_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 1500,
+          "actual_rpm": 1500,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/1500_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 1500,
+          "actual_rpm": 1500,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/1500_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 1500,
+          "actual_rpm": 1500,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/1500_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 2600,
+          "actual_rpm": 2599.962,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/2600_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 2600,
+          "actual_rpm": 2599.962,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/2600_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 2600,
+          "actual_rpm": 2599.962,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/2600_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 4300,
+          "actual_rpm": 4299.978,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/4300_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 4300,
+          "actual_rpm": 4299.978,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/4300_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 4300,
+          "actual_rpm": 4299.978,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/4300_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 6200,
+          "actual_rpm": 6200.007,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/6200_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 6200,
+          "actual_rpm": 6200.007,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/6200_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 6200,
+          "actual_rpm": 6200.007,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/6200_intake_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 7800,
+          "actual_rpm": 7800.122,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/7800_exhaust_on.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 7800,
+          "actual_rpm": 7800.122,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/7800_exhaust_off.wav"
+        },
+        {
+          "perspective": "exterior",
+          "layer": "intake_on",
+          "nominal_rpm": 7800,
+          "actual_rpm": 7800.122,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/exterior/7800_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 900,
+          "actual_rpm": 900,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/900_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 900,
+          "actual_rpm": 900,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/900_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 900,
+          "actual_rpm": 900,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/900_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 1500,
+          "actual_rpm": 1500,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/1500_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 1500,
+          "actual_rpm": 1500,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/1500_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 1500,
+          "actual_rpm": 1500,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/1500_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 2600,
+          "actual_rpm": 2599.962,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/2600_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 2600,
+          "actual_rpm": 2599.962,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/2600_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 2600,
+          "actual_rpm": 2599.962,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/2600_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 4300,
+          "actual_rpm": 4299.978,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/4300_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 4300,
+          "actual_rpm": 4299.978,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/4300_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 4300,
+          "actual_rpm": 4299.978,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/4300_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 6200,
+          "actual_rpm": 6200.007,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/6200_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 6200,
+          "actual_rpm": 6200.007,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/6200_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 6200,
+          "actual_rpm": 6200.007,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/6200_intake_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_on",
+          "nominal_rpm": 7800,
+          "actual_rpm": 7800.122,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/7800_exhaust_on.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "exhaust_off",
+          "nominal_rpm": 7800,
+          "actual_rpm": 7800.122,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/7800_exhaust_off.wav"
+        },
+        {
+          "perspective": "interior",
+          "layer": "intake_on",
+          "nominal_rpm": 7800,
+          "actual_rpm": 7800.122,
+          "loop": true,
+          "path": "engines/v8_coyote_dohc/interior/7800_intake_on.wav"
+        }
+      ]
+    }
+  },
+  "effects": [
+    {
+      "id": "single_turbo_spool",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/single_turbo_spool.wav"
+    },
+    {
+      "id": "twin_turbo_spool",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/twin_turbo_spool.wav"
+    },
+    {
+      "id": "roots_blower",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/roots_blower.wav"
+    },
+    {
+      "id": "twin_screw_blower",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/twin_screw_blower.wav"
+    },
+    {
+      "id": "centrifugal_blower",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/centrifugal_blower.wav"
+    },
+    {
+      "id": "compressor_air",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/compressor_air.wav"
+    },
+    {
+      "id": "wastegate_open",
+      "loop": true,
+      "duration": 0.9,
+      "path": "effects/wastegate_open.wav"
+    },
+    {
+      "id": "bov_vent",
+      "loop": false,
+      "duration": 0.72,
+      "path": "effects/bov_vent.wav"
+    },
+    {
+      "id": "bov_recirc",
+      "loop": false,
+      "duration": 0.62,
+      "path": "effects/bov_recirc.wav"
+    },
+    {
+      "id": "flutter_soft",
+      "loop": false,
+      "duration": 0.66,
+      "path": "effects/flutter_soft.wav"
+    },
+    {
+      "id": "flutter_hard",
+      "loop": false,
+      "duration": 0.74,
+      "path": "effects/flutter_hard.wav"
+    },
+    {
+      "id": "blower_bypass",
+      "loop": false,
+      "duration": 0.59,
+      "path": "effects/blower_bypass.wav"
+    },
+    {
+      "id": "overrun_pop",
+      "loop": false,
+      "duration": 0.22,
+      "path": "effects/overrun_pop.wav"
+    }
+  ]
+}
