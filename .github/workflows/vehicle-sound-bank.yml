@@ -23,3 +23,5 @@ jobs:
         with:
           node-version: '22'
       - run: node --test sound-bank/packs/v8-performance-v1/tests/*.test.mjs
+
+      - run: node --test sound-bank/packs/v8-detailed-v2/tests/*.test.mjs
