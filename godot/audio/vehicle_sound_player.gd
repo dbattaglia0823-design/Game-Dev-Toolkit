@@ -10,7 +10,7 @@ extends Node
 
 const VOICE_COUNT := 12
 const EVENT_COUNT := 3
-const SMOOTH_TIME := 0.035
+const SMOOTH_TIME = 0.035
 var _bank: Dictionary = {}
 var _profile: Dictionary = {}
 var _rows: Array = []
@@ -58,7 +58,7 @@ func _loop_stream(path: String) -> AudioStream:
         var wav := loaded.duplicate() as AudioStreamWAV
         wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
         wav.loop_begin = 0
-        wav.loop_end = wav.data.size() / (4 if wav.stereo else 2)
+        wav.loop_end = int(wav.data.size() / (4 if wav.stereo else 2))
         loaded = wav
     _cached_streams[path] = loaded
     return loaded
