@@ -163,3 +163,16 @@ See [Vehicle Sound Bank](../sound-bank/README.md) for generation, integration an
 | godot/audio/vehicle_sound_player.gd | Godot 4 | Cached in-game RPM crossfades and boost/shift events | Headless smoke tests |
 
 See [V8 pack integration](../sound-bank/packs/v8-performance-v1/README.md). Fully reusable source and binary assets; original synthesis, not OEM recordings. Install only the needed engines into the target game.
+
+
+## V8 Detailed v2 sound asset pack
+
+| Path | Runtime | Purpose | Validation |
+|---|---|---|---|
+| sound-bank/packs/v8-detailed-v2/bundles/ | Portable WAV archives | 72 48-kHz stereo RPM stems + 13 boost/effects | ZIP/PCM tests |
+| sound-bank/packs/v8-detailed-v2/render.mjs | Node 20+ | Reproducible synthesis and stereo perspectives | Node tests |
+| sound-bank/install_detailed_v8.py | Python stdlib | Safe standalone WAV installs that do not conflict with v1 | Python tests |
+| godot/audio/detailed_v8_bank.gd | Godot 4 | Cached streams, acoustic perspectives, RPM/load mixing | Headless smoke pending |
+| godot/audio/detailed_v8_player.gd | Godot 4 | Bounded voice pool and induction effects | Target-game smoke pending |
+
+See [V8 Detailed v2](../sound-bank/packs/v8-detailed-v2/README.md). All assets are original synthetic approximations, not OEM recordings.
