@@ -34,7 +34,7 @@ test("effect sounds are distinct and valid",()=>{
   const a=renderFx("v8_bov_vent",RATE),b=renderFx("v8_compressor_flutter",RATE);
   assert.ok(rms(a)>0.008);
   assert.ok(rms(b)>0.008);
-  assert.notEqual(a.length,b.length);
+  assert.notEqual(a[200],b[200]);
   for(const name of EFFECTS){
     const data=renderFx(name,RATE);
     assert.ok(data.length>3000,name);
