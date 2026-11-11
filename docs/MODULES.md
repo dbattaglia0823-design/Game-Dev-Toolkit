@@ -138,3 +138,16 @@ See `docs/SKILL_TREE_CONNECTIONS.md`.
 - `web/tests/menu-variants.test.js`: 57-layout structural, contract and persistence checks.
 
 See `docs/MENU_VARIANTS.md`.
+
+
+## Vehicle Sound Bank (phase 1)
+
+| Path | Runtime | Purpose | Validation |
+|---|---|---|---|
+| sound-bank/catalog.json | Data | 118 vehicle profiles + 27 family audio designs | Python unit tests |
+| sound-bank/modifiers.json | Data | Camshaft, exhaust, intake, boost and induction options | Source review |
+| sound-bank/build_bank.py | Python 3 stdlib | Generated WAV stems; optionally import REDLINE's synthesized bank | Python unit tests |
+| sound-bank/previews/ | Original WAV | 16 reference auditions (not OEM recordings) | WAV format |
+| godot/audio/vehicle_sound_bank.gd | Godot 4 | Profile and RPM-layer audio mix recipe | In-game validation pending |
+
+See [Vehicle Sound Bank](../sound-bank/README.md) for generation, integration and recording-licensing constraints.
