@@ -61,7 +61,7 @@ The adapter is a **data and mix recipe**, not a full vehicle audio controller. I
 
 ## Licensing and sources
 
-The only checked-in audio is new original synthesized preview material. **No third-party audio clips have been imported**. Prior REDLINE research considered online Freesound candidates, but recordings were not downloaded or cleared for inclusion. Before adding a recorded clip to a publicly distributable sound library, record its author, original source URL, exact license, redistribution rights, recording/model identification and any attribution requirement. A vehicle name or a public video does not confer permission to redistribute its audio.
+The only checked-in audio is original synthesized material: the first 16 previews and the Phase 2 V8 WAV archives. **No third-party audio clips have been imported**. Prior REDLINE research considered online Freesound candidates, but recordings were not downloaded or cleared for inclusion. Before adding a recorded clip to a publicly distributable sound library, record its author, original source URL, exact license, redistribution rights, recording/model identification and any attribution requirement. A vehicle name or a public video does not confer permission to redistribute its audio.
 
 In particular, **Sonniss's GDC Bundle license (v2, effective August 27, 2026)** permits audio used in finished games but **forbids redistributing the sound effects as a sound library, asset pack, sample pack or SDK**, including modified sounds. Do not put those assets into this toolkit.
 
@@ -78,4 +78,12 @@ References:
 python -m unittest discover -s sound-bank/tests -v
 ~~~
 
-Python tests check source coverage, generated PCM headers, anchor data and effect availability. Godot compile, actual playback and per-car perceptual quality must still be validated inside each target game. Further passes can cover richer standalone sound packs, more cars, stereo exterior/interior, custom exhaust microphone positions, starter/shutdown recordings, more rotor/diesel/EV variants and licensed field-recording imports.
+Python tests check source coverage, generated PCM headers, anchor data and effect availability. Godot compile, actual playback and per-car perceptual quality must still be validated inside each target game. Further passes can cover additional standalone sound packs, more cars, stereo exterior/interior, custom exhaust microphone positions, starter/shutdown recordings, more rotor/diesel/EV variants and licensed field-recording imports.
+
+## Phase 2 — Permanently stored V8 performance WAVs
+
+The [V8 Performance Sound Pack](packs/v8-performance-v1/README.md) now stores **162 actual original synthesized WAV assets** in 13 versioned ZIP archives (12 engine families with 4 RPM bands and 3 layers each, plus 18 sounds for turbo, supercharger, cam/exhaust and engine events). These archives stay in GitHub for use by any current or future game.
+
+Use **python sound-bank/install_pack.py --out /path/to/GAME/assets/audio/vehicle_bank** to extract all WAVs and merge the existing bank and catalog. For selected banks, pass repeated **--engine** flags. Python verifies archive CRCs, expected file names, WAV formats and collision safety before writing. No live dependency on REDLINE or Streetbound is needed to use the V8 pack.
+
+Two portable scripts, **godot/audio/vehicle_sound_bank.gd** and **godot/audio/vehicle_sound_player.gd**, support family selection, load/coast crossfades, effects and explicit sound-family overrides. The original synthesized engine files do not replace independently recorded car audio. No third-party recordings were added.
