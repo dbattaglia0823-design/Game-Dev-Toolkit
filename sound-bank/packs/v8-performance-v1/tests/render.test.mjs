@@ -22,7 +22,12 @@ test("rendered RPM layers have accurate pitch, dynamic content and quiet seams",
         assert.ok(Math.abs(data.actual_rpm/rpm-1)<0.001,id+" "+rpm);
         assert.ok(rms(data.signal)>0.015,id+" "+layer);
         assert.ok(rms(data.signal)<0.55,id);
-        assert.ok(Math.abs(data.signal[0]-data.signal.at(-1))<0.08,id+" seam");
+        const jump = Math.abs(data.signal[0]-data.signal.at(-1));
+        const localStep = Math.max(Math.abs(data.signal[1]-data.signal[0]),
+          Math.abs(data.signal.at(-1)-data.signal.at(-2)),0.005);
+        // A high-RPM periodic waveform can jump >0.08 per sample naturally.
+        // Require the wrap transition to follow its adjacent waveform slope.
+        assert.ok(jump < localStep*1.6+0.025,id+" abnormal seam");
         const file=encodeWav(data.signal,RATE);
         assert.equal(String.fromCharCode(...file.slice(0,4)),"RIFF");
         assert.equal(file.length,44+data.signal.length*2);
