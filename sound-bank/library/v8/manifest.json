@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "asset_type": "engine_loops",
+  "origin": "Original synthetic acoustic approximations; not recordings",
+  "sample_rate": 16000,
+  "channels": 1,
+  "pcm_bits": 16,
+  "rows": [
+    {
+      "variant": "cross_stock",
+      "cam_strength": 0,
+      "region": "idle",
+      "layer": "power",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_stock/idle_power.wav"
+    },
+    {
+      "variant": "cross_stock",
+      "cam_strength": 0,
+      "region": "idle",
+      "layer": "coast",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_stock/idle_coast.wav"
+    },
+    {
+      "variant": "cross_stock",
+      "cam_strength": 0,
+      "region": "high",
+      "layer": "power",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_stock/high_power.wav"
+    },
+    {
+      "variant": "cross_stock",
+      "cam_strength": 0,
+      "region": "high",
+      "layer": "coast",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_stock/high_coast.wav"
+    },
+    {
+      "variant": "cross_street_cam",
+      "cam_strength": 0.35,
+      "region": "idle",
+      "layer": "power",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_street_cam/idle_power.wav"
+    },
+    {
+      "variant": "cross_street_cam",
+      "cam_strength": 0.35,
+      "region": "idle",
+      "layer": "coast",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_street_cam/idle_coast.wav"
+    },
+    {
+      "variant": "cross_street_cam",
+      "cam_strength": 0.35,
+      "region": "high",
+      "layer": "power",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_street_cam/high_power.wav"
+    },
+    {
+      "variant": "cross_street_cam",
+      "cam_strength": 0.35,
+      "region": "high",
+      "layer": "coast",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_street_cam/high_coast.wav"
+    },
+    {
+      "variant": "cross_race_cam",
+      "cam_strength": 0.8,
+      "region": "idle",
+      "layer": "power",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_race_cam/idle_power.wav"
+    },
+    {
+      "variant": "cross_race_cam",
+      "cam_strength": 0.8,
+      "region": "idle",
+      "layer": "coast",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_race_cam/idle_coast.wav"
+    },
+    {
+      "variant": "cross_race_cam",
+      "cam_strength": 0.8,
+      "region": "high",
+      "layer": "power",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_race_cam/high_power.wav"
+    },
+    {
+      "variant": "cross_race_cam",
+      "cam_strength": 0.8,
+      "region": "high",
+      "layer": "coast",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/cross_race_cam/high_coast.wav"
+    },
+    {
+      "variant": "flat_plane",
+      "cam_strength": 0.05,
+      "region": "idle",
+      "layer": "power",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/flat_plane/idle_power.wav"
+    },
+    {
+      "variant": "flat_plane",
+      "cam_strength": 0.05,
+      "region": "idle",
+      "layer": "coast",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "duration_seconds": 0.5647,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/flat_plane/idle_coast.wav"
+    },
+    {
+      "variant": "flat_plane",
+      "cam_strength": 0.05,
+      "region": "high",
+      "layer": "power",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/flat_plane/high_power.wav"
+    },
+    {
+      "variant": "flat_plane",
+      "cam_strength": 0.05,
+      "region": "high",
+      "layer": "coast",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "duration_seconds": 0.6461,
+      "loop": true,
+      "path": "sound-bank/library/v8/loops/flat_plane/high_coast.wav"
+    }
+  ]
+}
