@@ -21,9 +21,13 @@ static func index() -> Dictionary:
     return _json(ROOT + "/bank.json")
 
 static func profile(vehicle_id: String, choices: Dictionary = {}) -> Dictionary:
-    var vehicle: Dictionary = catalog().get("vehicles", {}).get(vehicle_id, {}).duplicate(true)
+    var available: Dictionary = catalog()
+    var vehicle: Dictionary = available.get("vehicles", {}).get(vehicle_id, {}).duplicate(true)
     if vehicle.is_empty():
         return {}
+    var custom_family := str(choices.get("sound_family", ""))
+    if not custom_family.is_empty() and available.get("families", {}).has(custom_family):
+        vehicle["family"] = custom_family
     var definitions := modifiers()
     var cam: Dictionary = definitions.get("cam", {}).get(str(choices.get("cam", "stock")), {})
     var exhaust: Dictionary = definitions.get("exhaust", {}).get(str(choices.get("exhaust", "stock")), {})
@@ -57,7 +61,9 @@ static func profile(vehicle_id: String, choices: Dictionary = {}) -> Dictionary:
 static func rows_for(vehicle: Dictionary, bank: Dictionary) -> Array:
     var id := str(vehicle.get("source_id", ""))
     if str(vehicle.get("source", "")) == "Redline" and bank.get("vehicles", {}).has(id):
-        return bank["vehicles"][id].get("rows", [])
+        var native_bank: Dictionary = bank["vehicles"][id]
+        if str(native_bank.get("family", "")) == str(vehicle.get("family", "")):
+            return native_bank.get("rows", [])
     return bank.get("families", {}).get(str(vehicle.get("family", "")), [])
 
 static func stream(path: String) -> AudioStream:
@@ -122,6 +128,28 @@ static func mix_recipe(vehicle: Dictionary, rpm: float, throttle: float,
                            "pitch":clampf(rpm / maxf(1.0, float(row.rpm)), 0.70, 1.35)})
     return output
 
+const EFFECT_ALIASES := {
+    "turbo_spool": "v8_turbo_spool_loop",
+    "roots_whine": "v8_roots_whine_loop",
+    "centrifugal_whine": "v8_centrifugal_whine_loop",
+    "intake_open": "v8_intake_suction_loop",
+    "exhaust_catback": "v8_exhaust_burble_loop",
+    "exhaust_open": "v8_exhaust_burble_loop",
+    "exhaust_straight": "v8_exhaust_burble_loop",
+    "bov_vent": "v8_bov_vent", "bov_recirc": "v8_bov_recirc",
+    "turbo_flutter": "v8_compressor_flutter",
+    "wastegate": "v8_external_wastegate",
+    "blower_bypass": "v8_blower_bypass",
+    "starter": "v8_ignition_start",
+    "limiter": "v8_rev_limiter", "shift_cut": "v8_shift_cut",
+    "exhaust_pop": "v8_exhaust_pop_single"
+}
+static func effect_path(bank: Dictionary, name: String) -> String:
+    var effects: Dictionary = bank.get("effects", {})
+    if effects.has(name):
+        return str(effects[name])
+    return str(effects.get(str(EFFECT_ALIASES.get(name, name)), ""))
+
 static func texture_stream(vehicle: Dictionary, kind: String,
                            bank: Dictionary = {}) -> AudioStream:
     if bank.is_empty():
@@ -129,7 +157,7 @@ static func texture_stream(vehicle: Dictionary, kind: String,
     var effect_name: Variant = vehicle.get("textures", {}).get(kind)
     if effect_name == null:
         return null
-    return stream(str(bank.get("effects", {}).get(str(effect_name), "")))
+    return stream(effect_path(bank, str(effect_name)))
 
 static func event_stream(vehicle: Dictionary, event: String,
                          bank: Dictionary = {}) -> AudioStream:
@@ -144,4 +172,4 @@ static func event_stream(vehicle: Dictionary, event: String,
             name = str(modifiers().get("turbo_release", {}).get(release, {}).get("event", "bov_vent"))
         else:
             return null
-    return stream(str(bank.get("effects", {}).get(name, "")))
+    return stream(effect_path(bank, name))
