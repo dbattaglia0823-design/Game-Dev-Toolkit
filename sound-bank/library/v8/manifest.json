@@ -282,5 +282,79 @@
       "seconds": 0.7,
       "trigger": "event"
     }
+  ],
+  "exhaust_rows": [
+    {
+      "id": "stock",
+      "region": "idle",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/stock/idle.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "stock",
+      "region": "high",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/stock/high.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "catback",
+      "region": "idle",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/catback/idle.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "catback",
+      "region": "high",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/catback/high.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "headers",
+      "region": "idle",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/headers/idle.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "headers",
+      "region": "high",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/headers/high.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "straight_pipe",
+      "region": "idle",
+      "nominal_rpm": 850,
+      "actual_rpm": 850.03,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/straight_pipe/idle.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    },
+    {
+      "id": "straight_pipe",
+      "region": "high",
+      "nominal_rpm": 5200,
+      "actual_rpm": 5200.23,
+      "loop": true,
+      "path": "sound-bank/library/v8/exhaust/straight_pipe/high.wav",
+      "description": "Additive exhaust color bed; layer under engine loops, do not replace engine source"
+    }
   ]
 }
