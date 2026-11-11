@@ -6,6 +6,7 @@ This directory contains **actual standalone WAV files**, not merely synthesis pa
 
 - Four distinct synthesized engine characters: cross-plane V8 stock, cross-plane street cam, cross-plane race cam, and flat-plane V8.
 - For each engine character: idle and high RPM regions, each with independently recorded-style synthesized power and off-throttle coast loops (16 WAV engine loops total).
+- Eight additional additive exhaust WAV loops at idle/high RPM, covering stock, cat-back, headers and straight-pipe. Keep these under the main engine layer, not instead of it.
 - 14 effect assets: single-turbo spool, twin-turbo spool, Roots whine, twin-screw whine, centrifugal whine, atmospheric BOV, recirculating BOV, turbo flutter, external wastegate, supercharger bypass, exhaust pop, shift cut, starter, shutdown.
 - Asset paths, pitch anchor RPM, duration and loop/event flags are in [manifest.json](manifest.json).
 
@@ -17,7 +18,7 @@ Copy `library/v8/` into your game's assets folder, preserving relative paths. Re
 
 Effects can be used independently. Trigger BOV/flutter **only** when an installed turbo compressor has boost and the throttle closes or a shift occurs. Roots, twin-screw, and centrifugal whine should respond to RPM, drive ratio and boost/load. Supercharger bypass is different from turbo venting. Exhaust pops should be sparse and tied to overrun/tune parameters. No audio setting changes horsepower.
 
-Use the reusable [Godot resolver](../../../godot/audio/vehicle_sound_bank.gd) for profile data; it expects the original generated-bank layout, so a game-specific adapter or manifest reader is still required for these directly stored WAVs. See `manifest.json` to implement your own asset loader.
+For Godot 4, copy [v8_asset_library.gd](../../../godot/audio/v8_asset_library.gd) and the entire V8 asset directory to `res://assets/audio/v8`. Call `GDTV8AssetLibrary.engine_mix("cross_race_cam", rpm, engine_load)`, `GDTV8AssetLibrary.exhaust_mix("straight_pipe", rpm)`, and `GDTV8AssetLibrary.effect("turbo_flutter")` on vehicle equip/audio events. Cache streams and ramp players rather than reload on every frame.
 
 ## Asset format and quality
 
