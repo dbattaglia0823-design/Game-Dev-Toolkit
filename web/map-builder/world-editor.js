@@ -166,7 +166,7 @@ function setTool(next){
   });
   status({
     select:'Select a road to insert points, drag its control handles, or Alt-drag the entire shape.',
-    road:'Click to add road control points. Double-click or Enter to finish; road endpoints snap near existing roads.',
+    road:'Click road points and click the first point again to close a loop. Press Enter to finish an open road; nearby road ends connect automatically.',
     terrain:'Click around a terrain area. Double-click or Enter to close the polygon.',
     prop:'Click for a single prop, or enable hold-and-drag to paint or erase scenery.',
     marker:'Click to place a gameplay marker.',
@@ -353,10 +353,14 @@ function finishDraft(){
 function addDraftPoint(p,detail){
   const point=worldPoint(p.x,p.y);
   if(detail>=2&&draft){finishDraft();return;}
-  const where=tool==='road'?snapEnd(point):point;
+  // Clicking the first road point closes the shape, including roundabouts.
+  const first=draft?.type==='road'&&draft.points.length>=3?draft.points[0]:null;
+  const closesLoop=tool==='road'&&first&&distance(point,first)<=clamp(15/zoom,8,28);
+  const where=closesLoop?{...first}:(tool==='road'?snapEnd(point):point);
   if(!draft)draft={type:tool,width:Number($('road-width').value),points:[]};
   if(draft.points.length && distance(draft.points.at(-1),where)<1) return;
   draft.points.push(where);
+  if(closesLoop){finishDraft();return;}
   hover=null;
   refreshHeader();requestRender();
   status(draft.points.length+' control points · Enter to finish · Esc to cancel');
