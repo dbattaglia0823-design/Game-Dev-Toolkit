@@ -2,6 +2,17 @@
 
 Reusable foundations for Godot 4 and browser games, including a function-first UI layout system, runtime adapters, a visual component showcase, tested web utilities and a Godot demonstration. The toolkit is not a full game engine.
 
+## Shared knowledge hub and Codex workflows
+
+The toolkit also maintains a **GitHub-hosted Markdown knowledge vault** at [knowledge/INDEX.md](knowledge/INDEX.md), reusable task-specific Codex skills at [`.agents/skills/`](.agents/skills/), and safe per-game starters in [`templates/project/`](templates/project/). These are additions to the existing UI, world, audio and runtime modules, not replacements.
+
+- **Shared across games:** Godot/web engineering standards, test procedures, curated references and workflows.
+- **Each game owns:** its code, design decisions, architecture, known defects and recent handoff in its own repository.
+- **Agent usage:** read the small index, retrieve only relevant pages, inspect actual code and tests, then record verified changes.
+- **Optional:** open `knowledge/` as an Obsidian vault. No plugin, MCP or external database is necessary.
+
+To initialize a game's missing documentation without overwriting existing files, run `python3 tools/scaffold_project_knowledge.py --project-root /path/to/game --name "Game Name" --engine godot --dry-run`, review the plan, then rerun without `--dry-run`. See [onboarding instructions](templates/project/README.md).
+
 ## Open the toolkit
 
 Visit the [GitHub Pages Tool Hub](index.html) to launch every browser-based builder, exporter, validator and demonstration from one main menu. The homepage includes quick access to the 2D Map Builder and Functional UI Builder, category navigation and tool search. Pages must publish from the repository root so `index.html` is the landing page; browser-saved work stays local unless exported.

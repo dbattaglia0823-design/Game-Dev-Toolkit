@@ -1,0 +1,35 @@
+name: Knowledge and scaffold checks
+
+on:
+  pull_request:
+    paths:
+      - 'knowledge/**'
+      - 'templates/project/**'
+      - '.agents/skills/**'
+      - 'tools/scaffold_project_knowledge.py'
+      - 'tools/tests/**'
+      - '.github/workflows/knowledge-tests.yml'
+      - 'AGENTS.md'
+      - 'README.md'
+  push:
+    branches: [main]
+    paths:
+      - 'knowledge/**'
+      - 'templates/project/**'
+      - '.agents/skills/**'
+      - 'tools/scaffold_project_knowledge.py'
+      - 'tools/tests/**'
+      - '.github/workflows/knowledge-tests.yml'
+      - 'AGENTS.md'
+      - 'README.md'
+
+jobs:
+  scaffold-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test non-destructive project scaffolding
+        run: python3 -m unittest discover -s tools/tests -p 'test_*.py' -v

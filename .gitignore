@@ -1,0 +1,7 @@
+# Local note-workspace, bridge and Python test artifacts
+**/.obsidian/workspace*.json
+**/.obsidian/plugins/
+**/_codex_bridge/
+**/__pycache__/
+**/.pytest_cache/
+.DS_Store

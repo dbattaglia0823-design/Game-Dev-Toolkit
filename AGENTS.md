@@ -1,5 +1,16 @@
 # Development instructions
 
+## Knowledge routing (toolkit and consumer projects)
+
+- For toolkit module work, begin with `docs/MODULES.md` and the nearby module README/tests. The working code is authoritative.
+- For shared research, agent skills or onboarding, read `knowledge/INDEX.md` first, then **only** the relevant knowledge page.
+- For changes inside a consumer game, use **that game's** `AGENTS.md`, `docs/INDEX.md`, source code and tests as the source of truth. The toolkit's patterns are guidance, not proof a feature exists.
+- Choose only relevant reusable skills from `.agents/skills/`. Never load every skill or vault page by default.
+- Do not copy external vault/skill source without checking licensing, trust, compatibility and attribution. See `knowledge/references/external-projects.md`.
+- After tested changes, update affected documentation with verified paths, test commands/results, risks and a short handoff. Preserve existing user behavior and data contracts.
+- Obsidian and MCP are **optional**; a link to another repository does not grant access to its files. Never commit tokens, local plugin metadata or private vault files.
+
+
 Before writing a new feature, inspect `docs/MODULES.md` for an existing compatible module.
 
 - Do not import modules from the wrong runtime (web vs Godot).
