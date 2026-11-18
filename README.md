@@ -13,6 +13,18 @@ The toolkit also maintains a **GitHub-hosted Markdown knowledge vault** at [know
 
 To initialize a game's missing documentation without overwriting existing files, run `python3 tools/scaffold_project_knowledge.py --project-root /path/to/game --name "Game Name" --engine godot --dry-run`, review the plan, then rerun without `--dry-run`. See [onboarding instructions](templates/project/README.md).
 
+### Install selected shared skills in a game checkout
+
+Codex needs access to skill files inside its workspace. Install **only** the skills relevant to a project; copying everything increases maintenance and context noise.
+
+    python3 tools/install_project_skills.py --list
+    python3 tools/install_project_skills.py --project-root /path/to/game --skills godot-change-verification knowledge-maintenance --dry-run
+    python3 tools/install_project_skills.py --project-root /path/to/game --skills godot-change-verification knowledge-maintenance
+
+Existing skill files are never overwritten; a conflict requires manual review. Run again with `--verify` to detect missing or diverged snapshots. These are copies, not automatically synced updates. See [project onboarding](templates/project/README.md).
+
+Validate the central vault's internal Markdown links and skill metadata with `python3 tools/check_knowledge_links.py`.
+
 ## Open the toolkit
 
 Visit the [GitHub Pages Tool Hub](index.html) to launch every browser-based builder, exporter, validator and demonstration from one main menu. The homepage includes quick access to the 2D Map Builder and Functional UI Builder, category navigation and tool search. Pages must publish from the repository root so `index.html` is the landing page; browser-saved work stays local unless exported.

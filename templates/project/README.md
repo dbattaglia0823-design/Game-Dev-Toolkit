@@ -27,3 +27,13 @@ Expected project structure:
       HANDOFF.md
 
 Shared technical practices live in [the central knowledge vault](../../knowledge/INDEX.md), not duplicated in each game. Hosted Codex must have explicit access to the toolkit repo for those files; a link alone is not a file mount.
+
+## Optional Codex skills
+
+Once game-local documentation is established, copy **only** the workflow skills you need from Game-Dev-Toolkit. These snapshots allow Codex to read the skill from the game checkout even without cross-repository access:
+
+    python3 tools/install_project_skills.py --project-root /path/to/game --skills godot-change-verification knowledge-maintenance --dry-run
+    python3 tools/install_project_skills.py --project-root /path/to/game --skills godot-change-verification knowledge-maintenance
+    python3 tools/install_project_skills.py --project-root /path/to/game --skills godot-change-verification knowledge-maintenance --verify
+
+Use `web-change-verification` for web games, `racing-ai-audit` only for driving games, and `project-onboarding` for first-time documentation setup. Existing files are preserved on conflicts and must be manually reconciled. Copies do not update themselves; review upstream changes before replacing a local skill.
