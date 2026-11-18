@@ -25,6 +25,10 @@ Existing skill files are never overwritten; a conflict requires manual review. R
 
 Validate the central vault's internal Markdown links and skill metadata with `python3 tools/check_knowledge_links.py`.
 
+### Measure context and token usage
+
+A controlled before/after benchmark is available in [knowledge/measurements/README.md](knowledge/measurements/README.md). Record real paired Codex task metrics using the [empty CSV template](knowledge/measurements/sessions.csv), then run `python3 tools/benchmark_knowledge_usage.py --input <measured.csv>`. The report compares only successful task pairs and never fabricates token savings. The project starter includes a review checklist for verified documentation updates.
+
 ## Open the toolkit
 
 Visit the [GitHub Pages Tool Hub](index.html) to launch every browser-based builder, exporter, validator and demonstration from one main menu. The homepage includes quick access to the 2D Map Builder and Functional UI Builder, category navigation and tool search. Pages must publish from the repository root so `index.html` is the landing page; browser-saved work stays local unless exported.

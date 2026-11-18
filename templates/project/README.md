@@ -37,3 +37,7 @@ Once game-local documentation is established, copy **only** the workflow skills 
     python3 tools/install_project_skills.py --project-root /path/to/game --skills godot-change-verification knowledge-maintenance --verify
 
 Use `web-change-verification` for web games, `racing-ai-audit` only for driving games, and `project-onboarding` for first-time documentation setup. Existing files are preserved on conflicts and must be manually reconciled. Copies do not update themselves; review upstream changes before replacing a local skill.
+
+## Pull request maintenance checklist
+
+A nonblocking [pull request template](.github/pull_request_template.md) is included in the scaffold. It prompts contributors to record **real test evidence**, project-specific documentation updates and any save, art or mobile risks. Existing projects may install the template separately without replacing their current PR templates.

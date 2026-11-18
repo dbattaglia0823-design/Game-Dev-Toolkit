@@ -5,6 +5,7 @@ Read this **small routing page first**, then open only what the current task nee
 | Need | Read | Then |
 |---|---|---|
 | Decide what belongs in shared versus game memory | [Documentation standard](standards/documentation.md) | Target game's `docs/INDEX.md` |
+| Measure whether knowledge retrieval saves time/tokens | [Usage benchmark](measurements/README.md) | Record real paired sessions only |
 | Keep prompts and context small | [Context budget](standards/context-budget.md) | Relevant file(s) only |
 | Godot 4 scenes, physics, UI, import and runtime | [Godot conventions](standards/godot.md) | Toolkit `docs/MODULES.md`, target repo |
 | Web game or toolkit UI changes | [Web conventions](standards/web.md) | Toolkit `docs/VALIDATION.md` |
