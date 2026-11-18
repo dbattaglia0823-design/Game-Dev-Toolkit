@@ -1,0 +1,6 @@
+name: Knowledge and scaffold checks
+
+on:
+  pull_request:
+    paths:
+      - 'knowledge
