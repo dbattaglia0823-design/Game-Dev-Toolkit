@@ -4,6 +4,8 @@ Read this **small routing page first**, then open only what the current task nee
 
 | Need | Read | Then |
 |---|---|---|
+| Find every game and audit documentation coverage | [Project directory](projects/INDEX.md) | Follow each game's own docs index |
+| Maintain accurate per-game handoffs | [Knowledge maintenance](workflows/maintenance.md) | Check actual PRs/tests before updating |
 | Decide what belongs in shared versus game memory | [Documentation standard](standards/documentation.md) | Target game's `docs/INDEX.md` |
 | Measure whether knowledge retrieval saves time/tokens | [Usage benchmark](measurements/README.md) | Record real paired sessions only |
 | Keep prompts and context small | [Context budget](standards/context-budget.md) | Relevant file(s) only |

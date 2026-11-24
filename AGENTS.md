@@ -2,6 +2,8 @@
 
 ## Knowledge routing (toolkit and consumer projects)
 
+- Use `knowledge/projects/INDEX.md` for cross-project routing and gap status, never as proof of game implementation. Update the inventory only after checking current repository trees/PRs. Follow `knowledge/workflows/maintenance.md`; maintain game-specific details in their own repos.
+
 - For toolkit module work, begin with `docs/MODULES.md` and the nearby module README/tests. The working code is authoritative.
 - For shared research, agent skills or onboarding, read `knowledge/INDEX.md` first, then **only** the relevant knowledge page.
 - For changes inside a consumer game, use **that game's** `AGENTS.md`, `docs/INDEX.md`, source code and tests as the source of truth. The toolkit's patterns are guidance, not proof a feature exists.

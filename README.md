@@ -13,6 +13,12 @@ The toolkit also maintains a **GitHub-hosted Markdown knowledge vault** at [know
 
 To initialize a game's missing documentation without overwriting existing files, run `python3 tools/scaffold_project_knowledge.py --project-root /path/to/game --name "Game Name" --engine godot --dry-run`, review the plan, then rerun without `--dry-run`. See [onboarding instructions](templates/project/README.md).
 
+### Project coverage and consolidation
+
+The [cross-project directory](knowledge/projects/INDEX.md) links to each game's authoritative documentation and marks gaps separately from fully integrated work. Crownfall's knowledge onboarding was merged in [PR #1](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler/pull/1). The central vault never copies per-game mechanics, and local-only projects are not treated as connected.
+
+Audit project-inventory metadata with `python3 tools/audit_project_knowledge.py`, or check actual docs in local clones with `python3 tools/audit_project_knowledge.py --checkouts-root /path/to/repos`. Toolkit CI validates inventory metadata, **not** the current state of independent repositories. See [knowledge maintenance policy](knowledge/workflows/maintenance.md).
+
 ### Install selected shared skills in a game checkout
 
 Codex needs access to skill files inside its workspace. Install **only** the skills relevant to a project; copying everything increases maintenance and context noise.

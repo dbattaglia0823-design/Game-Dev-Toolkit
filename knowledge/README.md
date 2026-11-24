@@ -1,6 +1,6 @@
 # Shared Game Development Knowledge Vault
 
-Start at [INDEX.md](INDEX.md). This folder is intentionally plain Markdown and can be opened as an Obsidian vault, browsed on GitHub, or read selectively by a coding agent. Obsidian, MCP and a vector database are **not required**.
+Start at [INDEX.md](INDEX.md), or [project directory](projects/INDEX.md) to navigate game repositories. This folder is intentionally plain Markdown and can be opened as an Obsidian vault, browsed on GitHub, or read selectively by a coding agent. Obsidian, MCP and a vector database are **not required**.
 
 **Scope:** cross-project engineering practices, research pointers and reusable workflows. **Not:** project source-of-truth for specific mechanics or game state. Each game owns its own architecture, decisions, issues and session handoffs in its repository.
 
