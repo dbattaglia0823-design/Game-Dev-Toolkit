@@ -15,7 +15,7 @@ To initialize a game's missing documentation without overwriting existing files,
 
 ### Project coverage and consolidation
 
-The [cross-project directory](knowledge/projects/INDEX.md) links to each game's authoritative documentation and marks gaps separately from fully integrated work. Crownfall's onboarding is tracked as a pending PR until merged. The central vault never copies per-game mechanics, and local-only projects are not treated as connected.
+The [cross-project directory](knowledge/projects/INDEX.md) links to each game's authoritative documentation and marks gaps separately from fully integrated work. Crownfall's knowledge onboarding was merged in [PR #1](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler/pull/1). The central vault never copies per-game mechanics, and local-only projects are not treated as connected.
 
 Audit project-inventory metadata with `python3 tools/audit_project_knowledge.py`, or check actual docs in local clones with `python3 tools/audit_project_knowledge.py --checkouts-root /path/to/repos`. Toolkit CI validates inventory metadata, **not** the current state of independent repositories. See [knowledge maintenance policy](knowledge/workflows/maintenance.md).
 
