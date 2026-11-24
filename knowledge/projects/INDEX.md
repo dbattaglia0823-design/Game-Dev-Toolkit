@@ -7,7 +7,7 @@
 | [REDLINE](https://github.com/dbattaglia0823-design/Redline) | [docs/INDEX.md](https://github.com/dbattaglia0823-design/Redline/blob/main/docs/INDEX.md) | On `main` | Godot 4.6.3 |
 | [Streetbound](https://github.com/dbattaglia0823-design/Streetbound) | [docs/INDEX.md](https://github.com/dbattaglia0823-design/Streetbound/blob/main/docs/INDEX.md) | On `main` | Godot 4.6.3 |
 | [Cyber Idle](https://github.com/dbattaglia0823-design/Cyber-Idle) | [docs/INDEX.md](https://github.com/dbattaglia0823-design/Cyber-Idle/blob/main/docs/INDEX.md) | On `main` | React/TypeScript/Vite |
-| [Crownfall AutoBattler](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler) | [Onboarding PR #1](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler/pull/1) | **Pending review/merge**, not on `main` at audit | Browser/PWA/Electron |
+| [Crownfall AutoBattler](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler) | [docs/INDEX.md](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler/blob/main/docs/INDEX.md) ([onboarding PR #1](https://github.com/dbattaglia0823-design/Crownfall_AutoBattler/pull/1)) | On `main` | Browser/PWA/Electron |
 
 For each project, first read its own `AGENTS.md`, `docs/INDEX.md`, then a task-specific note and the actual code/tests. Reusable patterns live in this toolkit; mechanics, recent changes and decisions stay in the game repository.
 
