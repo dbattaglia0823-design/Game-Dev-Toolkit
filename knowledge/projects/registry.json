@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-11-24",
+  "owner": "dbattaglia0823-design",
+  "projects": [
+    {
+      "id": "redline",
+      "repository": "dbattaglia0823-design/Redline",
+      "runtime": "Godot 4.6.3",
+      "docs_index": "docs/INDEX.md",
+      "coverage": "present_on_main",
+      "last_checked": "2026-11-24",
+      "baseline_sha": "bdaf77589615794244c92211e838a2cc4b1cdb0d"
+    },
+    {
+      "id": "streetbound",
+      "repository": "dbattaglia0823-design/Streetbound",
+      "runtime": "Godot 4.6.3",
+      "docs_index": "docs/INDEX.md",
+      "coverage": "present_on_main",
+      "last_checked": "2026-11-24",
+      "baseline_sha": "78100d5e524b132242a6048c5fbf1690f9f45052"
+    },
+    {
+      "id": "cyber-idle",
+      "repository": "dbattaglia0823-design/Cyber-Idle",
+      "runtime": "React/TypeScript/Vite",
+      "docs_index": "docs/INDEX.md",
+      "coverage": "present_on_main",
+      "last_checked": "2026-11-24",
+      "baseline_sha": "f8b8cba15c9ce841f5f084abf93eb4aa0d2bafb7"
+    },
+    {
+      "id": "crownfall",
+      "repository": "dbattaglia0823-design/Crownfall_AutoBattler",
+      "runtime": "Browser JavaScript/PWA/Electron",
+      "docs_index": "docs/INDEX.md",
+      "coverage": "pending_pr",
+      "last_checked": "2026-11-24",
+      "baseline_sha": "562ec12436ca9544eccea11788b640d4840834dc",
+      "pr_url": "https://github.com/dbattaglia0823-design/Crownfall_AutoBattler/pull/1"
+    }
+  ]
+}
